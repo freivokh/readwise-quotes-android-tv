@@ -1,0 +1,11 @@
+<!-- app/src/main/res/values/colors.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_dark">#000000</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0B0B0</color>
+    <color name="gradient_start">#1a1a2e</color>
+    <color name="gradient_mid">#16213e</color>
+    <color name="gradient_end">#0f3460</color>
+    <color name="accent">#e94560</color>
+</resources>

@@ -1,0 +1,8 @@
+<!-- app/src/main/res/values/themes.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.ReadwiseQuotes" parent="@style/Theme.Leanback">
+        <item name="android:colorBackground">@color/background_dark</item>
+        <item name="android:windowBackground">@color/background_dark</item>
+    </style>
+</resources>

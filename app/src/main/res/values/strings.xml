@@ -1,0 +1,25 @@
+<!-- app/src/main/res/values/strings.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Readwise Quotes</string>
+    <string name="settings_title">Settings</string>
+    <string name="api_token_label">Readwise API Token</string>
+    <string name="api_token_hint">Paste your token from readwise.io/access_token</string>
+    <string name="sync_now">Sync Now</string>
+    <string name="last_sync">Last sync: %s</string>
+    <string name="never_synced">Never synced</string>
+    <string name="syncing">Syncing...</string>
+    <string name="quote_filter_label">Show Quotes</string>
+    <string name="filter_all">All Highlights</string>
+    <string name="filter_favorites">Favorites Only</string>
+    <string name="filter_tags">By Tag</string>
+    <string name="filter_recent">Recent (30 days)</string>
+    <string name="visual_style_label">Visual Style</string>
+    <string name="style_ambient">Ambient</string>
+    <string name="style_minimal">Minimal (OLED)</string>
+    <string name="duration_label">Quote Duration</string>
+    <string name="duration_format">%d seconds</string>
+    <string name="sync_interval_label">Auto-sync Every</string>
+    <string name="no_quotes">No quotes found. Check your filters or sync.</string>
+    <string name="setup_required">Enter your Readwise API token to get started.</string>
+</resources>
