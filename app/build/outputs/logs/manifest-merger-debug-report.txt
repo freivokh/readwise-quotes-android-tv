@@ -1,0 +1,373 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:3:1-53:12
+INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:3:1-53:12
+INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:3:1-53:12
+INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:3:1-53:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /Users/freivokh/.gradle/caches/transforms-3/20d0aacab5baa7b3cf594f5355d2d315/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat:1.6.1] /Users/freivokh/.gradle/caches/transforms-3/c3d60e07da3a0da93efcf7c4597064ee/transformed/appcompat-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.leanback:leanback:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/27caebf8639fc182df7857217a7912b0/transformed/leanback-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5a9f32f29ad55517f837d259bf3a756b/transformed/recyclerview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/b6c0882815dcedd3e77bdc3acf6bda8d/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media:media:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/8282851a730849dc5f21c66d3670cbec/transformed/media-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.dagger:hilt-android:2.48] /Users/freivokh/.gradle/caches/transforms-3/2cba3639471023458ba97701862e9b8b/transformed/hilt-android-2.48/AndroidManifest.xml:16:1-19:12
+MERGED from [androidx.fragment:fragment:1.5.1] /Users/freivokh/.gradle/caches/transforms-3/67c26ff0647b7a4f11e3eba4d5f433ff/transformed/fragment-1.5.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.6.0] /Users/freivokh/.gradle/caches/transforms-3/1cd9454ca3d6ba642c3dfdb7d5bad755/transformed/activity-1.6.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/004387eed61124ac12536b6e9277d30c/transformed/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/88e3be633c7f08650e8d2298e231408c/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/db24e4b9f0a00cbe6a95f4305db9ffa1/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/eaa79d7b7fbc79d4c64063adaf9596ea/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/a95d46a7b974b77b8142e9bba3c90ddc/transformed/coordinatorlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/c70584923e9c7ad44e4a2516233e996f/transformed/slidingpanelayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/da7325e80acfe8ad71a84b8d9e8fc594/transformed/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/9252c3756b7b31dc7b3ee1254686b15d/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/c60673fdf2b0fc8d88db951187eebe01/transformed/asynclayoutinflater-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/freivokh/.gradle/caches/transforms-3/724e9e2c8cc53c9ce5956f1dab0fb25e/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/freivokh/.gradle/caches/transforms-3/ad7c165e3f415797e33feea4fe4c88f6/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.loader:loader:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/f54abb68f347ea3325ad366aa04908e1/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/688b12b477375a2d956bcdb7de2e32a8/transformed/lifecycle-livedata-2.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/94a47516ddcb8098f6beb701dd8e1bc2/transformed/lifecycle-livedata-core-2.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/65e1239ef0856dc0fd0d53c943120c0c/transformed/lifecycle-viewmodel-2.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/freivokh/.gradle/caches/transforms-3/261fb3c9a3339956d457637ea59b2f32/transformed/savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6cecc663f6db32b65c6c07b17df6189/transformed/lifecycle-runtime-2.6.2/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/bb30f45fc20d9271cfb65408f5ee1173/transformed/lifecycle-viewmodel-ktx-2.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/5ed21c12839351ac85666b600f46cb32/transformed/lifecycle-runtime-ktx-2.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/34b7152bda87f64a5d135a51bc67cfae/transformed/lifecycle-viewmodel-savedstate-2.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/58d0a5c7c53b765f72a6df4415e94e7b/transformed/core-ktx-1.12.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:17:1-31:12
+MERGED from [androidx.room:room-ktx:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/38bea9d76254fc14fae6b0a39b61de3b/transformed/room-ktx-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /Users/freivokh/.gradle/caches/transforms-3/f415368770b4e329c302ab8959cdfdd4/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.sqlite:sqlite:2.4.0] /Users/freivokh/.gradle/caches/transforms-3/b32fa436791c5386c692cce67e89cd82/transformed/sqlite-2.4.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/edca49f161eb89f2d45d4f828c00462a/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /Users/freivokh/.gradle/caches/transforms-3/7dd0ae5d5117cd65c28582d9adc1bbe3/transformed/security-crypto-1.1.0-alpha06/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/4dd1d2f91da279ac5709135f3aec1a33/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/freivokh/.gradle/caches/transforms-3/b142d55444b3fb854b39b5bc8b4f3eb1/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/e035e2c15790d5ab6d4dfca06431bb87/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/7adf07d520eef6f16cf16ee22012e9f2/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/95f72df3df33a0dbe5484324048c732f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5c10a86ba47ed6daa74bd2b1cb7ea256/transformed/tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5281715fa97c343ae304aa8260b2ceb4/transformed/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/98ade4739f5b74e1d5dea4f472a29fc9/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5a94c6d9c999ee3fa903a47157e2699b/transformed/print-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.dagger:dagger-lint-aar:2.48] /Users/freivokh/.gradle/caches/transforms-3/5cf66a0efa626acae5f0503e63671db2/transformed/dagger-lint-aar-2.48/AndroidManifest.xml:16:1-19:12
+	package
+		INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:3:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:5:5-67
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:5:22-64
+uses-feature#android.software.leanback
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:7:5-9:35
+	android:required
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:9:9-32
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:8:9-49
+uses-feature#android.hardware.touchscreen
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:10:5-12:36
+	android:required
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:12:9-33
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:11:9-52
+application
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:14:5-51:19
+INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:14:5-51:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:23:5-29:19
+MERGED from [androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:23:5-29:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/e035e2c15790d5ab6d4dfca06431bb87/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/e035e2c15790d5ab6d4dfca06431bb87/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/95f72df3df33a0dbe5484324048c732f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/95f72df3df33a0dbe5484324048c732f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+	android:extractNativeLibs
+		INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:20:9-35
+	android:label
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:19:9-41
+	android:icon
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:18:9-44
+	android:allowBackup
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:16:9-35
+	android:banner
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:17:9-46
+	android:theme
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:21:9-52
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:15:9-42
+activity#com.readwisequotes.ui.MainActivity
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:23:9-30:20
+	android:exported
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:25:13-36
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:24:13-44
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LEANBACK_LAUNCHER
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:26:13-29:29
+action#android.intent.action.MAIN
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:27:17-69
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:27:25-66
+category#android.intent.category.LEANBACK_LAUNCHER
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:28:17-86
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:28:27-83
+activity#com.readwisequotes.ui.SettingsActivity
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:32:9-35:59
+	android:exported
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:34:13-37
+	android:theme
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:35:13-56
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:33:13-48
+service#com.readwisequotes.QuoteDreamService
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:37:9-49:19
+	android:label
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:40:13-45
+	android:exported
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:39:13-36
+	android:permission
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:41:13-71
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:38:13-46
+intent-filter#action:name:android.service.dreams.DreamService+category:name:android.intent.category.DEFAULT
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:42:13-45:29
+action#android.service.dreams.DreamService
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:43:17-78
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:43:25-75
+category#android.intent.category.DEFAULT
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:44:17-76
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:44:27-73
+meta-data#android.service.dream
+ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:46:13-48:54
+	android:resource
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:48:17-51
+	android:name
+		ADDED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:47:17-53
+uses-sdk
+INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml
+INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /Users/freivokh/.gradle/caches/transforms-3/20d0aacab5baa7b3cf594f5355d2d315/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /Users/freivokh/.gradle/caches/transforms-3/20d0aacab5baa7b3cf594f5355d2d315/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /Users/freivokh/.gradle/caches/transforms-3/c3d60e07da3a0da93efcf7c4597064ee/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /Users/freivokh/.gradle/caches/transforms-3/c3d60e07da3a0da93efcf7c4597064ee/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.leanback:leanback:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/27caebf8639fc182df7857217a7912b0/transformed/leanback-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.leanback:leanback:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/27caebf8639fc182df7857217a7912b0/transformed/leanback-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5a9f32f29ad55517f837d259bf3a756b/transformed/recyclerview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5a9f32f29ad55517f837d259bf3a756b/transformed/recyclerview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/b6c0882815dcedd3e77bdc3acf6bda8d/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/b6c0882815dcedd3e77bdc3acf6bda8d/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/8282851a730849dc5f21c66d3670cbec/transformed/media-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/8282851a730849dc5f21c66d3670cbec/transformed/media-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.dagger:hilt-android:2.48] /Users/freivokh/.gradle/caches/transforms-3/2cba3639471023458ba97701862e9b8b/transformed/hilt-android-2.48/AndroidManifest.xml:18:3-42
+MERGED from [com.google.dagger:hilt-android:2.48] /Users/freivokh/.gradle/caches/transforms-3/2cba3639471023458ba97701862e9b8b/transformed/hilt-android-2.48/AndroidManifest.xml:18:3-42
+MERGED from [androidx.fragment:fragment:1.5.1] /Users/freivokh/.gradle/caches/transforms-3/67c26ff0647b7a4f11e3eba4d5f433ff/transformed/fragment-1.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.5.1] /Users/freivokh/.gradle/caches/transforms-3/67c26ff0647b7a4f11e3eba4d5f433ff/transformed/fragment-1.5.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.6.0] /Users/freivokh/.gradle/caches/transforms-3/1cd9454ca3d6ba642c3dfdb7d5bad755/transformed/activity-1.6.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.6.0] /Users/freivokh/.gradle/caches/transforms-3/1cd9454ca3d6ba642c3dfdb7d5bad755/transformed/activity-1.6.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/004387eed61124ac12536b6e9277d30c/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/004387eed61124ac12536b6e9277d30c/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/88e3be633c7f08650e8d2298e231408c/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/88e3be633c7f08650e8d2298e231408c/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/db24e4b9f0a00cbe6a95f4305db9ffa1/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/db24e4b9f0a00cbe6a95f4305db9ffa1/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/eaa79d7b7fbc79d4c64063adaf9596ea/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/eaa79d7b7fbc79d4c64063adaf9596ea/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/a95d46a7b974b77b8142e9bba3c90ddc/transformed/coordinatorlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/a95d46a7b974b77b8142e9bba3c90ddc/transformed/coordinatorlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/c70584923e9c7ad44e4a2516233e996f/transformed/slidingpanelayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/c70584923e9c7ad44e4a2516233e996f/transformed/slidingpanelayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/da7325e80acfe8ad71a84b8d9e8fc594/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/da7325e80acfe8ad71a84b8d9e8fc594/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/9252c3756b7b31dc7b3ee1254686b15d/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/9252c3756b7b31dc7b3ee1254686b15d/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/c60673fdf2b0fc8d88db951187eebe01/transformed/asynclayoutinflater-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/c60673fdf2b0fc8d88db951187eebe01/transformed/asynclayoutinflater-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/freivokh/.gradle/caches/transforms-3/724e9e2c8cc53c9ce5956f1dab0fb25e/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/freivokh/.gradle/caches/transforms-3/724e9e2c8cc53c9ce5956f1dab0fb25e/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/freivokh/.gradle/caches/transforms-3/ad7c165e3f415797e33feea4fe4c88f6/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/freivokh/.gradle/caches/transforms-3/ad7c165e3f415797e33feea4fe4c88f6/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.loader:loader:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/f54abb68f347ea3325ad366aa04908e1/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/f54abb68f347ea3325ad366aa04908e1/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/688b12b477375a2d956bcdb7de2e32a8/transformed/lifecycle-livedata-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/688b12b477375a2d956bcdb7de2e32a8/transformed/lifecycle-livedata-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/94a47516ddcb8098f6beb701dd8e1bc2/transformed/lifecycle-livedata-core-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/94a47516ddcb8098f6beb701dd8e1bc2/transformed/lifecycle-livedata-core-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/65e1239ef0856dc0fd0d53c943120c0c/transformed/lifecycle-viewmodel-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/65e1239ef0856dc0fd0d53c943120c0c/transformed/lifecycle-viewmodel-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/freivokh/.gradle/caches/transforms-3/261fb3c9a3339956d457637ea59b2f32/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/freivokh/.gradle/caches/transforms-3/261fb3c9a3339956d457637ea59b2f32/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6cecc663f6db32b65c6c07b17df6189/transformed/lifecycle-runtime-2.6.2/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6cecc663f6db32b65c6c07b17df6189/transformed/lifecycle-runtime-2.6.2/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/bb30f45fc20d9271cfb65408f5ee1173/transformed/lifecycle-viewmodel-ktx-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/bb30f45fc20d9271cfb65408f5ee1173/transformed/lifecycle-viewmodel-ktx-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/5ed21c12839351ac85666b600f46cb32/transformed/lifecycle-runtime-ktx-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/5ed21c12839351ac85666b600f46cb32/transformed/lifecycle-runtime-ktx-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/34b7152bda87f64a5d135a51bc67cfae/transformed/lifecycle-viewmodel-savedstate-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/34b7152bda87f64a5d135a51bc67cfae/transformed/lifecycle-viewmodel-savedstate-2.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/58d0a5c7c53b765f72a6df4415e94e7b/transformed/core-ktx-1.12.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/58d0a5c7c53b765f72a6df4415e94e7b/transformed/core-ktx-1.12.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.room:room-ktx:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/38bea9d76254fc14fae6b0a39b61de3b/transformed/room-ktx-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.room:room-ktx:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/38bea9d76254fc14fae6b0a39b61de3b/transformed/room-ktx-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /Users/freivokh/.gradle/caches/transforms-3/f415368770b4e329c302ab8959cdfdd4/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-framework:2.4.0] /Users/freivokh/.gradle/caches/transforms-3/f415368770b4e329c302ab8959cdfdd4/transformed/sqlite-framework-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite:2.4.0] /Users/freivokh/.gradle/caches/transforms-3/b32fa436791c5386c692cce67e89cd82/transformed/sqlite-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite:2.4.0] /Users/freivokh/.gradle/caches/transforms-3/b32fa436791c5386c692cce67e89cd82/transformed/sqlite-2.4.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/edca49f161eb89f2d45d4f828c00462a/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/edca49f161eb89f2d45d4f828c00462a/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /Users/freivokh/.gradle/caches/transforms-3/7dd0ae5d5117cd65c28582d9adc1bbe3/transformed/security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /Users/freivokh/.gradle/caches/transforms-3/7dd0ae5d5117cd65c28582d9adc1bbe3/transformed/security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/4dd1d2f91da279ac5709135f3aec1a33/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/4dd1d2f91da279ac5709135f3aec1a33/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/freivokh/.gradle/caches/transforms-3/b142d55444b3fb854b39b5bc8b4f3eb1/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/freivokh/.gradle/caches/transforms-3/b142d55444b3fb854b39b5bc8b4f3eb1/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/e035e2c15790d5ab6d4dfca06431bb87/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/e035e2c15790d5ab6d4dfca06431bb87/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/7adf07d520eef6f16cf16ee22012e9f2/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/7adf07d520eef6f16cf16ee22012e9f2/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/95f72df3df33a0dbe5484324048c732f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/95f72df3df33a0dbe5484324048c732f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5c10a86ba47ed6daa74bd2b1cb7ea256/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5c10a86ba47ed6daa74bd2b1cb7ea256/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5281715fa97c343ae304aa8260b2ceb4/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5281715fa97c343ae304aa8260b2ceb4/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/98ade4739f5b74e1d5dea4f472a29fc9/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/98ade4739f5b74e1d5dea4f472a29fc9/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5a94c6d9c999ee3fa903a47157e2699b/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /Users/freivokh/.gradle/caches/transforms-3/5a94c6d9c999ee3fa903a47157e2699b/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.dagger:dagger-lint-aar:2.48] /Users/freivokh/.gradle/caches/transforms-3/5cf66a0efa626acae5f0503e63671db2/transformed/dagger-lint-aar-2.48/AndroidManifest.xml:18:3-42
+MERGED from [com.google.dagger:dagger-lint-aar:2.48] /Users/freivokh/.gradle/caches/transforms-3/5cf66a0efa626acae5f0503e63671db2/transformed/dagger-lint-aar-2.48/AndroidManifest.xml:18:3-42
+	android:targetSdkVersion
+		INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/95f72df3df33a0dbe5484324048c732f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/freivokh/.gradle/caches/transforms-3/95f72df3df33a0dbe5484324048c732f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:30:17-75
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+permission#com.readwisequotes.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+uses-permission#com.readwisequotes.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
+service#androidx.room.MultiInstanceInvalidationService
+ADDED from [androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:24:9-28:63
+	android:exported
+		ADDED from [androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:27:13-37
+	tools:ignore
+		ADDED from [androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:28:13-60
+	android:directBootAware
+		ADDED from [androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:26:13-43
+	android:name
+		ADDED from [androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:25:13-74
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92

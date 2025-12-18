@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.readwisequotes.app-merged_res-34:/xml_dream_info.xml.flat",
+        "source": "com.readwisequotes.app-main-36:/xml/dream_info.xml"
+    },
+    {
+        "merged": "com.readwisequotes.app-merged_res-34:/layout_activity_main.xml.flat",
+        "source": "com.readwisequotes.app-main-36:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.readwisequotes.app-merged_res-34:/layout_activity_settings.xml.flat",
+        "source": "com.readwisequotes.app-main-36:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "com.readwisequotes.app-merged_res-34:/drawable_app_banner.xml.flat",
+        "source": "com.readwisequotes.app-main-36:/drawable/app_banner.xml"
+    }
+]

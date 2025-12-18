@@ -1,0 +1,191 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<!-- app/src/main/AndroidManifest.xml -->
+3<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+4    package="com.readwisequotes"
+5    android:versionCode="1"
+6    android:versionName="1.0" >
+7
+8    <uses-sdk
+9        android:minSdkVersion="29"
+10        android:targetSdkVersion="34" />
+11
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:5:5-67
+12-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:5:22-64
+13
+14    <uses-feature
+14-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:7:5-9:35
+15        android:name="android.software.leanback"
+15-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:8:9-49
+16        android:required="true" />
+16-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:9:9-32
+17    <uses-feature
+17-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:10:5-12:36
+18        android:name="android.hardware.touchscreen"
+18-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:11:9-52
+19        android:required="false" />
+19-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:12:9-33
+20
+21    <permission
+21-->[androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+22        android:name="com.readwisequotes.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+22-->[androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+23        android:protectionLevel="signature" />
+23-->[androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+24
+25    <uses-permission android:name="com.readwisequotes.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+25-->[androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+25-->[androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+26
+27    <application
+27-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:14:5-51:19
+28        android:name="com.readwisequotes.ReadwiseQuotesApp"
+28-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:15:9-42
+29        android:allowBackup="true"
+29-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:16:9-35
+30        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+30-->[androidx.core:core:1.12.0] /Users/freivokh/.gradle/caches/transforms-3/dd91da340ad2b5b9f3d04c07779f9090/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+31        android:banner="@drawable/app_banner"
+31-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:17:9-46
+32        android:debuggable="true"
+33        android:extractNativeLibs="false"
+34        android:icon="@drawable/app_banner"
+34-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:18:9-44
+35        android:label="@string/app_name"
+35-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:19:9-41
+36        android:supportsRtl="true"
+36-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:20:9-35
+37        android:theme="@style/Theme.ReadwiseQuotes" >
+37-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:21:9-52
+38        <activity
+38-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:23:9-30:20
+39            android:name="com.readwisequotes.ui.MainActivity"
+39-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:24:13-44
+40            android:exported="true" >
+40-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:25:13-36
+41            <intent-filter>
+41-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:26:13-29:29
+42                <action android:name="android.intent.action.MAIN" />
+42-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:27:17-69
+42-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:27:25-66
+43
+44                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+44-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:28:17-86
+44-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:28:27-83
+45            </intent-filter>
+46        </activity>
+47        <activity
+47-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:32:9-35:59
+48            android:name="com.readwisequotes.ui.SettingsActivity"
+48-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:33:13-48
+49            android:exported="false"
+49-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:34:13-37
+50            android:theme="@style/Theme.ReadwiseQuotes" />
+50-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:35:13-56
+51
+52        <service
+52-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:37:9-49:19
+53            android:name="com.readwisequotes.QuoteDreamService"
+53-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:38:13-46
+54            android:exported="true"
+54-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:39:13-36
+55            android:label="@string/app_name"
+55-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:40:13-45
+56            android:permission="android.permission.BIND_DREAM_SERVICE" >
+56-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:41:13-71
+57            <intent-filter>
+57-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:42:13-45:29
+58                <action android:name="android.service.dreams.DreamService" />
+58-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:43:17-78
+58-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:43:25-75
+59
+60                <category android:name="android.intent.category.DEFAULT" />
+60-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:44:17-76
+60-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:44:27-73
+61            </intent-filter>
+62
+63            <meta-data
+63-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:46:13-48:54
+64                android:name="android.service.dream"
+64-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:47:17-53
+65                android:resource="@xml/dream_info" />
+65-->/Users/freivokh/Code/Claude/readwise-quotes-android-tv/app/src/main/AndroidManifest.xml:48:17-51
+66        </service>
+67
+68        <provider
+68-->[androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+69            android:name="androidx.startup.InitializationProvider"
+69-->[androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:25:13-67
+70            android:authorities="com.readwisequotes.androidx-startup"
+70-->[androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:26:13-68
+71            android:exported="false" >
+71-->[androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:27:13-37
+72            <meta-data
+72-->[androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+73                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+73-->[androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:30:17-75
+74                android:value="androidx.startup" />
+74-->[androidx.emoji2:emoji2:1.2.0] /Users/freivokh/.gradle/caches/transforms-3/743c650aad76792ee6acb43b11ce45d4/transformed/emoji2-1.2.0/AndroidManifest.xml:31:17-49
+75            <meta-data
+75-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
+76                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+76-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
+77                android:value="androidx.startup" />
+77-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/freivokh/.gradle/caches/transforms-3/a6fda40dc432d388457b6d9988ca4a93/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
+78            <meta-data
+78-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+79                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+79-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+80                android:value="androidx.startup" />
+80-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+81        </provider>
+82
+83        <service
+83-->[androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:24:9-28:63
+84            android:name="androidx.room.MultiInstanceInvalidationService"
+84-->[androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:25:13-74
+85            android:directBootAware="true"
+85-->[androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:26:13-43
+86            android:exported="false" />
+86-->[androidx.room:room-runtime:2.6.1] /Users/freivokh/.gradle/caches/transforms-3/f2067a29c69e6cf13a633ee8c54815a6/transformed/room-runtime-2.6.1/AndroidManifest.xml:27:13-37
+87
+88        <receiver
+88-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+89            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+89-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+90            android:directBootAware="false"
+90-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+91            android:enabled="true"
+91-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+92            android:exported="true"
+92-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+93            android:permission="android.permission.DUMP" >
+93-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+94            <intent-filter>
+94-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+95                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+96            </intent-filter>
+97            <intent-filter>
+97-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+98                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+99            </intent-filter>
+100            <intent-filter>
+100-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+101                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+101-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+101-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+102            </intent-filter>
+103            <intent-filter>
+103-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+104                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+104-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+104-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/freivokh/.gradle/caches/transforms-3/e493560ce3e6f11ceaf25ba1557610de/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+105            </intent-filter>
+106        </receiver>
+107    </application>
+108
+109</manifest>

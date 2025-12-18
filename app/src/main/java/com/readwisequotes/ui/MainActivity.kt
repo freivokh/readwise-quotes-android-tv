@@ -8,7 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.readwisequotes.R
 import com.readwisequotes.data.QuoteRepository
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : FragmentActivity() {
 
     @Inject lateinit var settingsManager: SettingsManager
     @Inject lateinit var quoteRepository: QuoteRepository

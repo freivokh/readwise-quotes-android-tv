@@ -4,7 +4,7 @@ package com.readwisequotes.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.readwisequotes.R
 import com.readwisequotes.data.QuoteRepository
@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : FragmentActivity() {
 
     @Inject lateinit var settingsManager: SettingsManager
     @Inject lateinit var quoteRepository: QuoteRepository
