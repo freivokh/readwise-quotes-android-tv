@@ -2,6 +2,7 @@
 package com.readwisequotes.ui
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -344,98 +345,130 @@ class SettingsActivity : FragmentActivity() {
         val existingGroups = settingsManager.getTagGroups()
         val defaultName = "Group ${existingGroups.size + 1}"
 
-        val nameInput = EditText(this).apply {
-            hint = "Group name"
-            setText(defaultName)
-            setPadding(48, 32, 48, 32)
-            selectAll()
+        showGroupNameDialog("Create Tag Group", defaultName) { name ->
+            showSelectTagsForGroupDialog(name, emptySet())
+        }
+    }
+
+    private fun showGroupNameDialog(title: String, initialName: String, onNext: (String) -> Unit) {
+        val dialog = Dialog(this, android.R.style.Theme_Material_Dialog_NoActionBar)
+        val view = layoutInflater.inflate(R.layout.dialog_group_name, null)
+        dialog.setContentView(view)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val titleView = view.findViewById<TextView>(R.id.dialogTitle)
+        val nameInput = view.findViewById<EditText>(R.id.groupNameInput)
+        val cancelButton = view.findViewById<Button>(R.id.cancelButton)
+        val nextButton = view.findViewById<Button>(R.id.nextButton)
+
+        titleView.text = title
+        nameInput.setText(initialName)
+        nameInput.selectAll()
+
+        cancelButton.setOnClickListener { dialog.dismiss() }
+        nextButton.setOnClickListener {
+            val name = nameInput.text.toString().trim().ifEmpty { initialName }
+            dialog.dismiss()
+            onNext(name)
         }
 
-        AlertDialog.Builder(this)
-            .setTitle("Create Tag Group")
-            .setView(nameInput)
-            .setPositiveButton("Next") { _, _ ->
-                val name = nameInput.text.toString().trim().ifEmpty { defaultName }
-                showSelectTagsForGroupDialog(name, emptySet())
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
+        // Handle Enter key on EditText
+        nameInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT) {
+                nextButton.performClick()
+                true
+            } else false
+        }
+
+        dialog.show()
+        nameInput.requestFocus()
     }
 
     private fun showSelectTagsForGroupDialog(groupName: String, existingTags: Set<String>, groupId: String? = null) {
         val selectedTags = existingTags.toMutableSet()
-        val checkedItems = availableTags.map { selectedTags.contains(it) }.toBooleanArray()
 
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("Select tags for \"$groupName\"")
-            .setMultiChoiceItems(availableTags.toTypedArray(), checkedItems) { _, which, isChecked ->
-                val tag = availableTags[which]
-                if (isChecked) {
-                    selectedTags.add(tag)
-                } else {
-                    selectedTags.remove(tag)
-                }
+        val dialog = Dialog(this, android.R.style.Theme_Material_Dialog_NoActionBar)
+        val view = layoutInflater.inflate(R.layout.dialog_tag_selection, null)
+        dialog.setContentView(view)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(false)
+
+        val titleView = view.findViewById<TextView>(R.id.dialogTitle)
+        val tagsContainer = view.findViewById<LinearLayout>(R.id.tagsContainer)
+        val cancelButton = view.findViewById<Button>(R.id.cancelButton)
+        val saveButton = view.findViewById<Button>(R.id.saveButton)
+
+        titleView.text = "Select tags for \"$groupName\""
+
+        // Create checkboxes for each tag
+        val checkboxes = mutableListOf<CheckBox>()
+        availableTags.forEachIndexed { index, tag ->
+            val checkBox = layoutInflater.inflate(R.layout.item_tag_checkbox, tagsContainer, false) as CheckBox
+            checkBox.text = tag
+            checkBox.isChecked = selectedTags.contains(tag)
+            checkBox.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) selectedTags.add(tag) else selectedTags.remove(tag)
             }
-            .setPositiveButton("Save", null) // Set to null, we'll override below
-            .setNegativeButton("Cancel", null)
-            .create()
 
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { view ->
-                view.isEnabled = false // Prevent double-clicks
-
-                if (selectedTags.isEmpty()) {
-                    Toast.makeText(this, "Please select at least one tag", Toast.LENGTH_SHORT).show()
-                    view.isEnabled = true
-                    return@setOnClickListener
-                }
-
-                if (groupId != null) {
-                    // Editing existing group
-                    val existingGroup = settingsManager.getTagGroups().find { it.id == groupId }
-                    if (existingGroup != null) {
-                        settingsManager.updateTagGroup(existingGroup.copy(name = groupName, tags = selectedTags))
-                    }
-                } else {
-                    // Creating new group
-                    val newGroup = com.readwisequotes.data.model.TagGroup(
-                        name = groupName,
-                        tags = selectedTags
-                    )
-                    settingsManager.addTagGroup(newGroup)
-                }
-
-                dialog.dismiss()
-                Toast.makeText(this@SettingsActivity, "Group \"$groupName\" saved!", Toast.LENGTH_SHORT).show()
-                renderTagGroups()
-                updateSelectedTagsDisplay()
+            // Set focus navigation
+            if (index == 0) {
+                checkBox.nextFocusUpId = cancelButton.id
             }
+            if (index == availableTags.size - 1) {
+                checkBox.nextFocusDownId = cancelButton.id
+                cancelButton.nextFocusUpId = checkBox.id
+                saveButton.nextFocusUpId = checkBox.id
+            }
+
+            checkboxes.add(checkBox)
+            tagsContainer.addView(checkBox)
         }
 
-        dialog.setCancelable(true)
-        dialog.setCanceledOnTouchOutside(false) // Don't dismiss when clicking outside
+        cancelButton.setOnClickListener { dialog.dismiss() }
+        saveButton.setOnClickListener {
+            if (selectedTags.isEmpty()) {
+                Toast.makeText(this, "Please select at least one tag", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            saveButton.isEnabled = false
+
+            if (groupId != null) {
+                val existingGroup = settingsManager.getTagGroups().find { it.id == groupId }
+                if (existingGroup != null) {
+                    settingsManager.updateTagGroup(existingGroup.copy(name = groupName, tags = selectedTags))
+                }
+            } else {
+                val newGroup = com.readwisequotes.data.model.TagGroup(
+                    name = groupName,
+                    tags = selectedTags
+                )
+                settingsManager.addTagGroup(newGroup)
+            }
+
+            dialog.dismiss()
+            Toast.makeText(this@SettingsActivity, "Group \"$groupName\" saved!", Toast.LENGTH_SHORT).show()
+            renderTagGroups()
+            updateSelectedTagsDisplay()
+        }
+
         dialog.show()
+
+        // Focus first checkbox if available
+        if (checkboxes.isNotEmpty()) {
+            checkboxes[0].requestFocus()
+        }
     }
 
     private fun showEditGroupDialog(group: com.readwisequotes.data.model.TagGroup) {
-        val nameInput = EditText(this).apply {
-            setText(group.name)
-            setPadding(48, 32, 48, 32)
-        }
-
-        AlertDialog.Builder(this)
-            .setTitle("Edit Group")
-            .setView(nameInput)
-            .setPositiveButton("Next") { _, _ ->
-                val name = nameInput.text.toString().trim()
-                if (name.isNotEmpty()) {
-                    showSelectTagsForGroupDialog(name, group.tags, group.id)
-                } else {
-                    Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show()
-                }
+        showGroupNameDialog("Edit Group", group.name) { name ->
+            if (name.isNotEmpty()) {
+                showSelectTagsForGroupDialog(name, group.tags, group.id)
+            } else {
+                Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
     }
 
     private fun showDeleteGroupConfirmation(group: com.readwisequotes.data.model.TagGroup) {

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#222222">
+
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Tag Group"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp"
+        android:layout_marginBottom="24dp" />
+
+    <EditText
+        android:id="@+id/groupNameInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Group name"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"
+        android:textSize="14sp"
+        android:background="@drawable/focusable_edittext_background"
+        android:inputType="text"
+        android:imeOptions="actionNext"
+        android:singleLine="true"
+        android:paddingHorizontal="12dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:nextFocusDown="@id/cancelButton"
+        android:layout_marginBottom="24dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:text="Cancel"
+            android:textColor="@color/text_primary"
+            android:textSize="13sp"
+            android:paddingHorizontal="24dp"
+            android:background="@drawable/focusable_button_background"
+            android:focusable="true"
+            android:nextFocusUp="@id/groupNameInput"
+            android:nextFocusRight="@id/nextButton"
+            android:layout_marginEnd="12dp" />
+
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:text="Next"
+            android:textColor="@color/text_primary"
+            android:textSize="13sp"
+            android:paddingHorizontal="24dp"
+            android:background="@drawable/focusable_button_background"
+            android:focusable="true"
+            android:nextFocusUp="@id/groupNameInput"
+            android:nextFocusLeft="@id/cancelButton" />
+
+    </LinearLayout>
+
+</LinearLayout>

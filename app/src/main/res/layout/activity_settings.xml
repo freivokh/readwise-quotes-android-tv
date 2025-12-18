@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settingsScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark"
     android:paddingHorizontal="64dp"
-    android:paddingVertical="48dp">
+    android:paddingVertical="48dp"
+    android:scrollbars="vertical"
+    android:fadeScrollbars="false"
+    android:descendantFocusability="afterDescendants"
+    android:focusable="false"
+    android:focusableInTouchMode="false">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +33,9 @@
                 android:textSize="28sp"
                 android:textColor="@color/text_primary"
                 android:background="@drawable/focusable_button_background"
-                android:focusable="true" />
+                android:focusable="true"
+                android:nextFocusDown="@id/apiTokenInput"
+                android:nextFocusRight="@id/apiTokenInput" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,9 +67,12 @@
             android:textSize="14sp"
             android:background="@drawable/focusable_edittext_background"
             android:inputType="textPassword"
+            android:imeOptions="actionNext"
             android:paddingHorizontal="12dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:nextFocusUp="@id/backButton"
+            android:nextFocusDown="@id/syncButton"
             android:layout_marginBottom="20dp" />
 
         <LinearLayout
@@ -80,7 +91,9 @@
                 android:textColor="@color/text_primary"
                 android:paddingHorizontal="24dp"
                 android:background="@drawable/focusable_button_background"
-                android:focusable="true" />
+                android:focusable="true"
+                android:nextFocusUp="@id/apiTokenInput"
+                android:nextFocusDown="@id/filterSpinner" />
 
             <TextView
                 android:id="@+id/syncStatus"
@@ -116,7 +129,9 @@
             android:layout_height="48dp"
             android:background="@drawable/focusable_spinner_background"
             android:focusable="true"
-            android:focusableInTouchMode="false" />
+            android:focusableInTouchMode="false"
+            android:nextFocusUp="@id/syncButton"
+            android:nextFocusDown="@id/tagModeToggle" />
 
         <!-- Tag Groups (visible when By Tag is selected) -->
         <LinearLayout
@@ -152,7 +167,9 @@
                     android:textSize="11sp"
                     android:textColor="@color/text_primary"
                     android:background="@drawable/focusable_button_background"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:nextFocusUp="@id/filterSpinner"
+                    android:nextFocusDown="@id/createGroupButton" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -183,6 +200,8 @@
                 android:paddingHorizontal="20dp"
                 android:background="@drawable/focusable_button_background"
                 android:focusable="true"
+                android:nextFocusUp="@id/tagModeToggle"
+                android:nextFocusDown="@id/styleSpinner"
                 android:layout_marginTop="12dp" />
 
             <!-- Active tags summary -->
@@ -231,7 +250,9 @@
             android:background="@drawable/focusable_spinner_background"
             android:layout_marginBottom="24dp"
             android:focusable="true"
-            android:focusableInTouchMode="false" />
+            android:focusableInTouchMode="false"
+            android:nextFocusUp="@id/createGroupButton"
+            android:nextFocusDown="@id/durationSeekBar" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -257,7 +278,9 @@
                 android:progress="20"
                 android:background="@drawable/focusable_item_background"
                 android:focusable="true"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:nextFocusUp="@id/styleSpinner"
+                android:nextFocusDown="@id/syncIntervalSpinner" />
 
             <TextView
                 android:id="@+id/durationValue"
@@ -301,7 +324,9 @@
             android:layout_height="48dp"
             android:background="@drawable/focusable_spinner_background"
             android:focusable="true"
-            android:focusableInTouchMode="false" />
+            android:focusableInTouchMode="false"
+            android:nextFocusUp="@id/durationSeekBar"
+            android:nextFocusDown="@id/backButton" />
 
         <!-- Bottom spacing -->
         <View
