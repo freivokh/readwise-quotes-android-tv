@@ -21,12 +21,12 @@
 
             <Button
                 android:id="@+id/backButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:text="‹"
                 android:textSize="28sp"
-                android:textColor="@color/text_secondary"
-                android:background="@android:color/transparent"
+                android:textColor="@color/text_primary"
+                android:background="@drawable/focusable_button_background"
                 android:focusable="true" />
 
             <TextView
@@ -52,22 +52,16 @@
         <EditText
             android:id="@+id/apiTokenInput"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="52dp"
             android:hint="@string/api_token_hint"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_secondary"
             android:textSize="14sp"
-            android:background="@android:color/transparent"
+            android:background="@drawable/focusable_edittext_background"
             android:inputType="textPassword"
-            android:paddingHorizontal="0dp"
+            android:paddingHorizontal="12dp"
             android:focusable="true"
-            android:focusableInTouchMode="true" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/text_secondary"
-            android:alpha="0.3"
+            android:focusableInTouchMode="true"
             android:layout_marginBottom="20dp" />
 
         <LinearLayout
@@ -80,10 +74,13 @@
             <Button
                 android:id="@+id/syncButton"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="44dp"
                 android:text="@string/sync_now"
                 android:textSize="13sp"
-                android:paddingHorizontal="20dp" />
+                android:textColor="@color/text_primary"
+                android:paddingHorizontal="24dp"
+                android:background="@drawable/focusable_button_background"
+                android:focusable="true" />
 
             <TextView
                 android:id="@+id/syncStatus"
@@ -116,9 +113,10 @@
         <Spinner
             android:id="@+id/filterSpinner"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@android:drawable/btn_dropdown"
-            android:focusable="true" />
+            android:layout_height="48dp"
+            android:background="@drawable/focusable_spinner_background"
+            android:focusable="true"
+            android:focusableInTouchMode="false" />
 
         <!-- Tag Groups (visible when By Tag is selected) -->
         <LinearLayout
@@ -147,11 +145,14 @@
 
                 <ToggleButton
                     android:id="@+id/tagModeToggle"
-                    android:layout_width="56dp"
-                    android:layout_height="32dp"
+                    android:layout_width="60dp"
+                    android:layout_height="36dp"
                     android:textOn="ALL"
                     android:textOff="ANY"
-                    android:textSize="11sp" />
+                    android:textSize="11sp"
+                    android:textColor="@color/text_primary"
+                    android:background="@drawable/focusable_button_background"
+                    android:focusable="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -175,10 +176,13 @@
             <Button
                 android:id="@+id/createGroupButton"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="40dp"
                 android:text="+ Create Group"
                 android:textSize="12sp"
-                android:paddingHorizontal="16dp"
+                android:textColor="@color/text_primary"
+                android:paddingHorizontal="20dp"
+                android:background="@drawable/focusable_button_background"
+                android:focusable="true"
                 android:layout_marginTop="12dp" />
 
             <!-- Active tags summary -->
@@ -223,10 +227,11 @@
         <Spinner
             android:id="@+id/styleSpinner"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@android:drawable/btn_dropdown"
+            android:layout_height="48dp"
+            android:background="@drawable/focusable_spinner_background"
             android:layout_marginBottom="24dp"
-            android:focusable="true" />
+            android:focusable="true"
+            android:focusableInTouchMode="false" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -245,12 +250,14 @@
             <SeekBar
                 android:id="@+id/durationSeekBar"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_weight="1"
                 android:min="10"
                 android:max="60"
                 android:progress="20"
-                android:focusable="true" />
+                android:background="@drawable/focusable_item_background"
+                android:focusable="true"
+                android:padding="8dp" />
 
             <TextView
                 android:id="@+id/durationValue"
@@ -291,9 +298,10 @@
         <Spinner
             android:id="@+id/syncIntervalSpinner"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@android:drawable/btn_dropdown"
-            android:focusable="true" />
+            android:layout_height="48dp"
+            android:background="@drawable/focusable_spinner_background"
+            android:focusable="true"
+            android:focusableInTouchMode="false" />
 
         <!-- Bottom spacing -->
         <View

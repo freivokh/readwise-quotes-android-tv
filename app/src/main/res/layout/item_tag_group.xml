@@ -45,7 +45,10 @@
         android:layout_height="36dp"
         android:text="Edit"
         android:textSize="12sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/focusable_button_background"
         android:focusable="true"
+        android:paddingHorizontal="12dp"
         android:layout_marginStart="8dp" />
 
     <Button
@@ -54,7 +57,10 @@
         android:layout_height="36dp"
         android:text="Del"
         android:textSize="12sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/focusable_button_background"
         android:focusable="true"
+        android:paddingHorizontal="12dp"
         android:layout_marginStart="4dp" />
 
 </LinearLayout>

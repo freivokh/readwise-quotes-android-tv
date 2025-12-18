@@ -76,13 +76,16 @@ class SettingsActivity : FragmentActivity() {
             finish()
         }
 
-        // API Token - save on focus lost
-        apiTokenInput.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
+        // API Token - verify on Enter key (not on focus change for TV navigation)
+        apiTokenInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
                 val token = apiTokenInput.text.toString()
                 if (token.isNotEmpty()) {
                     verifyAndSaveToken(token)
                 }
+                true
+            } else {
+                false
             }
         }
 
