@@ -42,6 +42,11 @@ class MainActivity : FragmentActivity() {
         openSettingsButton.setOnClickListener {
             openSettings()
         }
+
+        // Also open settings when clicking on the quote display
+        quoteDisplayView.setOnClickListener {
+            openSettings()
+        }
     }
 
     override fun onResume() {

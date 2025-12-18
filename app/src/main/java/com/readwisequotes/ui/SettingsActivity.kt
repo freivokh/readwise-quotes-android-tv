@@ -5,8 +5,6 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.*
-import android.widget.ImageButton
-import android.widget.Switch
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.readwisequotes.R
@@ -307,11 +305,11 @@ class SettingsActivity : FragmentActivity() {
         for (group in groups) {
             val itemView = layoutInflater.inflate(R.layout.item_tag_group, tagGroupsContainer, false)
 
-            val groupSwitch = itemView.findViewById<Switch>(R.id.groupSwitch)
+            val groupSwitch = itemView.findViewById<CheckBox>(R.id.groupSwitch)
             val groupName = itemView.findViewById<TextView>(R.id.groupName)
             val groupTags = itemView.findViewById<TextView>(R.id.groupTags)
-            val editButton = itemView.findViewById<ImageButton>(R.id.editButton)
-            val deleteButton = itemView.findViewById<ImageButton>(R.id.deleteButton)
+            val editButton = itemView.findViewById<Button>(R.id.editButton)
+            val deleteButton = itemView.findViewById<Button>(R.id.deleteButton)
 
             groupName.text = group.name
             groupTags.text = group.tags.joinToString(", ")
@@ -340,21 +338,22 @@ class SettingsActivity : FragmentActivity() {
             return
         }
 
+        val existingGroups = settingsManager.getTagGroups()
+        val defaultName = "Group ${existingGroups.size + 1}"
+
         val nameInput = EditText(this).apply {
             hint = "Group name"
+            setText(defaultName)
             setPadding(48, 32, 48, 32)
+            selectAll()
         }
 
         AlertDialog.Builder(this)
             .setTitle("Create Tag Group")
             .setView(nameInput)
             .setPositiveButton("Next") { _, _ ->
-                val name = nameInput.text.toString().trim()
-                if (name.isNotEmpty()) {
-                    showSelectTagsForGroupDialog(name, emptySet())
-                } else {
-                    Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show()
-                }
+                val name = nameInput.text.toString().trim().ifEmpty { defaultName }
+                showSelectTagsForGroupDialog(name, emptySet())
             }
             .setNegativeButton("Cancel", null)
             .show()
@@ -364,7 +363,7 @@ class SettingsActivity : FragmentActivity() {
         val selectedTags = existingTags.toMutableSet()
         val checkedItems = availableTags.map { selectedTags.contains(it) }.toBooleanArray()
 
-        AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
             .setTitle("Select tags for \"$groupName\"")
             .setMultiChoiceItems(availableTags.toTypedArray(), checkedItems) { _, which, isChecked ->
                 val tag = availableTags[which]
@@ -374,10 +373,18 @@ class SettingsActivity : FragmentActivity() {
                     selectedTags.remove(tag)
                 }
             }
-            .setPositiveButton("Save") { _, _ ->
+            .setPositiveButton("Save", null) // Set to null, we'll override below
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { view ->
+                view.isEnabled = false // Prevent double-clicks
+
                 if (selectedTags.isEmpty()) {
                     Toast.makeText(this, "Please select at least one tag", Toast.LENGTH_SHORT).show()
-                    return@setPositiveButton
+                    view.isEnabled = true
+                    return@setOnClickListener
                 }
 
                 if (groupId != null) {
@@ -395,11 +402,16 @@ class SettingsActivity : FragmentActivity() {
                     settingsManager.addTagGroup(newGroup)
                 }
 
+                dialog.dismiss()
+                Toast.makeText(this@SettingsActivity, "Group \"$groupName\" saved!", Toast.LENGTH_SHORT).show()
                 renderTagGroups()
                 updateSelectedTagsDisplay()
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
+
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(false) // Don't dismiss when clicking outside
+        dialog.show()
     }
 
     private fun showEditGroupDialog(group: com.readwisequotes.data.model.TagGroup) {

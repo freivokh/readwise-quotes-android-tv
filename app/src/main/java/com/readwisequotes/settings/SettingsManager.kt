@@ -98,13 +98,21 @@ class SettingsManager @Inject constructor(
     }
 
     fun saveTagGroups(groups: List<TagGroup>) {
-        val json = gson.toJson(groups)
-        prefs.edit().putString(KEY_TAG_GROUPS, json).apply()
+        try {
+            val json = gson.toJson(groups)
+            android.util.Log.d("SettingsManager", "Saving tag groups JSON: $json")
+            val success = prefs.edit().putString(KEY_TAG_GROUPS, json).commit()
+            android.util.Log.d("SettingsManager", "Save result: $success")
+        } catch (e: Exception) {
+            android.util.Log.e("SettingsManager", "Error saving tag groups", e)
+        }
     }
 
     fun addTagGroup(group: TagGroup) {
+        android.util.Log.d("SettingsManager", "Adding tag group: ${group.name}")
         val groups = getTagGroups().toMutableList()
         groups.add(group)
+        android.util.Log.d("SettingsManager", "Total groups now: ${groups.size}")
         saveTagGroups(groups)
     }
 
