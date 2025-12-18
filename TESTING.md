@@ -66,6 +66,12 @@ Location: `/opt/homebrew/share/android-commandlinetools/`
 
 **AVD Location:** `~/.android/avd/AndroidTV.avd/`
 
+**Critical AVD Settings** (in `config.ini`):
+```ini
+hw.keyboard = yes      # Enables Mac keyboard → D-pad mapping
+hw.gpu.enabled = yes   # GPU acceleration for performance
+```
+
 ## How to Test
 
 ### Step 1: Launch the Emulator
@@ -96,11 +102,22 @@ export JAVA_HOME=/opt/homebrew/Cellar/openjdk@17/17.0.17/libexec/openjdk.jdk/Con
 adb shell am start -n com.readwisequotes/.ui.MainActivity
 ```
 
-## Controlling the App via ADB
+## Controlling the Emulator
 
-**Known Issue:** The Android TV emulator's extended controls (virtual remote) are unresponsive. Use ADB commands instead.
+### Keyboard Controls (Recommended)
 
-### Navigation Commands
+With `hw.keyboard = yes` enabled in the AVD config, use your Mac's keyboard:
+
+| Key | Action |
+|-----|--------|
+| Arrow keys | D-pad navigation |
+| Enter | Select/OK |
+| Escape | Back |
+| F1 | Home |
+
+### ADB Commands (Alternative)
+
+If keyboard doesn't work, use ADB:
 
 ```bash
 # D-Pad directions
@@ -111,18 +128,14 @@ adb shell input keyevent KEYCODE_DPAD_RIGHT
 
 # Select/Enter
 adb shell input keyevent KEYCODE_DPAD_CENTER
-adb shell input keyevent KEYCODE_ENTER
 
 # Back
 adb shell input keyevent KEYCODE_BACK
-
-# Home
-adb shell input keyevent KEYCODE_HOME
 ```
 
-### Touch/Tap (Alternative)
+### Touch/Tap
 
-Since this app has tap-to-open-settings:
+This app supports tap-to-open-settings:
 ```bash
 # Tap at coordinates (x, y) - screen is 1920x1080
 adb shell input tap 540 320  # Center-ish tap opens settings
@@ -172,10 +185,10 @@ adb exec-out screencap -p > /tmp/screen.png           # Screenshot
 4. Click "+ CREATE GROUP" to create a group
 5. Groups persist across app restarts
 
-### Known Emulator Limitations
-- Extended controls/virtual remote doesn't work (use ADB)
+### Known Emulator Notes
 - Swipe gestures can trigger unintended back navigation
 - First boot may show Android TV home screen (just launch app via ADB)
+- If keyboard doesn't work, check AVD config has `hw.keyboard = yes`
 
 ## Troubleshooting
 
@@ -206,6 +219,14 @@ adb uninstall com.readwisequotes
 pkill -f qemu-system
 /opt/homebrew/share/android-commandlinetools/emulator/emulator -avd AndroidTV -no-snapshot-load &
 ```
+
+### Keyboard/D-pad Not Working
+Edit `~/.android/avd/AndroidTV.avd/config.ini`:
+```ini
+hw.keyboard = yes
+hw.gpu.enabled = yes
+```
+Then restart the emulator.
 
 ## File Locations Summary
 
