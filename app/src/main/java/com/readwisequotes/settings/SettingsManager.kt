@@ -5,6 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.readwisequotes.data.model.TagGroup
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -46,6 +49,13 @@ class SettingsManager @Inject constructor(
     fun getSelectedTags(): Set<String> = prefs.getStringSet(KEY_SELECTED_TAGS, emptySet()) ?: emptySet()
     fun setSelectedTags(tags: Set<String>) = prefs.edit().putStringSet(KEY_SELECTED_TAGS, tags).apply()
 
+    // Tag filter mode (ANY = OR, ALL = AND)
+    fun getTagFilterMode(): TagFilterMode {
+        val value = prefs.getString(KEY_TAG_FILTER_MODE, TagFilterMode.ANY.name) ?: TagFilterMode.ANY.name
+        return TagFilterMode.valueOf(value)
+    }
+    fun setTagFilterMode(mode: TagFilterMode) = prefs.edit().putString(KEY_TAG_FILTER_MODE, mode.name).apply()
+
     // Visual style
     fun getVisualStyle(): VisualStyle {
         val value = prefs.getString(KEY_VISUAL_STYLE, VisualStyle.AMBIENT.name) ?: VisualStyle.AMBIENT.name
@@ -74,11 +84,64 @@ class SettingsManager @Inject constructor(
         return System.currentTimeMillis() - lastSyncMillis > intervalMillis
     }
 
+    // Tag Groups
+    private val gson = Gson()
+
+    fun getTagGroups(): List<TagGroup> {
+        val json = prefs.getString(KEY_TAG_GROUPS, null) ?: return emptyList()
+        return try {
+            val type = object : TypeToken<List<TagGroup>>() {}.type
+            gson.fromJson(json, type)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    fun saveTagGroups(groups: List<TagGroup>) {
+        val json = gson.toJson(groups)
+        prefs.edit().putString(KEY_TAG_GROUPS, json).apply()
+    }
+
+    fun addTagGroup(group: TagGroup) {
+        val groups = getTagGroups().toMutableList()
+        groups.add(group)
+        saveTagGroups(groups)
+    }
+
+    fun updateTagGroup(group: TagGroup) {
+        val groups = getTagGroups().toMutableList()
+        val index = groups.indexOfFirst { it.id == group.id }
+        if (index >= 0) {
+            groups[index] = group
+            saveTagGroups(groups)
+        }
+    }
+
+    fun deleteTagGroup(groupId: String) {
+        val groups = getTagGroups().filter { it.id != groupId }
+        saveTagGroups(groups)
+    }
+
+    fun toggleTagGroup(groupId: String) {
+        val groups = getTagGroups().toMutableList()
+        val index = groups.indexOfFirst { it.id == groupId }
+        if (index >= 0) {
+            groups[index] = groups[index].copy(isEnabled = !groups[index].isEnabled)
+            saveTagGroups(groups)
+        }
+    }
+
+    fun getEnabledTagGroups(): List<TagGroup> = getTagGroups().filter { it.isEnabled }
+
+    fun getAllEnabledTags(): Set<String> = getEnabledTagGroups().flatMap { it.tags }.toSet()
+
     companion object {
         private const val KEY_API_TOKEN = "api_token"
         private const val KEY_LAST_SYNC = "last_sync"
         private const val KEY_QUOTE_FILTER = "quote_filter"
         private const val KEY_SELECTED_TAGS = "selected_tags"
+        private const val KEY_TAG_FILTER_MODE = "tag_filter_mode"
+        private const val KEY_TAG_GROUPS = "tag_groups"
         private const val KEY_VISUAL_STYLE = "visual_style"
         private const val KEY_QUOTE_DURATION = "quote_duration"
         private const val KEY_SYNC_INTERVAL = "sync_interval"

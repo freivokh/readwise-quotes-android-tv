@@ -3,21 +3,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark"
-    android:padding="48dp">
+    android:paddingHorizontal="64dp"
+    android:paddingVertical="48dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_title"
-            android:textColor="@color/text_primary"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="32dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="48dp">
+
+            <Button
+                android:id="@+id/backButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="‹"
+                android:textSize="28sp"
+                android:textColor="@color/text_secondary"
+                android:background="@android:color/transparent"
+                android:focusable="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_title"
+                android:textColor="@color/text_primary"
+                android:textSize="28sp"
+                android:fontFamily="sans-serif-light" />
+
+        </LinearLayout>
 
         <!-- Account Section -->
         <TextView
@@ -25,53 +45,64 @@
             android:layout_height="wrap_content"
             android:text="ACCOUNT"
             android:textColor="@color/accent"
-            android:textSize="14sp"
-            android:textStyle="bold"
+            android:textSize="12sp"
+            android:letterSpacing="0.15"
             android:layout_marginBottom="16dp" />
 
         <EditText
             android:id="@+id/apiTokenInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="@string/api_token_hint"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_secondary"
-            android:backgroundTint="@color/text_secondary"
+            android:textSize="14sp"
+            android:background="@android:color/transparent"
             android:inputType="textPassword"
-            android:layout_marginBottom="16dp"
+            android:paddingHorizontal="0dp"
             android:focusable="true"
             android:focusableInTouchMode="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text_secondary"
+            android:alpha="0.3"
+            android:layout_marginBottom="20dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="32dp">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="40dp">
 
             <Button
                 android:id="@+id/syncButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:text="@string/sync_now"
-                android:layout_marginEnd="16dp" />
+                android:textSize="13sp"
+                android:paddingHorizontal="20dp" />
 
             <TextView
                 android:id="@+id/syncStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_secondary"
-                android:gravity="center_vertical"
-                android:layout_gravity="center_vertical" />
+                android:textSize="13sp"
+                android:layout_marginStart="16dp" />
+
         </LinearLayout>
 
-        <!-- Quote Filter Section -->
+        <!-- Quote Filters Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="QUOTE FILTERS"
             android:textColor="@color/accent"
-            android:textSize="14sp"
-            android:textStyle="bold"
+            android:textSize="12sp"
+            android:letterSpacing="0.15"
             android:layout_marginBottom="16dp" />
 
         <TextView
@@ -79,16 +110,97 @@
             android:layout_height="wrap_content"
             android:text="@string/quote_filter_label"
             android:textColor="@color/text_secondary"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:layout_marginBottom="8dp" />
 
         <Spinner
             android:id="@+id/filterSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:background="@android:drawable/btn_dropdown"
-            android:layout_marginBottom="32dp"
             android:focusable="true" />
+
+        <!-- Tag Groups (visible when By Tag is selected) -->
+        <LinearLayout
+            android:id="@+id/tagSelectionContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="16dp">
+
+            <!-- Match mode toggle -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Match mode:"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="12dp" />
+
+                <ToggleButton
+                    android:id="@+id/tagModeToggle"
+                    android:layout_width="56dp"
+                    android:layout_height="32dp"
+                    android:textOn="ALL"
+                    android:textOff="ANY"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(ANY = or, ALL = and)"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp"
+                    android:alpha="0.7"
+                    android:layout_marginStart="8dp" />
+
+            </LinearLayout>
+
+            <!-- Tag Groups List -->
+            <LinearLayout
+                android:id="@+id/tagGroupsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <!-- Create Group Button -->
+            <Button
+                android:id="@+id/createGroupButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="+ Create Group"
+                android:textSize="12sp"
+                android:paddingHorizontal="16dp"
+                android:layout_marginTop="12dp" />
+
+            <!-- Active tags summary -->
+            <TextView
+                android:id="@+id/selectedTagsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No groups enabled"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:fontStyle="italic"
+                android:layout_marginTop="12dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text_secondary"
+            android:alpha="0.15"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="40dp" />
 
         <!-- Display Section -->
         <TextView
@@ -96,8 +208,8 @@
             android:layout_height="wrap_content"
             android:text="DISPLAY"
             android:textColor="@color/accent"
-            android:textSize="14sp"
-            android:textStyle="bold"
+            android:textSize="12sp"
+            android:letterSpacing="0.15"
             android:layout_marginBottom="16dp" />
 
         <TextView
@@ -105,15 +217,15 @@
             android:layout_height="wrap_content"
             android:text="@string/visual_style_label"
             android:textColor="@color/text_secondary"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:layout_marginBottom="8dp" />
 
         <Spinner
             android:id="@+id/styleSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:background="@android:drawable/btn_dropdown"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24dp"
             android:focusable="true" />
 
         <TextView
@@ -121,25 +233,42 @@
             android:layout_height="wrap_content"
             android:text="@string/duration_label"
             android:textColor="@color/text_secondary"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:layout_marginBottom="8dp" />
 
-        <SeekBar
-            android:id="@+id/durationSeekBar"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:min="10"
-            android:max="60"
-            android:progress="20"
-            android:layout_marginBottom="8dp"
-            android:focusable="true" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/durationValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="32dp" />
+            <SeekBar
+                android:id="@+id/durationSeekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:min="10"
+                android:max="60"
+                android:progress="20"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/durationValue"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:gravity="end" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text_secondary"
+            android:alpha="0.15"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="40dp" />
 
         <!-- Sync Section -->
         <TextView
@@ -147,8 +276,8 @@
             android:layout_height="wrap_content"
             android:text="SYNC"
             android:textColor="@color/accent"
-            android:textSize="14sp"
-            android:textStyle="bold"
+            android:textSize="12sp"
+            android:letterSpacing="0.15"
             android:layout_marginBottom="16dp" />
 
         <TextView
@@ -156,15 +285,20 @@
             android:layout_height="wrap_content"
             android:text="@string/sync_interval_label"
             android:textColor="@color/text_secondary"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:layout_marginBottom="8dp" />
 
         <Spinner
             android:id="@+id/syncIntervalSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:background="@android:drawable/btn_dropdown"
             android:focusable="true" />
+
+        <!-- Bottom spacing -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="48dp" />
 
     </LinearLayout>
 </ScrollView>

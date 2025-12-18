@@ -2,6 +2,7 @@
 package com.readwisequotes.data.local
 
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.readwisequotes.data.model.Quote
 import kotlinx.coroutines.flow.Flow
 
@@ -15,6 +16,9 @@ interface QuoteDao {
 
     @Query("SELECT * FROM quotes WHERE tags LIKE '%' || :tag || '%' ORDER BY RANDOM()")
     fun getQuotesByTag(tag: String): Flow<List<Quote>>
+
+    @RawQuery(observedEntities = [Quote::class])
+    fun getQuotesByTagsRaw(query: SupportSQLiteQuery): Flow<List<Quote>>
 
     @Query("SELECT * FROM quotes WHERE updatedAt >= :since ORDER BY RANDOM()")
     fun getRecentQuotes(since: String): Flow<List<Quote>>

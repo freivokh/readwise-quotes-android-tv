@@ -1,11 +1,13 @@
 // app/src/main/java/com/readwisequotes/data/QuoteRepository.kt
 package com.readwisequotes.data
 
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.readwisequotes.data.local.QuoteDao
 import com.readwisequotes.data.model.Quote
 import com.readwisequotes.data.remote.ReadwiseApi
 import com.readwisequotes.settings.QuoteFilter
 import com.readwisequotes.settings.SettingsManager
+import com.readwisequotes.settings.TagFilterMode
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -22,19 +24,36 @@ class QuoteRepository @Inject constructor(
         return when (settingsManager.getQuoteFilter()) {
             QuoteFilter.ALL -> quoteDao.getAllQuotes()
             QuoteFilter.FAVORITES -> quoteDao.getFavoriteQuotes()
-            QuoteFilter.BY_TAG -> {
-                val tags = settingsManager.getSelectedTags()
-                if (tags.isNotEmpty()) {
-                    quoteDao.getQuotesByTag(tags.first())
-                } else {
-                    quoteDao.getAllQuotes()
-                }
-            }
+            QuoteFilter.BY_TAG -> getQuotesByTags()
             QuoteFilter.RECENT -> {
                 val thirtyDaysAgo = Instant.now().minus(30, ChronoUnit.DAYS).toString()
                 quoteDao.getRecentQuotes(thirtyDaysAgo)
             }
         }
+    }
+
+    private fun getQuotesByTags(): Flow<List<Quote>> {
+        // Get tags from enabled tag groups
+        val tags = settingsManager.getAllEnabledTags().toList()
+        if (tags.isEmpty()) {
+            // Fall back to manual tag selection if no groups enabled
+            val manualTags = settingsManager.getSelectedTags().toList()
+            if (manualTags.isEmpty()) {
+                return quoteDao.getAllQuotes()
+            }
+            return buildTagQuery(manualTags)
+        }
+        return buildTagQuery(tags)
+    }
+
+    private fun buildTagQuery(tags: List<String>): Flow<List<Quote>> {
+        val mode = settingsManager.getTagFilterMode()
+        val conditions = tags.map { "tags LIKE '%$it%'" }
+        val operator = if (mode == TagFilterMode.ANY) " OR " else " AND "
+        val whereClause = conditions.joinToString(operator)
+        val query = SimpleSQLiteQuery("SELECT * FROM quotes WHERE $whereClause ORDER BY RANDOM()")
+
+        return quoteDao.getQuotesByTagsRaw(query)
     }
 
     suspend fun getAllTags(): List<String> {

@@ -7,3 +7,8 @@ enum class QuoteFilter {
     BY_TAG,
     RECENT
 }
+
+enum class TagFilterMode {
+    ANY,  // OR - quotes with any of the selected tags
+    ALL   // AND - quotes with all of the selected tags
+}
