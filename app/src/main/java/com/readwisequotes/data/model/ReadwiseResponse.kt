@@ -23,7 +23,7 @@ data class HighlightResult(
     val text: String,
     @SerializedName("is_favorite") val isFavorite: Boolean,
     val tags: List<TagResult>,
-    @SerializedName("updated") val updated: String
+    @SerializedName("updated_at") val updated: String
 )
 
 data class TagResult(

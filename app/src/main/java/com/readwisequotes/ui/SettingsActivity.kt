@@ -67,7 +67,14 @@ class SettingsActivity : FragmentActivity() {
 
         // Sync button
         syncButton.setOnClickListener {
-            performSync()
+            val inputToken = apiTokenInput.text.toString()
+            val savedToken = settingsManager.getApiToken()
+            if (inputToken.isNotEmpty() && inputToken != savedToken) {
+                // Token was entered but not saved yet - verify and save first
+                verifyAndSaveToken(inputToken)
+            } else {
+                performSync()
+            }
         }
 
         // Filter spinner
