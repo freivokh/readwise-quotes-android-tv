@@ -59,6 +59,43 @@ class SettingsActivity : FragmentActivity() {
         }
     }
 
+    override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
+        if (event.action == android.view.KeyEvent.ACTION_DOWN) {
+            val currentFilter = settingsManager.getQuoteFilter()
+            val tagSectionHidden = currentFilter != QuoteFilter.BY_TAG
+
+            // Check if focus is within the spinner by walking up the view hierarchy
+            val filterHasFocus = isDescendantOfView(currentFocus, filterSpinner)
+            val styleHasFocus = isDescendantOfView(currentFocus, styleSpinner)
+
+            // Handle D-pad DOWN from filter spinner when tag section is hidden
+            if (event.keyCode == android.view.KeyEvent.KEYCODE_DPAD_DOWN &&
+                filterHasFocus && tagSectionHidden) {
+                styleSpinner.requestFocus()
+                return true
+            }
+
+            // Handle D-pad UP from style spinner when tag section is hidden
+            if (event.keyCode == android.view.KeyEvent.KEYCODE_DPAD_UP &&
+                styleHasFocus && tagSectionHidden) {
+                filterSpinner.requestFocus()
+                return true
+            }
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
+    private fun isDescendantOfView(child: View?, parent: View): Boolean {
+        if (child == null) return false
+        if (child == parent) return true
+        var current: android.view.ViewParent? = child.parent
+        while (current != null) {
+            if (current == parent) return true
+            current = current.parent
+        }
+        return false
+    }
+
     private fun bindViews() {
         backButton = findViewById(R.id.backButton)
         apiTokenInput = findViewById(R.id.apiTokenInput)
@@ -306,40 +343,22 @@ class SettingsActivity : FragmentActivity() {
         // 1. Update visibility
         tagSelectionContainer.visibility = if (isTagFilter) View.VISIBLE else View.GONE
 
-        // 2. Update focusability of children (prevents focus on hidden elements)
-        tagModeToggle.isFocusable = isTagFilter
-        createGroupButton.isFocusable = isTagFilter
-
-        // Also update focusability of dynamically added tag group items
-        for (i in 0 until tagGroupsContainer.childCount) {
-            setViewTreeFocusable(tagGroupsContainer.getChildAt(i), isTagFilter)
-        }
-
-        // 3. Update focus chain dynamically
-        if (isTagFilter) {
-            filterSpinner.nextFocusDownId = R.id.tagModeToggle
-            styleSpinner.nextFocusUpId = R.id.createGroupButton
-        } else {
-            filterSpinner.nextFocusDownId = R.id.styleSpinner
-            styleSpinner.nextFocusUpId = R.id.filterSpinner
+        // 2. Update focus chain AFTER layout completes (critical for D-pad navigation)
+        filterSpinner.post {
+            if (isTagFilter) {
+                // Tag section visible: filter → tagMode → ... → style
+                filterSpinner.nextFocusDownId = R.id.tagModeToggle
+                styleSpinner.nextFocusUpId = R.id.createGroupButton
+            } else {
+                // Tag section hidden: filter → style directly
+                filterSpinner.nextFocusDownId = R.id.styleSpinner
+                styleSpinner.nextFocusUpId = R.id.filterSpinner
+            }
         }
 
         // Load tags if needed
         if (isTagFilter && availableTags.isEmpty()) {
             loadAvailableTags()
-        }
-    }
-
-    /**
-     * Recursively set focusability for a view and all its children.
-     * Used to prevent focus from landing on hidden elements.
-     */
-    private fun setViewTreeFocusable(view: View, focusable: Boolean) {
-        view.isFocusable = focusable
-        if (view is android.view.ViewGroup) {
-            for (i in 0 until view.childCount) {
-                setViewTreeFocusable(view.getChildAt(i), focusable)
-            }
         }
     }
 
@@ -375,10 +394,6 @@ class SettingsActivity : FragmentActivity() {
 
             tagGroupsContainer.addView(itemView)
         }
-
-        // Re-apply focus chain after rendering new items
-        val currentFilter = settingsManager.getQuoteFilter()
-        updateTagSelectionVisibility(currentFilter)
     }
 
     private fun showCreateGroupDialog() {
