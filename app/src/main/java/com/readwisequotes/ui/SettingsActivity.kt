@@ -52,6 +52,11 @@ class SettingsActivity : FragmentActivity() {
         bindViews()
         setupListeners()
         loadCurrentSettings()
+
+        // Ensure initial focus for D-pad navigation
+        backButton.post {
+            backButton.requestFocus()
+        }
     }
 
     private fun bindViews() {
@@ -296,9 +301,45 @@ class SettingsActivity : FragmentActivity() {
     }
 
     private fun updateTagSelectionVisibility(filter: QuoteFilter) {
-        tagSelectionContainer.visibility = if (filter == QuoteFilter.BY_TAG) View.VISIBLE else View.GONE
-        if (filter == QuoteFilter.BY_TAG && availableTags.isEmpty()) {
+        val isTagFilter = filter == QuoteFilter.BY_TAG
+
+        // 1. Update visibility
+        tagSelectionContainer.visibility = if (isTagFilter) View.VISIBLE else View.GONE
+
+        // 2. Update focusability of children (prevents focus on hidden elements)
+        tagModeToggle.isFocusable = isTagFilter
+        createGroupButton.isFocusable = isTagFilter
+
+        // Also update focusability of dynamically added tag group items
+        for (i in 0 until tagGroupsContainer.childCount) {
+            setViewTreeFocusable(tagGroupsContainer.getChildAt(i), isTagFilter)
+        }
+
+        // 3. Update focus chain dynamically
+        if (isTagFilter) {
+            filterSpinner.nextFocusDownId = R.id.tagModeToggle
+            styleSpinner.nextFocusUpId = R.id.createGroupButton
+        } else {
+            filterSpinner.nextFocusDownId = R.id.styleSpinner
+            styleSpinner.nextFocusUpId = R.id.filterSpinner
+        }
+
+        // Load tags if needed
+        if (isTagFilter && availableTags.isEmpty()) {
             loadAvailableTags()
+        }
+    }
+
+    /**
+     * Recursively set focusability for a view and all its children.
+     * Used to prevent focus from landing on hidden elements.
+     */
+    private fun setViewTreeFocusable(view: View, focusable: Boolean) {
+        view.isFocusable = focusable
+        if (view is android.view.ViewGroup) {
+            for (i in 0 until view.childCount) {
+                setViewTreeFocusable(view.getChildAt(i), focusable)
+            }
         }
     }
 
@@ -334,6 +375,10 @@ class SettingsActivity : FragmentActivity() {
 
             tagGroupsContainer.addView(itemView)
         }
+
+        // Re-apply focus chain after rendering new items
+        val currentFilter = settingsManager.getQuoteFilter()
+        updateTagSelectionVisibility(currentFilter)
     }
 
     private fun showCreateGroupDialog() {
