@@ -471,9 +471,12 @@ class SettingsActivity : FragmentActivity() {
                 if (isChecked) selectedTags.add(tag) else selectedTags.remove(tag)
             }
 
-            // Set focus navigation - circular: first tag UP goes to buttons, last tag DOWN goes to buttons
+            // LEFT from any tag → Cancel, RIGHT from any tag → Save
+            checkBox.nextFocusLeftId = cancelButton.id
+            checkBox.nextFocusRightId = saveButton.id
+
+            // Vertical navigation at list boundaries
             if (index == 0) {
-                checkBox.nextFocusUpId = saveButton.id
                 saveButton.nextFocusDownId = checkBox.id
                 cancelButton.nextFocusDownId = checkBox.id
             }
