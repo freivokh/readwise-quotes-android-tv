@@ -168,8 +168,7 @@
                     android:textColor="@color/text_primary"
                     android:background="@drawable/focusable_button_background"
                     android:focusable="true"
-                    android:nextFocusUp="@id/filterSpinner"
-                    android:nextFocusDown="@id/createGroupButton" />
+                    android:nextFocusUp="@id/filterSpinner" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -200,7 +199,6 @@
                 android:paddingHorizontal="20dp"
                 android:background="@drawable/focusable_button_background"
                 android:focusable="true"
-                android:nextFocusUp="@id/tagModeToggle"
                 android:nextFocusDown="@id/styleSpinner"
                 android:layout_marginTop="12dp" />
 

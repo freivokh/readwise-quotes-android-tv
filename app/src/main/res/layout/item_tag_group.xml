@@ -6,7 +6,8 @@
     android:gravity="center_vertical"
     android:paddingVertical="12dp"
     android:paddingHorizontal="4dp"
-    android:focusable="true">
+    android:focusable="false"
+    android:descendantFocusability="afterDescendants">
 
     <CheckBox
         android:id="@+id/groupSwitch"
