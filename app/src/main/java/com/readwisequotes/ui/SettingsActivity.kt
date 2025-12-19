@@ -471,9 +471,11 @@ class SettingsActivity : FragmentActivity() {
                 if (isChecked) selectedTags.add(tag) else selectedTags.remove(tag)
             }
 
-            // Set focus navigation
+            // Set focus navigation - circular: first tag UP goes to buttons, last tag DOWN goes to buttons
             if (index == 0) {
-                checkBox.nextFocusUpId = cancelButton.id
+                checkBox.nextFocusUpId = saveButton.id
+                saveButton.nextFocusDownId = checkBox.id
+                cancelButton.nextFocusDownId = checkBox.id
             }
             if (index == availableTags.size - 1) {
                 checkBox.nextFocusDownId = cancelButton.id
