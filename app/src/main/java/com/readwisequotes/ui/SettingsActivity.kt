@@ -366,7 +366,11 @@ class SettingsActivity : FragmentActivity() {
         tagGroupsContainer.removeAllViews()
         val groups = settingsManager.getTagGroups()
 
-        for (group in groups) {
+        // Track first and last focusable elements for focus chain
+        var firstGroupCheckbox: CheckBox? = null
+        var lastGroupDeleteButton: Button? = null
+
+        groups.forEachIndexed { index, group ->
             val itemView = layoutInflater.inflate(R.layout.item_tag_group, tagGroupsContainer, false)
 
             val groupSwitch = itemView.findViewById<CheckBox>(R.id.groupSwitch)
@@ -378,6 +382,12 @@ class SettingsActivity : FragmentActivity() {
             groupName.text = group.name
             groupTags.text = group.tags.joinToString(", ")
             groupSwitch.isChecked = group.isEnabled
+
+            // Set horizontal focus navigation within the row
+            groupSwitch.nextFocusRightId = editButton.id
+            editButton.nextFocusLeftId = groupSwitch.id
+            editButton.nextFocusRightId = deleteButton.id
+            deleteButton.nextFocusLeftId = editButton.id
 
             groupSwitch.setOnCheckedChangeListener { _, _ ->
                 settingsManager.toggleTagGroup(group.id)
@@ -393,6 +403,30 @@ class SettingsActivity : FragmentActivity() {
             }
 
             tagGroupsContainer.addView(itemView)
+
+            // Track first/last elements
+            if (index == 0) {
+                firstGroupCheckbox = groupSwitch
+            }
+            if (index == groups.size - 1) {
+                lastGroupDeleteButton = deleteButton
+            }
+        }
+
+        // Connect focus chain: tagModeToggle → first group, last group → createGroupButton
+        firstGroupCheckbox?.let { first ->
+            tagModeToggle.nextFocusDownId = first.id
+            first.nextFocusUpId = tagModeToggle.id
+        }
+        lastGroupDeleteButton?.let { last ->
+            last.nextFocusDownId = createGroupButton.id
+            createGroupButton.nextFocusUpId = last.id
+        }
+
+        // If no groups, connect tagModeToggle directly to createGroupButton
+        if (groups.isEmpty()) {
+            tagModeToggle.nextFocusDownId = createGroupButton.id
+            createGroupButton.nextFocusUpId = tagModeToggle.id
         }
     }
 
@@ -516,6 +550,28 @@ class SettingsActivity : FragmentActivity() {
             Toast.makeText(this@SettingsActivity, "Group \"$groupName\" saved!", Toast.LENGTH_SHORT).show()
             renderTagGroups()
             updateSelectedTagsDisplay()
+        }
+
+        // Intercept LEFT/RIGHT from checkboxes to navigate to buttons
+        dialog.setOnKeyListener { _, keyCode, event ->
+            if (event.action == android.view.KeyEvent.ACTION_DOWN) {
+                val focused = dialog.currentFocus
+                val isCheckboxFocused = checkboxes.contains(focused)
+
+                if (isCheckboxFocused) {
+                    when (keyCode) {
+                        android.view.KeyEvent.KEYCODE_DPAD_LEFT -> {
+                            cancelButton.requestFocus()
+                            return@setOnKeyListener true
+                        }
+                        android.view.KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                            saveButton.requestFocus()
+                            return@setOnKeyListener true
+                        }
+                    }
+                }
+            }
+            false
         }
 
         dialog.show()
