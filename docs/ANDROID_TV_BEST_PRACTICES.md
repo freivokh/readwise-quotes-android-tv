@@ -13,6 +13,7 @@
 5. [Jetpack Compose for TV](#5-jetpack-compose-for-tv)
 6. [Common Pitfalls & Solutions](#6-common-pitfalls--solutions)
 7. [Testing & Quality](#7-testing--quality)
+8. [Project-Specific Gotchas](#8-project-specific-gotchas-readwise-quotes-app)
 
 ---
 
@@ -808,6 +809,114 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.focusGroup
 ```
+
+---
+
+## 8. Project-Specific Gotchas (Readwise Quotes App)
+
+Lessons learned during development of this app:
+
+### Gotcha 1: Spinner.hasFocus() Returns False When Focused
+
+**Problem:** `spinner.hasFocus()` returns `false` even when the Spinner is visually focused, because Spinners have nested child views that actually hold focus.
+
+**Solution:** Use a helper to check if focus is within the Spinner's view hierarchy:
+
+```kotlin
+private fun isDescendantOfView(child: View?, parent: View): Boolean {
+    if (child == null) return false
+    if (child == parent) return true
+    var current: ViewParent? = child.parent
+    while (current != null) {
+        if (current == parent) return true
+        current = current.parent
+    }
+    return false
+}
+
+// Usage in dispatchKeyEvent
+val filterHasFocus = isDescendantOfView(currentFocus, filterSpinner)
+```
+
+### Gotcha 2: CheckBox Consumes LEFT/RIGHT Before nextFocusLeftId
+
+**Problem:** Setting `nextFocusLeftId` and `nextFocusRightId` on CheckBox doesn't work - the CheckBox consumes the key events before focus navigation is consulted.
+
+**Solution:** Intercept at the dialog/activity level with a key listener:
+
+```kotlin
+dialog.setOnKeyListener { _, keyCode, event ->
+    if (event.action == KeyEvent.ACTION_DOWN) {
+        val isCheckboxFocused = checkboxes.contains(dialog.currentFocus)
+        if (isCheckboxFocused) {
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    cancelButton.requestFocus()
+                    return@setOnKeyListener true
+                }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    saveButton.requestFocus()
+                    return@setOnKeyListener true
+                }
+            }
+        }
+    }
+    false
+}
+```
+
+### Gotcha 3: Dynamic View IDs Need View.generateViewId()
+
+**Problem:** Programmatically created views (like tag group rows) need unique IDs for focus chain to work.
+
+**Solution:** Always generate IDs for dynamic views:
+
+```kotlin
+val groupSwitch = itemView.findViewById<CheckBox>(R.id.groupSwitch)
+groupSwitch.id = View.generateViewId()  // Critical for focus chain
+
+val editButton = itemView.findViewById<Button>(R.id.editButton)
+editButton.id = View.generateViewId()
+
+// Now focus chain works
+groupSwitch.nextFocusRightId = editButton.id
+```
+
+### Gotcha 4: FocusAwareScrollView for Hidden View Skipping
+
+**Problem:** Standard focus chain (`nextFocusDownId`) still tries to focus hidden views, even with dynamic updates.
+
+**Solution:** Custom ScrollView that overrides `focusSearch()` to skip hidden views:
+
+```kotlin
+class FocusAwareScrollView : ScrollView {
+    override fun focusSearch(focused: View?, direction: Int): View? {
+        val result = findNextVisibleFocusable(focused, direction, 0)
+        return result ?: super.focusSearch(focused, direction)
+    }
+
+    private fun findNextVisibleFocusable(fromView: View?, direction: Int, depth: Int): View? {
+        if (depth > 10 || fromView == null) return null
+        val nextFocusId = when (direction) {
+            View.FOCUS_UP -> fromView.nextFocusUpId
+            View.FOCUS_DOWN -> fromView.nextFocusDownId
+            else -> View.NO_ID
+        }
+        if (nextFocusId == View.NO_ID) return null
+        val nextView = findViewById<View>(nextFocusId) ?: return null
+        // Key: use isShown() not visibility - checks entire hierarchy
+        if (nextView.isShown && nextView.isFocusable) return nextView
+        return findNextVisibleFocusable(nextView, direction, depth + 1)
+    }
+}
+```
+
+### Reference: SmartTube Focus Patterns
+
+We studied [SmartTube](https://github.com/yuliskov/SmartTube) for focus handling inspiration:
+- Overrides `focusSearch()` to skip hidden views
+- Uses XML-based focus chains that persist regardless of visibility
+- Checks `getVisibility() == View.VISIBLE` before returning focus candidates
 
 ---
 
