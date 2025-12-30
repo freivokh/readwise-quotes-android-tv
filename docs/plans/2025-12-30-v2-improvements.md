@@ -41,7 +41,7 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 | ID | Feature | Status | Priority | Notes |
 |----|---------|--------|----------|-------|
 | F1 | QR code linking to original document/Readwise | Pending | | Optional, bottom right |
-| F3 | Cross-group matching option | Pending | | "Across groups" ANY/ALL mode |
+| ~F3~ | Per-group match mode (ANY/ALL) | Done | | Each group has own toggle |
 
 ---
 
@@ -67,7 +67,7 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 
 ## Remaining Features Summary
 
-**To Implement (12 items):**
+**To Implement (11 items):**
 
 1. **U1** - Aesthetic redesign (fonts, cleaner look)
 2. **U2** - Settings menu visual refresh
@@ -76,15 +76,19 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 5. **U5** - Fix quote text overflow/sizing
 6. **N1** - D-pad left/right quote navigation
 7. **F1** - QR code for source link
-8. **F3** - Cross-group matching
-9. **S1** - Alternative token entry method
-10. **S2** - Password visibility toggle
-11. **S3** - One-time entry note
-12. **S4** - Optional sync methods
+8. **S1** - Alternative token entry method
+9. **S2** - Password visibility toggle
+10. **S3** - One-time entry note
+11. **S4** - Optional sync methods
 
 ---
 
 ## Implementation Log
 
-_Features will be documented here as we complete them_
+### 2025-12-30: Per-group match mode (F3)
+- Added `matchMode` field to TagGroup model
+- Each group row now has ANY/ALL toggle button
+- Removed global match mode toggle
+- Query: `(Group A tags with its mode) OR (Group B tags with its mode)`
+- Commit: `8d5904e`
 
