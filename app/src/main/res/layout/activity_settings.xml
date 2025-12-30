@@ -130,8 +130,7 @@
             android:background="@drawable/focusable_spinner_background"
             android:focusable="true"
             android:focusableInTouchMode="false"
-            android:nextFocusUp="@id/syncButton"
-            android:nextFocusDown="@id/tagModeToggle" />
+            android:nextFocusUp="@id/syncButton" />
 
         <!-- Tag Groups (visible when By Tag is selected) -->
         <LinearLayout
@@ -141,45 +140,6 @@
             android:orientation="vertical"
             android:visibility="gone"
             android:layout_marginTop="16dp">
-
-            <!-- Match mode toggle -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Match mode:"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp"
-                    android:layout_marginEnd="12dp" />
-
-                <ToggleButton
-                    android:id="@+id/tagModeToggle"
-                    android:layout_width="60dp"
-                    android:layout_height="36dp"
-                    android:textOn="ALL"
-                    android:textOff="ANY"
-                    android:textSize="11sp"
-                    android:textColor="@color/text_primary"
-                    android:background="@drawable/focusable_button_background"
-                    android:focusable="true"
-                    android:nextFocusUp="@id/filterSpinner" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="(ANY = or, ALL = and)"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="11sp"
-                    android:alpha="0.7"
-                    android:layout_marginStart="8dp" />
-
-            </LinearLayout>
 
             <!-- Tag Groups List -->
             <LinearLayout

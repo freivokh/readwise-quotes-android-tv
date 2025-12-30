@@ -40,6 +40,18 @@
 
     </LinearLayout>
 
+    <ToggleButton
+        android:id="@+id/matchModeToggle"
+        android:layout_width="50dp"
+        android:layout_height="32dp"
+        android:textOn="ALL"
+        android:textOff="ANY"
+        android:textSize="10sp"
+        android:textColor="@color/text_primary"
+        android:background="@drawable/focusable_button_background"
+        android:focusable="true"
+        android:layout_marginStart="8dp" />
+
     <Button
         android:id="@+id/editButton"
         android:layout_width="wrap_content"

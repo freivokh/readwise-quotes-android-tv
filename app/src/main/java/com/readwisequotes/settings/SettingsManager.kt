@@ -49,13 +49,6 @@ class SettingsManager @Inject constructor(
     fun getSelectedTags(): Set<String> = prefs.getStringSet(KEY_SELECTED_TAGS, emptySet()) ?: emptySet()
     fun setSelectedTags(tags: Set<String>) = prefs.edit().putStringSet(KEY_SELECTED_TAGS, tags).apply()
 
-    // Tag filter mode (ANY = OR, ALL = AND)
-    fun getTagFilterMode(): TagFilterMode {
-        val value = prefs.getString(KEY_TAG_FILTER_MODE, TagFilterMode.ANY.name) ?: TagFilterMode.ANY.name
-        return TagFilterMode.valueOf(value)
-    }
-    fun setTagFilterMode(mode: TagFilterMode) = prefs.edit().putString(KEY_TAG_FILTER_MODE, mode.name).apply()
-
     // Visual style
     fun getVisualStyle(): VisualStyle {
         val value = prefs.getString(KEY_VISUAL_STYLE, VisualStyle.AMBIENT.name) ?: VisualStyle.AMBIENT.name
@@ -125,6 +118,15 @@ class SettingsManager @Inject constructor(
         }
     }
 
+    fun updateTagGroupMatchMode(groupId: String, mode: TagFilterMode) {
+        val groups = getTagGroups().toMutableList()
+        val index = groups.indexOfFirst { it.id == groupId }
+        if (index != -1) {
+            groups[index] = groups[index].copy(matchMode = mode)
+            saveTagGroups(groups)
+        }
+    }
+
     fun deleteTagGroup(groupId: String) {
         val groups = getTagGroups().filter { it.id != groupId }
         saveTagGroups(groups)
@@ -148,7 +150,6 @@ class SettingsManager @Inject constructor(
         private const val KEY_LAST_SYNC = "last_sync"
         private const val KEY_QUOTE_FILTER = "quote_filter"
         private const val KEY_SELECTED_TAGS = "selected_tags"
-        private const val KEY_TAG_FILTER_MODE = "tag_filter_mode"
         private const val KEY_TAG_GROUPS = "tag_groups"
         private const val KEY_VISUAL_STYLE = "visual_style"
         private const val KEY_QUOTE_DURATION = "quote_duration"

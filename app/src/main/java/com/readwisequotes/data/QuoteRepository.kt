@@ -4,6 +4,7 @@ package com.readwisequotes.data
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.readwisequotes.data.local.QuoteDao
 import com.readwisequotes.data.model.Quote
+import com.readwisequotes.data.model.TagGroup
 import com.readwisequotes.data.remote.ReadwiseApi
 import com.readwisequotes.settings.QuoteFilter
 import com.readwisequotes.settings.SettingsManager
@@ -33,24 +34,25 @@ class QuoteRepository @Inject constructor(
     }
 
     private fun getQuotesByTags(): Flow<List<Quote>> {
-        // Get tags from enabled tag groups
-        val tags = settingsManager.getAllEnabledTags().toList()
-        if (tags.isEmpty()) {
-            // Fall back to manual tag selection if no groups enabled
-            val manualTags = settingsManager.getSelectedTags().toList()
-            if (manualTags.isEmpty()) {
-                return quoteDao.getAllQuotes()
-            }
-            return buildTagQuery(manualTags)
+        val enabledGroups = settingsManager.getEnabledTagGroups()
+
+        if (enabledGroups.isEmpty()) {
+            // Fall back to all quotes if no groups enabled
+            return quoteDao.getAllQuotes()
         }
-        return buildTagQuery(tags)
+
+        return buildGroupedTagQuery(enabledGroups)
     }
 
-    private fun buildTagQuery(tags: List<String>): Flow<List<Quote>> {
-        val mode = settingsManager.getTagFilterMode()
-        val conditions = tags.map { "tags LIKE '%$it%'" }
-        val operator = if (mode == TagFilterMode.ANY) " OR " else " AND "
-        val whereClause = conditions.joinToString(operator)
+    private fun buildGroupedTagQuery(groups: List<TagGroup>): Flow<List<Quote>> {
+        // Build per-group conditions, then OR them together
+        val groupConditions = groups.map { group ->
+            val tagConditions = group.tags.map { "tags LIKE '%$it%'" }
+            val operator = if (group.matchMode == TagFilterMode.ANY) " OR " else " AND "
+            "(${tagConditions.joinToString(operator)})"
+        }
+
+        val whereClause = groupConditions.joinToString(" OR ")
         val query = SimpleSQLiteQuery("SELECT * FROM quotes WHERE $whereClause ORDER BY RANDOM()")
 
         return quoteDao.getQuotesByTagsRaw(query)

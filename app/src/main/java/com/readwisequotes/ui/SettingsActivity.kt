@@ -36,7 +36,6 @@ class SettingsActivity : FragmentActivity() {
     private lateinit var tagSelectionContainer: LinearLayout
     private lateinit var tagGroupsContainer: LinearLayout
     private lateinit var createGroupButton: Button
-    private lateinit var tagModeToggle: ToggleButton
     private lateinit var selectedTagsText: TextView
     private lateinit var styleSpinner: Spinner
     private lateinit var durationSeekBar: SeekBar
@@ -105,7 +104,6 @@ class SettingsActivity : FragmentActivity() {
         tagSelectionContainer = findViewById(R.id.tagSelectionContainer)
         tagGroupsContainer = findViewById(R.id.tagGroupsContainer)
         createGroupButton = findViewById(R.id.createGroupButton)
-        tagModeToggle = findViewById(R.id.tagModeToggle)
         selectedTagsText = findViewById(R.id.selectedTagsText)
         styleSpinner = findViewById(R.id.styleSpinner)
         durationSeekBar = findViewById(R.id.durationSeekBar)
@@ -168,12 +166,6 @@ class SettingsActivity : FragmentActivity() {
         // Create group button
         createGroupButton.setOnClickListener {
             showCreateGroupDialog()
-        }
-
-        // Tag mode toggle (ANY/ALL)
-        tagModeToggle.setOnCheckedChangeListener { _, isChecked ->
-            val mode = if (isChecked) TagFilterMode.ALL else TagFilterMode.ANY
-            settingsManager.setTagFilterMode(mode)
         }
 
         // Style spinner
@@ -240,7 +232,6 @@ class SettingsActivity : FragmentActivity() {
         updateTagSelectionVisibility(currentFilter)
 
         // Tag settings
-        tagModeToggle.isChecked = settingsManager.getTagFilterMode() == TagFilterMode.ALL
         renderTagGroups()
         updateSelectedTagsDisplay()
         loadAvailableTags()
@@ -346,8 +337,8 @@ class SettingsActivity : FragmentActivity() {
         // 2. Update focus chain AFTER layout completes (critical for D-pad navigation)
         filterSpinner.post {
             if (isTagFilter) {
-                // Tag section visible: filter → tagMode → ... → style
-                filterSpinner.nextFocusDownId = R.id.tagModeToggle
+                // Tag section visible: filter → first group or createGroupButton → style
+                // (renderTagGroups() will set filterSpinner.nextFocusDownId to first group or createGroupButton)
                 styleSpinner.nextFocusUpId = R.id.createGroupButton
             } else {
                 // Tag section hidden: filter → style directly
@@ -376,22 +367,31 @@ class SettingsActivity : FragmentActivity() {
             val groupSwitch = itemView.findViewById<CheckBox>(R.id.groupSwitch)
             val groupName = itemView.findViewById<TextView>(R.id.groupName)
             val groupTags = itemView.findViewById<TextView>(R.id.groupTags)
+            val matchModeToggle = itemView.findViewById<ToggleButton>(R.id.matchModeToggle)
             val editButton = itemView.findViewById<Button>(R.id.editButton)
             val deleteButton = itemView.findViewById<Button>(R.id.deleteButton)
 
             groupName.text = group.name
             groupTags.text = group.tags.joinToString(", ")
             groupSwitch.isChecked = group.isEnabled
+            matchModeToggle.isChecked = group.matchMode == TagFilterMode.ALL
 
             // Set horizontal focus navigation within the row
-            groupSwitch.nextFocusRightId = editButton.id
-            editButton.nextFocusLeftId = groupSwitch.id
+            groupSwitch.nextFocusRightId = matchModeToggle.id
+            matchModeToggle.nextFocusLeftId = groupSwitch.id
+            matchModeToggle.nextFocusRightId = editButton.id
+            editButton.nextFocusLeftId = matchModeToggle.id
             editButton.nextFocusRightId = deleteButton.id
             deleteButton.nextFocusLeftId = editButton.id
 
             groupSwitch.setOnCheckedChangeListener { _, _ ->
                 settingsManager.toggleTagGroup(group.id)
                 updateSelectedTagsDisplay()
+            }
+
+            matchModeToggle.setOnCheckedChangeListener { _, isChecked ->
+                val newMode = if (isChecked) TagFilterMode.ALL else TagFilterMode.ANY
+                settingsManager.updateTagGroupMatchMode(group.id, newMode)
             }
 
             editButton.setOnClickListener {
@@ -413,20 +413,24 @@ class SettingsActivity : FragmentActivity() {
             }
         }
 
-        // Connect focus chain: tagModeToggle → first group, last group → createGroupButton
+        // Connect focus chain: filterSpinner → first group, last group → createGroupButton
         firstGroupCheckbox?.let { first ->
-            tagModeToggle.nextFocusDownId = first.id
-            first.nextFocusUpId = tagModeToggle.id
+            filterSpinner.post {
+                filterSpinner.nextFocusDownId = first.id
+                first.nextFocusUpId = R.id.filterSpinner
+            }
         }
         lastGroupDeleteButton?.let { last ->
             last.nextFocusDownId = createGroupButton.id
             createGroupButton.nextFocusUpId = last.id
         }
 
-        // If no groups, connect tagModeToggle directly to createGroupButton
+        // If no groups, connect filterSpinner directly to createGroupButton
         if (groups.isEmpty()) {
-            tagModeToggle.nextFocusDownId = createGroupButton.id
-            createGroupButton.nextFocusUpId = tagModeToggle.id
+            filterSpinner.post {
+                filterSpinner.nextFocusDownId = R.id.createGroupButton
+                createGroupButton.nextFocusUpId = R.id.filterSpinner
+            }
         }
     }
 
