@@ -360,6 +360,7 @@ class SettingsActivity : FragmentActivity() {
         // Track first and last focusable elements for focus chain
         var firstGroupCheckbox: CheckBox? = null
         var lastGroupDeleteButton: Button? = null
+        var previousDeleteButton: Button? = null
 
         groups.forEachIndexed { index, group ->
             val itemView = layoutInflater.inflate(R.layout.item_tag_group, tagGroupsContainer, false)
@@ -370,6 +371,12 @@ class SettingsActivity : FragmentActivity() {
             val matchModeToggle = itemView.findViewById<ToggleButton>(R.id.matchModeToggle)
             val editButton = itemView.findViewById<Button>(R.id.editButton)
             val deleteButton = itemView.findViewById<Button>(R.id.deleteButton)
+
+            // Generate unique IDs for each view to fix focus navigation
+            groupSwitch.id = View.generateViewId()
+            matchModeToggle.id = View.generateViewId()
+            editButton.id = View.generateViewId()
+            deleteButton.id = View.generateViewId()
 
             groupName.text = group.name
             groupTags.text = group.tags.joinToString(", ")
@@ -383,6 +390,14 @@ class SettingsActivity : FragmentActivity() {
             editButton.nextFocusLeftId = matchModeToggle.id
             editButton.nextFocusRightId = deleteButton.id
             deleteButton.nextFocusLeftId = editButton.id
+
+            // Set vertical focus navigation between rows
+            if (previousDeleteButton != null) {
+                // Connect previous row's delete button DOWN to this row's checkbox
+                previousDeleteButton!!.nextFocusDownId = groupSwitch.id
+                // Connect this row's checkbox UP to previous row's checkbox
+                groupSwitch.nextFocusUpId = firstGroupCheckbox?.id ?: R.id.filterSpinner
+            }
 
             groupSwitch.setOnCheckedChangeListener { _, _ ->
                 settingsManager.toggleTagGroup(group.id)
@@ -408,9 +423,8 @@ class SettingsActivity : FragmentActivity() {
             if (index == 0) {
                 firstGroupCheckbox = groupSwitch
             }
-            if (index == groups.size - 1) {
-                lastGroupDeleteButton = deleteButton
-            }
+            lastGroupDeleteButton = deleteButton
+            previousDeleteButton = deleteButton
         }
 
         // Connect focus chain: filterSpinner → first group, last group → createGroupButton
