@@ -104,12 +104,23 @@ class MainActivity : FragmentActivity() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        // Open settings on OK/Select button press
-        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
-            keyCode == KeyEvent.KEYCODE_ENTER ||
-            keyCode == KeyEvent.KEYCODE_MENU) {
-            openSettings()
-            return true
+        when (keyCode) {
+            // Open settings on OK/Select button press
+            KeyEvent.KEYCODE_DPAD_CENTER,
+            KeyEvent.KEYCODE_ENTER,
+            KeyEvent.KEYCODE_MENU -> {
+                openSettings()
+                return true
+            }
+            // Navigate quotes with LEFT/RIGHT
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                quoteDisplayView.showNextQuote()
+                return true
+            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                quoteDisplayView.showPreviousQuote()
+                return true
+            }
         }
         return super.onKeyDown(keyCode, event)
     }

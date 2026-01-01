@@ -37,7 +37,10 @@ class QuoteDisplayView @JvmOverloads constructor(
     private var isRunning = false
     private var visualStyle: VisualStyle = VisualStyle.AMBIENT
 
-    private val displayRunnable = Runnable { showNextQuote() }
+    private val autoFadeDuration = 500L
+    private val manualFadeDuration = 150L  // Faster for manual navigation (150ms each way = 300ms total)
+
+    private val displayRunnable = Runnable { showNextQuoteAuto() }
 
     init {
         // Create gradient background
@@ -140,7 +143,7 @@ class QuoteDisplayView @JvmOverloads constructor(
         handler?.removeCallbacks(displayRunnable)
     }
 
-    private fun displayCurrentQuote() {
+    private fun displayCurrentQuote(fadeDuration: Long = autoFadeDuration) {
         if (currentQuotes.isEmpty()) return
 
         val quote = currentQuotes[currentIndex]
@@ -155,7 +158,7 @@ class QuoteDisplayView @JvmOverloads constructor(
         quoteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
 
         // Fade out current content
-        fadeOut {
+        fadeOut(fadeDuration) {
             // Update content
             quoteText.text = "\"${quote.text}\""
             authorText.text = quote.author?.let { "— $it" } ?: ""
@@ -165,22 +168,38 @@ class QuoteDisplayView @JvmOverloads constructor(
             sourceText.visibility = if (quote.title.isNullOrEmpty()) View.GONE else View.VISIBLE
 
             // Fade in new content
-            fadeIn {
+            fadeIn(fadeDuration) {
                 // Schedule next quote
                 handler?.postDelayed(displayRunnable, quoteDurationMs)
             }
         }
     }
 
-    private fun showNextQuote() {
+    private fun showNextQuoteAuto() {
         if (!isRunning) return
         currentIndex = (currentIndex + 1) % currentQuotes.size
-        displayCurrentQuote()
+        displayCurrentQuote(autoFadeDuration)
     }
 
-    private fun fadeOut(onComplete: () -> Unit) {
+    /** Navigate to next quote manually (faster animation, resets timer) */
+    fun showNextQuote() {
+        if (currentQuotes.isEmpty()) return
+        handler?.removeCallbacks(displayRunnable)
+        currentIndex = (currentIndex + 1) % currentQuotes.size
+        displayCurrentQuote(manualFadeDuration)
+    }
+
+    /** Navigate to previous quote manually (faster animation, resets timer) */
+    fun showPreviousQuote() {
+        if (currentQuotes.isEmpty()) return
+        handler?.removeCallbacks(displayRunnable)
+        currentIndex = if (currentIndex > 0) currentIndex - 1 else currentQuotes.size - 1
+        displayCurrentQuote(manualFadeDuration)
+    }
+
+    private fun fadeOut(fadeDuration: Long, onComplete: () -> Unit) {
         ObjectAnimator.ofFloat(quoteContainer, "alpha", 1f, 0f).apply {
-            duration = 500
+            duration = fadeDuration
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     onComplete()
@@ -190,9 +209,9 @@ class QuoteDisplayView @JvmOverloads constructor(
         }
     }
 
-    private fun fadeIn(onComplete: () -> Unit) {
+    private fun fadeIn(fadeDuration: Long, onComplete: () -> Unit) {
         ObjectAnimator.ofFloat(quoteContainer, "alpha", 0f, 1f).apply {
-            duration = 500
+            duration = fadeDuration
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     onComplete()
