@@ -50,7 +50,7 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 | ID | Feature | Status | Priority | Notes |
 |----|---------|--------|----------|-------|
 | S1 | API token entry without manual keyboard | Pending | | QR code? Deep link? |
-| S2 | Show/hide password toggle for API token | Pending | | Currently always masked |
+| ~S2~ | Show/hide password toggle for API token | Done | | Eye icon toggle |
 | S3 | Funny note about one-time token entry | Pending | | UX improvement |
 | S4 | Optional sync methods | Pending | | Need to clarify scope |
 
@@ -67,7 +67,7 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 
 ## Remaining Features Summary
 
-**To Implement (10 items):**
+**To Implement (9 items):**
 
 1. **U1** - Aesthetic redesign (fonts, cleaner look)
 2. **U2** - Settings menu visual refresh
@@ -76,13 +76,18 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 5. **U5** - Fix quote text overflow/sizing
 6. **F1** - QR code for source link
 7. **S1** - Alternative token entry method
-8. **S2** - Password visibility toggle
-9. **S3** - One-time entry note
-10. **S4** - Optional sync methods
+8. **S3** - One-time entry note
+9. **S4** - Optional sync methods
 
 ---
 
 ## Implementation Log
+
+### 2025-01-01: Password visibility toggle (S2)
+- Eye icon button next to API token input
+- Toggles between 👁 (hidden) and 🙈 (visible)
+- D-pad navigation between input and toggle
+- Commit: `b649162`
 
 ### 2025-01-01: D-pad quote navigation (N1)
 - LEFT/RIGHT arrows navigate through quotes manually
