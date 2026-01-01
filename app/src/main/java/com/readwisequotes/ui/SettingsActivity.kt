@@ -4,6 +4,7 @@ package com.readwisequotes.ui
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
@@ -41,8 +42,10 @@ class SettingsActivity : FragmentActivity() {
     private lateinit var durationSeekBar: SeekBar
     private lateinit var durationValue: TextView
     private lateinit var syncIntervalSpinner: Spinner
+    private lateinit var toggleTokenVisibility: Button
 
     private var availableTags: List<String> = emptyList()
+    private var isTokenVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,12 +112,27 @@ class SettingsActivity : FragmentActivity() {
         durationSeekBar = findViewById(R.id.durationSeekBar)
         durationValue = findViewById(R.id.durationValue)
         syncIntervalSpinner = findViewById(R.id.syncIntervalSpinner)
+        toggleTokenVisibility = findViewById(R.id.toggleTokenVisibility)
     }
 
     private fun setupListeners() {
         // Back button
         backButton.setOnClickListener {
             finish()
+        }
+
+        // Toggle token visibility
+        toggleTokenVisibility.setOnClickListener {
+            isTokenVisible = !isTokenVisible
+            if (isTokenVisible) {
+                apiTokenInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                toggleTokenVisibility.text = "🙈"
+            } else {
+                apiTokenInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                toggleTokenVisibility.text = "👁"
+            }
+            // Move cursor to end after changing input type
+            apiTokenInput.setSelection(apiTokenInput.text.length)
         }
 
         // API Token - verify on Enter key (not on focus change for TV navigation)

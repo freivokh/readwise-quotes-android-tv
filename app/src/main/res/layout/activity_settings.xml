@@ -57,23 +57,46 @@
             android:letterSpacing="0.15"
             android:layout_marginBottom="16dp" />
 
-        <EditText
-            android:id="@+id/apiTokenInput"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:hint="@string/api_token_hint"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_secondary"
-            android:textSize="14sp"
-            android:background="@drawable/focusable_edittext_background"
-            android:inputType="textPassword"
-            android:imeOptions="actionNext"
-            android:paddingHorizontal="12dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:nextFocusUp="@id/backButton"
-            android:nextFocusDown="@id/syncButton"
-            android:layout_marginBottom="20dp" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <EditText
+                android:id="@+id/apiTokenInput"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:hint="@string/api_token_hint"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary"
+                android:textSize="14sp"
+                android:background="@drawable/focusable_edittext_background"
+                android:inputType="textPassword"
+                android:imeOptions="actionNext"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:nextFocusUp="@id/backButton"
+                android:nextFocusDown="@id/syncButton"
+                android:nextFocusRight="@id/toggleTokenVisibility" />
+
+            <Button
+                android:id="@+id/toggleTokenVisibility"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:text="👁"
+                android:textSize="20sp"
+                android:background="@drawable/focusable_button_background"
+                android:focusable="true"
+                android:layout_marginStart="8dp"
+                android:nextFocusLeft="@id/apiTokenInput"
+                android:nextFocusUp="@id/backButton"
+                android:nextFocusDown="@id/syncButton" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
