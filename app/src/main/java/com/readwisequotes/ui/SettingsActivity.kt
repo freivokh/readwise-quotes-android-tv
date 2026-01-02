@@ -43,6 +43,7 @@ class SettingsActivity : FragmentActivity() {
     private lateinit var durationValue: TextView
     private lateinit var syncIntervalSpinner: Spinner
     private lateinit var toggleTokenVisibility: Button
+    private lateinit var tokenHelperText: TextView
 
     private var availableTags: List<String> = emptyList()
     private var isTokenVisible = false
@@ -113,6 +114,7 @@ class SettingsActivity : FragmentActivity() {
         durationValue = findViewById(R.id.durationValue)
         syncIntervalSpinner = findViewById(R.id.syncIntervalSpinner)
         toggleTokenVisibility = findViewById(R.id.toggleTokenVisibility)
+        tokenHelperText = findViewById(R.id.tokenHelperText)
     }
 
     private fun setupListeners() {
@@ -239,6 +241,9 @@ class SettingsActivity : FragmentActivity() {
         val token = settingsManager.getApiToken()
         if (token.isNotEmpty()) {
             apiTokenInput.setText(token)
+            tokenHelperText.visibility = View.GONE
+        } else {
+            tokenHelperText.visibility = View.VISIBLE
         }
 
         // Sync status

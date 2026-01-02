@@ -98,6 +98,18 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tokenHelperText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="We know, typing with a remote is painful. The good news? You'll never have to do this again. 🎉\nGet your token at readwise.io/access_token"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:alpha="0.7"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
