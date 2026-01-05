@@ -3,12 +3,15 @@ package com.readwisequotes.ui
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import java.net.Inet4Address
+import java.net.NetworkInterface
 import com.readwisequotes.R
 import com.readwisequotes.data.QuoteRepository
 import com.readwisequotes.data.SyncResult
@@ -44,9 +47,12 @@ class SettingsActivity : FragmentActivity() {
     private lateinit var syncIntervalSpinner: Spinner
     private lateinit var toggleTokenVisibility: Button
     private lateinit var tokenHelperText: TextView
+    private lateinit var setupViaPhoneButton: Button
 
     private var availableTags: List<String> = emptyList()
     private var isTokenVisible = false
+    private var tokenEntryServer: TokenEntryServer? = null
+    private var setupDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,12 +121,18 @@ class SettingsActivity : FragmentActivity() {
         syncIntervalSpinner = findViewById(R.id.syncIntervalSpinner)
         toggleTokenVisibility = findViewById(R.id.toggleTokenVisibility)
         tokenHelperText = findViewById(R.id.tokenHelperText)
+        setupViaPhoneButton = findViewById(R.id.setupViaPhoneButton)
     }
 
     private fun setupListeners() {
         // Back button
         backButton.setOnClickListener {
             finish()
+        }
+
+        // Setup via phone button
+        setupViaPhoneButton.setOnClickListener {
+            startTokenEntryServer()
         }
 
         // Toggle token visibility
@@ -242,8 +254,16 @@ class SettingsActivity : FragmentActivity() {
         if (token.isNotEmpty()) {
             apiTokenInput.setText(token)
             tokenHelperText.visibility = View.GONE
+            setupViaPhoneButton.visibility = View.GONE
+            // Focus chain: token row → sync button (skip hidden setup button)
+            apiTokenInput.nextFocusDownId = R.id.syncButton
+            toggleTokenVisibility.nextFocusDownId = R.id.syncButton
         } else {
             tokenHelperText.visibility = View.VISIBLE
+            setupViaPhoneButton.visibility = View.VISIBLE
+            // Focus chain: token row → setup button → sync button
+            apiTokenInput.nextFocusDownId = R.id.setupViaPhoneButton
+            toggleTokenVisibility.nextFocusDownId = R.id.setupViaPhoneButton
         }
 
         // Sync status
@@ -655,5 +675,95 @@ class SettingsActivity : FragmentActivity() {
             allTags.size <= 5 -> "${enabledGroups.size} group(s): ${allTags.joinToString(", ")}"
             else -> "${enabledGroups.size} group(s): ${allTags.take(5).joinToString(", ")} +${allTags.size - 5} more"
         }
+    }
+
+    // ==================== Token Entry Server ====================
+
+    private fun startTokenEntryServer() {
+        val ipAddress = getDeviceIpAddress()
+        if (ipAddress == null) {
+            Toast.makeText(this, "Could not get IP address. Make sure you're connected to WiFi.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val port = 8080
+        tokenEntryServer = TokenEntryServer(port) { token ->
+            runOnUiThread {
+                handleTokenReceived(token)
+            }
+        }
+
+        try {
+            tokenEntryServer?.start()
+            showSetupDialog(ipAddress, port)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Failed to start server: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun showSetupDialog(ipAddress: String, port: Int) {
+        val url = "http://$ipAddress:$port"
+
+        setupDialog = AlertDialog.Builder(this)
+            .setTitle("📱 Setup via Phone")
+            .setMessage("On your phone, open a browser and go to:\n\n$url\n\nThen paste your Readwise API token.")
+            .setNegativeButton("Cancel") { _, _ ->
+                stopTokenEntryServer()
+            }
+            .setOnCancelListener {
+                stopTokenEntryServer()
+            }
+            .create()
+
+        setupDialog?.show()
+    }
+
+    private fun handleTokenReceived(token: String) {
+        // Stop the server
+        stopTokenEntryServer()
+
+        // Dismiss the dialog
+        setupDialog?.dismiss()
+
+        // Save and verify the token
+        settingsManager.setApiToken(token)
+        apiTokenInput.setText(token)
+
+        // Hide the helper text and setup button
+        tokenHelperText.visibility = View.GONE
+        setupViaPhoneButton.visibility = View.GONE
+
+        // Show success and trigger sync
+        Toast.makeText(this, "Token received! Syncing...", Toast.LENGTH_SHORT).show()
+        performSync()
+    }
+
+    private fun stopTokenEntryServer() {
+        tokenEntryServer?.stop()
+        tokenEntryServer = null
+    }
+
+    private fun getDeviceIpAddress(): String? {
+        try {
+            val interfaces = NetworkInterface.getNetworkInterfaces()
+            while (interfaces.hasMoreElements()) {
+                val networkInterface = interfaces.nextElement()
+                val addresses = networkInterface.inetAddresses
+                while (addresses.hasMoreElements()) {
+                    val address = addresses.nextElement()
+                    if (!address.isLoopbackAddress && address is Inet4Address) {
+                        return address.hostAddress
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopTokenEntryServer()
     }
 }

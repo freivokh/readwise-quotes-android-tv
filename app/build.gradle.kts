@@ -67,6 +67,9 @@ dependencies {
     // Security (encrypted prefs)
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
+    // Local HTTP server for token entry
+    implementation("org.nanohttpd:nanohttpd:2.3.1")
+
     // Testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
