@@ -49,7 +49,7 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 
 | ID | Feature | Status | Priority | Notes |
 |----|---------|--------|----------|-------|
-| S1 | API token entry without manual keyboard | Pending | | QR code? Deep link? |
+| ~S1~ | API token entry without manual keyboard | Done | | Local web server on phone |
 | ~S2~ | Show/hide password toggle for API token | Done | | Eye icon toggle |
 | ~S3~ | Funny note about one-time token entry | Done | | Shows only when no token saved |
 | S4 | Optional sync methods | Pending | | Need to clarify scope |
@@ -67,7 +67,7 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 
 ## Remaining Features Summary
 
-**To Implement (8 items):**
+**To Implement (7 items):**
 
 1. **U1** - Aesthetic redesign (fonts, cleaner look)
 2. **U2** - Settings menu visual refresh
@@ -75,12 +75,18 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 4. **U4** - Show book cover art option
 5. **U5** - Fix quote text overflow/sizing
 6. **F1** - QR code for source link
-7. **S1** - Alternative token entry method
-8. **S4** - Optional sync methods
+7. **S4** - Optional sync methods
 
 ---
 
 ## Implementation Log
+
+### 2025-01-01: Setup via Phone token entry (S1)
+- Local web server (NanoHTTPD) for receiving token
+- TV shows IP address, user visits on phone
+- Beautiful styled HTML form for pasting token
+- Auto-syncs after token received
+- Commit: `7fbc480`
 
 ### 2025-01-01: Playful token helper text (S3)
 - Shows friendly message only when no token is saved
