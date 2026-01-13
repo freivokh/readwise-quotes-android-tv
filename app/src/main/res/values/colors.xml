@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base colors -->
     <color name="background_dark">#000000</color>
     <color name="text_primary">#FFFFFF</color>
     <color name="text_secondary">#B0B0B0</color>
+    <color name="accent">#e94560</color>
+
+    <!-- Ambient theme gradient -->
     <color name="gradient_start">#1a1a2e</color>
     <color name="gradient_mid">#16213e</color>
     <color name="gradient_end">#0f3460</color>
-    <color name="accent">#e94560</color>
+
+    <!-- Editorial theme - warm paper tones -->
+    <color name="editorial_background">#1a1915</color>
+    <color name="editorial_text_primary">#f5f0e8</color>
+    <color name="editorial_text_secondary">#c4beb4</color>
+    <color name="editorial_accent">#d4c4a8</color>
+
+    <!-- Stoic theme - deep charcoal with gold -->
+    <color name="stoic_background">#121212</color>
+    <color name="stoic_text_primary">#e8e4dc</color>
+    <color name="stoic_text_secondary">#a09080</color>
+    <color name="stoic_accent">#c9a962</color>
 </resources>

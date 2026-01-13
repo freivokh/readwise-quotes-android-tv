@@ -38,9 +38,14 @@ class QuoteDisplayView @JvmOverloads constructor(
     private var visualStyle: VisualStyle = VisualStyle.AMBIENT
 
     private val autoFadeDuration = 500L
-    private val manualFadeDuration = 150L  // Faster for manual navigation (150ms each way = 300ms total)
+    private val manualFadeDuration = 150L
 
     private val displayRunnable = Runnable { showNextQuoteAuto() }
+
+    // Base text sizes (will be adjusted based on quote length)
+    private var baseQuoteSize = 32f
+    private var baseAuthorSize = 20f
+    private var baseSourceSize = 16f
 
     init {
         // Create gradient background
@@ -53,66 +58,215 @@ class QuoteDisplayView @JvmOverloads constructor(
         quoteContainer = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER
-            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT).apply {
-                val padding = dpToPx(80)
-                setPadding(padding, padding, padding, padding)
-            }
+            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         }
         addView(quoteContainer)
 
         // Quote text
         quoteText = TextView(context).apply {
-            setTextColor(ContextCompat.getColor(context, R.color.text_primary))
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 32f)
-            typeface = Typeface.create("serif", Typeface.ITALIC)
             gravity = Gravity.CENTER
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                bottomMargin = dpToPx(32)
-            }
+            )
         }
         quoteContainer.addView(quoteText)
 
         // Author text
         authorText = TextView(context).apply {
-            setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-            typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
             gravity = Gravity.CENTER
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                bottomMargin = dpToPx(8)
-            }
+            )
         }
         quoteContainer.addView(authorText)
 
         // Source text
         sourceText = TextView(context).apply {
-            setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             gravity = Gravity.CENTER
-            alpha = 0.7f
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
         }
         quoteContainer.addView(sourceText)
+
+        // Apply default style
+        applyTheme(VisualStyle.AMBIENT)
     }
 
     fun setVisualStyle(style: VisualStyle) {
         visualStyle = style
+        applyTheme(style)
+    }
+
+    private fun applyTheme(style: VisualStyle) {
         when (style) {
-            VisualStyle.AMBIENT -> {
-                gradientBackground.visibility = View.VISIBLE
-                gradientBackground.startAnimation()
-            }
-            VisualStyle.MINIMAL -> {
-                gradientBackground.visibility = View.GONE
-                gradientBackground.stopAnimation()
-                setBackgroundColor(Color.BLACK)
-            }
+            VisualStyle.MINIMAL -> applyMinimalTheme()
+            VisualStyle.AMBIENT -> applyAmbientTheme()
+            VisualStyle.EDITORIAL -> applyEditorialTheme()
+            VisualStyle.STOIC -> applyStoicTheme()
         }
+    }
+
+    private fun applyMinimalTheme() {
+        // Background
+        gradientBackground.visibility = View.GONE
+        gradientBackground.stopAnimation()
+        setBackgroundColor(Color.BLACK)
+
+        // Padding
+        val padding = dpToPx(80)
+        quoteContainer.setPadding(padding, padding, padding, padding)
+
+        // Quote text - clean white on black
+        quoteText.apply {
+            setTextColor(Color.WHITE)
+            typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
+            setLineSpacing(dpToPx(4).toFloat(), 1f)
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(32)
+        }
+        baseQuoteSize = 30f
+
+        // Author text
+        authorText.apply {
+            setTextColor(Color.parseColor("#B0B0B0"))
+            typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+            alpha = 1f
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(8)
+        }
+        baseAuthorSize = 18f
+
+        // Source text
+        sourceText.apply {
+            setTextColor(Color.parseColor("#808080"))
+            typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+            alpha = 0.8f
+        }
+        baseSourceSize = 14f
+    }
+
+    private fun applyAmbientTheme() {
+        // Background - animated gradient
+        gradientBackground.visibility = View.VISIBLE
+        if (isRunning) gradientBackground.startAnimation()
+
+        // Padding
+        val padding = dpToPx(80)
+        quoteContainer.setPadding(padding, padding, padding, padding)
+
+        // Quote text - elegant serif italic
+        quoteText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.text_primary))
+            typeface = Typeface.create("serif", Typeface.ITALIC)
+            setLineSpacing(dpToPx(6).toFloat(), 1f)
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(32)
+        }
+        baseQuoteSize = 32f
+
+        // Author text
+        authorText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
+            typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+            alpha = 1f
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(8)
+        }
+        baseAuthorSize = 20f
+
+        // Source text
+        sourceText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
+            typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+            alpha = 0.7f
+        }
+        baseSourceSize = 16f
+    }
+
+    private fun applyEditorialTheme() {
+        // Background - warm dark paper tone
+        gradientBackground.visibility = View.GONE
+        gradientBackground.stopAnimation()
+        setBackgroundColor(ContextCompat.getColor(context, R.color.editorial_background))
+
+        // Generous padding for editorial feel
+        val horizontalPadding = dpToPx(120)
+        val verticalPadding = dpToPx(100)
+        quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+
+        // Quote text - elegant serif, cream colored
+        quoteText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.editorial_text_primary))
+            typeface = Typeface.create("serif", Typeface.ITALIC)
+            setLineSpacing(dpToPx(10).toFloat(), 1.1f)
+            letterSpacing = 0.02f
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(48)
+        }
+        baseQuoteSize = 34f
+
+        // Author text - refined, small caps feel
+        authorText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.editorial_accent))
+            typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+            letterSpacing = 0.15f
+            isAllCaps = true
+            alpha = 1f
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(12)
+        }
+        baseAuthorSize = 14f
+
+        // Source text - subtle, understated
+        sourceText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.editorial_text_secondary))
+            typeface = Typeface.create("serif", Typeface.ITALIC)
+            letterSpacing = 0.03f
+            isAllCaps = false
+            alpha = 0.8f
+        }
+        baseSourceSize = 15f
+    }
+
+    private fun applyStoicTheme() {
+        // Background - deep charcoal
+        gradientBackground.visibility = View.GONE
+        gradientBackground.stopAnimation()
+        setBackgroundColor(ContextCompat.getColor(context, R.color.stoic_background))
+
+        // Very generous padding - lots of breathing room
+        val horizontalPadding = dpToPx(140)
+        val verticalPadding = dpToPx(120)
+        quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+
+        // Quote text - warm off-white, classical serif
+        quoteText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.stoic_text_primary))
+            typeface = Typeface.create("serif", Typeface.NORMAL)
+            setLineSpacing(dpToPx(12).toFloat(), 1.15f)
+            letterSpacing = 0.01f
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(56)
+        }
+        baseQuoteSize = 32f
+
+        // Author text - warm gold accent
+        authorText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.stoic_accent))
+            typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
+            letterSpacing = 0.08f
+            isAllCaps = false
+            alpha = 1f
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(8)
+        }
+        baseAuthorSize = 17f
+
+        // Source text - muted, philosophical
+        sourceText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.stoic_text_secondary))
+            typeface = Typeface.create("serif", Typeface.ITALIC)
+            letterSpacing = 0.02f
+            isAllCaps = false
+            alpha = 0.7f
+        }
+        baseSourceSize = 14f
     }
 
     fun setQuoteDuration(durationSeconds: Int) {
@@ -149,19 +303,21 @@ class QuoteDisplayView @JvmOverloads constructor(
         val quote = currentQuotes[currentIndex]
 
         // Adjust text size based on quote length
-        val textSize = when {
-            quote.text.length > 500 -> 20f
-            quote.text.length > 300 -> 24f
-            quote.text.length > 150 -> 28f
-            else -> 32f
+        val sizeMultiplier = when {
+            quote.text.length > 500 -> 0.625f
+            quote.text.length > 300 -> 0.75f
+            quote.text.length > 150 -> 0.875f
+            else -> 1f
         }
-        quoteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+        quoteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseQuoteSize * sizeMultiplier)
+        authorText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseAuthorSize)
+        sourceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseSourceSize)
 
         // Fade out current content
         fadeOut(fadeDuration) {
-            // Update content
-            quoteText.text = "\"${quote.text}\""
-            authorText.text = quote.author?.let { "— $it" } ?: ""
+            // Update content - use curly quotes for elegance
+            quoteText.text = "\u201C${quote.text}\u201D"
+            authorText.text = quote.author?.let { "\u2014 $it" } ?: ""
             sourceText.text = quote.title ?: ""
 
             authorText.visibility = if (quote.author.isNullOrEmpty()) View.GONE else View.VISIBLE

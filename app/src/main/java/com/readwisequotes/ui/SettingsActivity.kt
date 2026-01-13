@@ -200,11 +200,16 @@ class SettingsActivity : FragmentActivity() {
             showCreateGroupDialog()
         }
 
-        // Style spinner
+        // Style spinner - order must match VisualStyle enum: MINIMAL, AMBIENT, EDITORIAL, STOIC
         val styleAdapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_dropdown_item,
-            listOf(getString(R.string.style_ambient), getString(R.string.style_minimal))
+            listOf(
+                getString(R.string.style_minimal),
+                getString(R.string.style_ambient),
+                getString(R.string.style_editorial),
+                getString(R.string.style_stoic)
+            )
         )
         styleSpinner.adapter = styleAdapter
         styleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

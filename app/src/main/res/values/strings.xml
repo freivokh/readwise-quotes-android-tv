@@ -14,8 +14,10 @@
     <string name="filter_tags">By Tag</string>
     <string name="filter_recent">Recent (30 days)</string>
     <string name="visual_style_label">Visual Style</string>
+    <string name="style_minimal">Minimal</string>
     <string name="style_ambient">Ambient</string>
-    <string name="style_minimal">Minimal (OLED)</string>
+    <string name="style_editorial">Editorial</string>
+    <string name="style_stoic">Stoic</string>
     <string name="duration_label">Quote Duration</string>
     <string name="duration_format">%d seconds</string>
     <string name="sync_interval_label">Auto-sync Every</string>
