@@ -117,34 +117,39 @@ class QuoteDisplayView @JvmOverloads constructor(
         setBackgroundColor(Color.BLACK)
 
         // Padding
-        val padding = dpToPx(80)
+        val padding = dpToPx(60)
         quoteContainer.setPadding(padding, padding, padding, padding)
 
         // Quote text - clean white on black
         quoteText.apply {
             setTextColor(Color.WHITE)
             typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
-            setLineSpacing(dpToPx(4).toFloat(), 1f)
-            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(32)
+            setLineSpacing(dpToPx(3).toFloat(), 1f)
+            letterSpacing = 0f
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(24)
         }
-        baseQuoteSize = 30f
+        baseQuoteSize = 22f
 
         // Author text
         authorText.apply {
             setTextColor(Color.parseColor("#B0B0B0"))
             typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+            letterSpacing = 0f
+            isAllCaps = false
             alpha = 1f
-            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(8)
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(6)
         }
-        baseAuthorSize = 18f
+        baseAuthorSize = 14f
 
         // Source text
         sourceText.apply {
             setTextColor(Color.parseColor("#808080"))
             typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+            letterSpacing = 0f
+            isAllCaps = false
             alpha = 0.8f
         }
-        baseSourceSize = 14f
+        baseSourceSize = 12f
     }
 
     private fun applyAmbientTheme() {
@@ -153,34 +158,39 @@ class QuoteDisplayView @JvmOverloads constructor(
         if (isRunning) gradientBackground.startAnimation()
 
         // Padding
-        val padding = dpToPx(80)
+        val padding = dpToPx(60)
         quoteContainer.setPadding(padding, padding, padding, padding)
 
         // Quote text - elegant serif italic
         quoteText.apply {
             setTextColor(ContextCompat.getColor(context, R.color.text_primary))
             typeface = Typeface.create("serif", Typeface.ITALIC)
-            setLineSpacing(dpToPx(6).toFloat(), 1f)
-            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(32)
+            setLineSpacing(dpToPx(4).toFloat(), 1f)
+            letterSpacing = 0f
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(24)
         }
-        baseQuoteSize = 32f
+        baseQuoteSize = 24f
 
         // Author text
         authorText.apply {
             setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+            letterSpacing = 0f
+            isAllCaps = false
             alpha = 1f
-            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(8)
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(6)
         }
-        baseAuthorSize = 20f
+        baseAuthorSize = 15f
 
         // Source text
         sourceText.apply {
             setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
             typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+            letterSpacing = 0f
+            isAllCaps = false
             alpha = 0.7f
         }
-        baseSourceSize = 16f
+        baseSourceSize = 13f
     }
 
     private fun applyEditorialTheme() {
@@ -189,41 +199,41 @@ class QuoteDisplayView @JvmOverloads constructor(
         gradientBackground.stopAnimation()
         setBackgroundColor(ContextCompat.getColor(context, R.color.editorial_background))
 
-        // Generous padding for editorial feel
-        val horizontalPadding = dpToPx(120)
-        val verticalPadding = dpToPx(100)
+        // Balanced padding for editorial feel
+        val horizontalPadding = dpToPx(80)
+        val verticalPadding = dpToPx(60)
         quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
         // Quote text - elegant serif, cream colored
         quoteText.apply {
             setTextColor(ContextCompat.getColor(context, R.color.editorial_text_primary))
             typeface = Typeface.create("serif", Typeface.ITALIC)
-            setLineSpacing(dpToPx(10).toFloat(), 1.1f)
-            letterSpacing = 0.02f
-            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(48)
+            setLineSpacing(dpToPx(5).toFloat(), 1.05f)
+            letterSpacing = 0.01f
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(28)
         }
-        baseQuoteSize = 34f
+        baseQuoteSize = 24f
 
         // Author text - refined, small caps feel
         authorText.apply {
             setTextColor(ContextCompat.getColor(context, R.color.editorial_accent))
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-            letterSpacing = 0.15f
+            letterSpacing = 0.12f
             isAllCaps = true
             alpha = 1f
-            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(12)
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(8)
         }
-        baseAuthorSize = 14f
+        baseAuthorSize = 12f
 
         // Source text - subtle, understated
         sourceText.apply {
             setTextColor(ContextCompat.getColor(context, R.color.editorial_text_secondary))
             typeface = Typeface.create("serif", Typeface.ITALIC)
-            letterSpacing = 0.03f
+            letterSpacing = 0.02f
             isAllCaps = false
             alpha = 0.8f
         }
-        baseSourceSize = 15f
+        baseSourceSize = 12f
     }
 
     private fun applyStoicTheme() {
@@ -232,41 +242,41 @@ class QuoteDisplayView @JvmOverloads constructor(
         gradientBackground.stopAnimation()
         setBackgroundColor(ContextCompat.getColor(context, R.color.stoic_background))
 
-        // Very generous padding - lots of breathing room
-        val horizontalPadding = dpToPx(140)
-        val verticalPadding = dpToPx(120)
+        // Balanced padding with breathing room
+        val horizontalPadding = dpToPx(80)
+        val verticalPadding = dpToPx(60)
         quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
         // Quote text - warm off-white, classical serif
         quoteText.apply {
             setTextColor(ContextCompat.getColor(context, R.color.stoic_text_primary))
             typeface = Typeface.create("serif", Typeface.NORMAL)
-            setLineSpacing(dpToPx(12).toFloat(), 1.15f)
+            setLineSpacing(dpToPx(5).toFloat(), 1.05f)
             letterSpacing = 0.01f
-            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(56)
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(28)
         }
-        baseQuoteSize = 32f
+        baseQuoteSize = 24f
 
         // Author text - warm gold accent
         authorText.apply {
             setTextColor(ContextCompat.getColor(context, R.color.stoic_accent))
             typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
-            letterSpacing = 0.08f
+            letterSpacing = 0.05f
             isAllCaps = false
             alpha = 1f
-            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(8)
+            (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(6)
         }
-        baseAuthorSize = 17f
+        baseAuthorSize = 14f
 
         // Source text - muted, philosophical
         sourceText.apply {
             setTextColor(ContextCompat.getColor(context, R.color.stoic_text_secondary))
             typeface = Typeface.create("serif", Typeface.ITALIC)
-            letterSpacing = 0.02f
+            letterSpacing = 0.01f
             isAllCaps = false
             alpha = 0.7f
         }
-        baseSourceSize = 14f
+        baseSourceSize = 12f
     }
 
     fun setQuoteDuration(durationSeconds: Int) {
