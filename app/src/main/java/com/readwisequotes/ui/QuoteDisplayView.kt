@@ -139,7 +139,7 @@ class QuoteDisplayView @JvmOverloads constructor(
             alpha = 1f
             (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(6)
         }
-        baseAuthorSize = 14f
+        baseAuthorSize = 16f
 
         // Source text
         sourceText.apply {
@@ -180,7 +180,7 @@ class QuoteDisplayView @JvmOverloads constructor(
             alpha = 1f
             (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(6)
         }
-        baseAuthorSize = 15f
+        baseAuthorSize = 17f
 
         // Source text
         sourceText.apply {
@@ -223,7 +223,7 @@ class QuoteDisplayView @JvmOverloads constructor(
             alpha = 1f
             (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(8)
         }
-        baseAuthorSize = 12f
+        baseAuthorSize = 14f
 
         // Source text - subtle, understated
         sourceText.apply {
@@ -266,7 +266,7 @@ class QuoteDisplayView @JvmOverloads constructor(
             alpha = 1f
             (layoutParams as LinearLayout.LayoutParams).bottomMargin = dpToPx(6)
         }
-        baseAuthorSize = 14f
+        baseAuthorSize = 16f
 
         // Source text - muted, philosophical
         sourceText.apply {
