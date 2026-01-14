@@ -37,8 +37,8 @@ class QuoteDisplayView @JvmOverloads constructor(
     private var isRunning = false
     private var visualStyle: VisualStyle = VisualStyle.AMBIENT
 
-    private val autoFadeDuration = 500L
-    private val manualFadeDuration = 150L
+    private val autoFadeDuration = 600L
+    private val manualFadeDuration = 350L
 
     private val displayRunnable = Runnable { showNextQuoteAuto() }
 
@@ -312,19 +312,19 @@ class QuoteDisplayView @JvmOverloads constructor(
 
         val quote = currentQuotes[currentIndex]
 
-        // Adjust text size based on quote length
-        val sizeMultiplier = when {
-            quote.text.length > 500 -> 0.625f
-            quote.text.length > 300 -> 0.75f
-            quote.text.length > 150 -> 0.875f
-            else -> 1f
-        }
-        quoteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseQuoteSize * sizeMultiplier)
-        authorText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseAuthorSize)
-        sourceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseSourceSize)
-
-        // Fade out current content
+        // Fade out current content first
         fadeOut(fadeDuration) {
+            // Adjust text size based on quote length (while invisible)
+            val sizeMultiplier = when {
+                quote.text.length > 500 -> 0.625f
+                quote.text.length > 300 -> 0.75f
+                quote.text.length > 150 -> 0.875f
+                else -> 1f
+            }
+            quoteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseQuoteSize * sizeMultiplier)
+            authorText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseAuthorSize)
+            sourceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseSourceSize)
+
             // Update content - use curly quotes for elegance
             quoteText.text = "\u201C${quote.text}\u201D"
             authorText.text = quote.author?.let { "\u2014 $it" } ?: ""
