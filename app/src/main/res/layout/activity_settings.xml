@@ -258,6 +258,25 @@
             android:focusable="true"
             android:focusableInTouchMode="false"
             android:nextFocusUp="@id/createGroupButton"
+            android:nextFocusDown="@id/textSizeSpinner" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_size_label"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/textSizeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/focusable_spinner_background"
+            android:layout_marginBottom="24dp"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:nextFocusUp="@id/styleSpinner"
             android:nextFocusDown="@id/durationSeekBar" />
 
         <TextView

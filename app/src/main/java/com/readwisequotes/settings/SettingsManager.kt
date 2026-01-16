@@ -56,6 +56,13 @@ class SettingsManager @Inject constructor(
     }
     fun setVisualStyle(style: VisualStyle) = prefs.edit().putString(KEY_VISUAL_STYLE, style.name).apply()
 
+    // Text size
+    fun getTextSize(): TextSize {
+        val value = prefs.getString(KEY_TEXT_SIZE, TextSize.MEDIUM.name) ?: TextSize.MEDIUM.name
+        return TextSize.valueOf(value)
+    }
+    fun setTextSize(size: TextSize) = prefs.edit().putString(KEY_TEXT_SIZE, size.name).apply()
+
     // Quote duration in seconds
     fun getQuoteDuration(): Int = prefs.getInt(KEY_QUOTE_DURATION, 20)
     fun setQuoteDuration(seconds: Int) = prefs.edit().putInt(KEY_QUOTE_DURATION, seconds).apply()
@@ -152,6 +159,7 @@ class SettingsManager @Inject constructor(
         private const val KEY_SELECTED_TAGS = "selected_tags"
         private const val KEY_TAG_GROUPS = "tag_groups"
         private const val KEY_VISUAL_STYLE = "visual_style"
+        private const val KEY_TEXT_SIZE = "text_size"
         private const val KEY_QUOTE_DURATION = "quote_duration"
         private const val KEY_SYNC_INTERVAL = "sync_interval"
     }

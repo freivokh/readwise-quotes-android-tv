@@ -36,6 +36,7 @@ class QuoteDisplayView @JvmOverloads constructor(
     private var quoteDurationMs = 20000L
     private var isRunning = false
     private var visualStyle: VisualStyle = VisualStyle.AMBIENT
+    private var textSizeScale: Float = 1.0f
 
     private val autoFadeDuration = 600L
     private val manualFadeDuration = 350L
@@ -99,6 +100,10 @@ class QuoteDisplayView @JvmOverloads constructor(
     fun setVisualStyle(style: VisualStyle) {
         visualStyle = style
         applyTheme(style)
+    }
+
+    fun setTextSizeScale(scale: Float) {
+        textSizeScale = scale
     }
 
     private fun applyTheme(style: VisualStyle) {
@@ -315,15 +320,16 @@ class QuoteDisplayView @JvmOverloads constructor(
         // Fade out current content first
         fadeOut(fadeDuration) {
             // Adjust text size based on quote length (while invisible)
-            val sizeMultiplier = when {
+            val lengthMultiplier = when {
                 quote.text.length > 500 -> 0.625f
                 quote.text.length > 300 -> 0.75f
                 quote.text.length > 150 -> 0.875f
                 else -> 1f
             }
-            quoteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseQuoteSize * sizeMultiplier)
-            authorText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseAuthorSize)
-            sourceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseSourceSize)
+            // Apply both length-based and user preference scaling
+            quoteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseQuoteSize * lengthMultiplier * textSizeScale)
+            authorText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseAuthorSize * textSizeScale)
+            sourceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseSourceSize * textSizeScale)
 
             // Update content - use curly quotes for elegance
             quoteText.text = "\u201C${quote.text}\u201D"

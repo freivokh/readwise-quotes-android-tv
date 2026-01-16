@@ -67,6 +67,7 @@ class MainActivity : FragmentActivity() {
 
         // Apply settings
         quoteDisplayView.setVisualStyle(settingsManager.getVisualStyle())
+        quoteDisplayView.setTextSizeScale(settingsManager.getTextSize().multiplier)
         quoteDisplayView.setQuoteDuration(settingsManager.getQuoteDuration())
 
         // Check if sync needed

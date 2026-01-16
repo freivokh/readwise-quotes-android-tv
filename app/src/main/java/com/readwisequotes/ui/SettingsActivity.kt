@@ -18,6 +18,7 @@ import com.readwisequotes.data.SyncResult
 import com.readwisequotes.settings.QuoteFilter
 import com.readwisequotes.settings.SettingsManager
 import com.readwisequotes.settings.TagFilterMode
+import com.readwisequotes.settings.TextSize
 import com.readwisequotes.settings.VisualStyle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -42,6 +43,7 @@ class SettingsActivity : FragmentActivity() {
     private lateinit var createGroupButton: Button
     private lateinit var selectedTagsText: TextView
     private lateinit var styleSpinner: Spinner
+    private lateinit var textSizeSpinner: Spinner
     private lateinit var durationSeekBar: SeekBar
     private lateinit var durationValue: TextView
     private lateinit var syncIntervalSpinner: Spinner
@@ -116,6 +118,7 @@ class SettingsActivity : FragmentActivity() {
         createGroupButton = findViewById(R.id.createGroupButton)
         selectedTagsText = findViewById(R.id.selectedTagsText)
         styleSpinner = findViewById(R.id.styleSpinner)
+        textSizeSpinner = findViewById(R.id.textSizeSpinner)
         durationSeekBar = findViewById(R.id.durationSeekBar)
         durationValue = findViewById(R.id.durationValue)
         syncIntervalSpinner = findViewById(R.id.syncIntervalSpinner)
@@ -220,6 +223,25 @@ class SettingsActivity : FragmentActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        // Text size spinner - order must match TextSize enum: SMALL, MEDIUM, LARGE
+        val textSizeAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf(
+                getString(R.string.text_size_small),
+                getString(R.string.text_size_medium),
+                getString(R.string.text_size_large)
+            )
+        )
+        textSizeSpinner.adapter = textSizeAdapter
+        textSizeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val size = TextSize.entries[position]
+                settingsManager.setTextSize(size)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
         // Duration seek bar
         durationSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -286,6 +308,9 @@ class SettingsActivity : FragmentActivity() {
 
         // Style
         styleSpinner.setSelection(settingsManager.getVisualStyle().ordinal)
+
+        // Text size
+        textSizeSpinner.setSelection(settingsManager.getTextSize().ordinal)
 
         // Duration
         val duration = settingsManager.getQuoteDuration()
