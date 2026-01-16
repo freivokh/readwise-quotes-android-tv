@@ -121,9 +121,10 @@ class QuoteDisplayView @JvmOverloads constructor(
         gradientBackground.stopAnimation()
         setBackgroundColor(Color.BLACK)
 
-        // Padding
-        val padding = dpToPx(60)
-        quoteContainer.setPadding(padding, padding, padding, padding)
+        // Padding - wider horizontal margins for elegant text blocks
+        val horizontalPadding = dpToPx(120)
+        val verticalPadding = dpToPx(60)
+        quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
         // Quote text - clean white on black
         quoteText.apply {
@@ -162,9 +163,10 @@ class QuoteDisplayView @JvmOverloads constructor(
         gradientBackground.visibility = View.VISIBLE
         if (isRunning) gradientBackground.startAnimation()
 
-        // Padding
-        val padding = dpToPx(60)
-        quoteContainer.setPadding(padding, padding, padding, padding)
+        // Padding - wider horizontal margins for elegant text blocks
+        val horizontalPadding = dpToPx(120)
+        val verticalPadding = dpToPx(60)
+        quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
         // Quote text - elegant serif italic
         quoteText.apply {
@@ -204,8 +206,8 @@ class QuoteDisplayView @JvmOverloads constructor(
         gradientBackground.stopAnimation()
         setBackgroundColor(ContextCompat.getColor(context, R.color.editorial_background))
 
-        // Balanced padding for editorial feel
-        val horizontalPadding = dpToPx(80)
+        // Wider horizontal margins for elegant text blocks
+        val horizontalPadding = dpToPx(140)
         val verticalPadding = dpToPx(60)
         quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
@@ -247,8 +249,8 @@ class QuoteDisplayView @JvmOverloads constructor(
         gradientBackground.stopAnimation()
         setBackgroundColor(ContextCompat.getColor(context, R.color.stoic_background))
 
-        // Balanced padding with breathing room
-        val horizontalPadding = dpToPx(80)
+        // Wider horizontal margins for elegant text blocks
+        val horizontalPadding = dpToPx(140)
         val verticalPadding = dpToPx(60)
         quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
