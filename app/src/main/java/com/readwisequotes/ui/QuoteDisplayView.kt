@@ -333,8 +333,9 @@ class QuoteDisplayView @JvmOverloads constructor(
             authorText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseAuthorSize * textSizeScale)
             sourceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseSourceSize * textSizeScale)
 
-            // Update content - use curly quotes for elegance
-            quoteText.text = "\u201C${quote.text}\u201D"
+            // Update content - clean markdown and add curly quotes
+            val cleanText = cleanQuoteText(quote.text)
+            quoteText.text = "\u201C${cleanText}\u201D"
             authorText.text = quote.author?.let { "\u2014 $it" } ?: ""
             sourceText.text = quote.title ?: ""
 
@@ -393,6 +394,22 @@ class QuoteDisplayView @JvmOverloads constructor(
             })
             start()
         }
+    }
+
+    private fun cleanQuoteText(text: String): String {
+        return text
+            // Remove markdown bold/italic: **text**, *text*, __text__, _text_
+            .replace(Regex("\\*\\*(.+?)\\*\\*"), "$1")
+            .replace(Regex("\\*(.+?)\\*"), "$1")
+            .replace(Regex("__(.+?)__"), "$1")
+            .replace(Regex("_(.+?)_"), "$1")
+            // Remove existing quotes at start/end (we add our own curly quotes)
+            .trim()
+            .removeSurrounding("\"", "\"")
+            .removeSurrounding("\u201C", "\u201D")  // curly quotes
+            .removeSurrounding("\u201C", "\"")      // mixed quotes
+            .removeSurrounding("\"", "\u201D")
+            .trim()
     }
 
     private fun dpToPx(dp: Int): Int {
