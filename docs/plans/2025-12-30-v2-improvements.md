@@ -22,9 +22,10 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 |----|---------|--------|----------|-------|
 | ~U1~ | Update aesthetic design - cleaner, smaller font | Done | | 4 themes, elegant typography, text size setting |
 | U2 | Make settings menu cleaner and more aesthetic | Pending | | |
-| U3 | Show highlight tags in UI (bottom right corner) | Pending | | Data exists, just need to display |
+| ~U3~ | Show highlight tags in UI | Done | | Bottom-center, toggle in settings |
 | U4 | Option to show book cover art | Pending | | Data synced, UI not implemented |
 | ~U5~ | Quotes getting cut off / resize issues | Done | | Reduced fonts, wider margins, markdown stripping |
+| ~U6~ | Show highlight notes | Done | | Below source, toggle in settings |
 
 ---
 
@@ -67,13 +68,12 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 
 ## Remaining Features Summary
 
-**To Implement (5 items):**
+**To Implement (4 items):**
 
 1. **U2** - Settings menu visual refresh
-2. **U3** - Display tags on quote screen
-3. **U4** - Show book cover art option
-4. **F1** - QR code for source link
-5. **S4** - Optional sync methods
+2. **U4** - Show book cover art option
+3. **F1** - QR code for source link
+4. **S4** - Optional sync methods
 
 ---
 
@@ -120,4 +120,27 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 - Removed global match mode toggle
 - Query: `(Group A tags with its mode) OR (Group B tags with its mode)`
 - Commit: `8d5904e`
+
+### 2025-01-20: Tags display (U3)
+- Display tags at bottom-center of quote screen
+- Subtle styling: 10sp font, 40% opacity
+- "Show Tags" toggle in Display settings
+- Commits: `022501a`, `9dd0d7e`
+
+### 2025-01-20: Notes display (U6)
+- Sync `note` field from Readwise API
+- Display notes below source text (italic, muted)
+- "Show Notes" toggle in Display settings
+- Database version bump (v1 → v2) with destructive migration
+- Commit: `bd7ab1d`
+
+### 2025-01-20: Full Sync button
+- Clears last sync time to re-download all quotes
+- Added next to "Sync Now" in Account section
+- Commit: `9dd0d7e`
+
+### 2025-01-20: Padding adjustments
+- Reduced horizontal padding for better text display
+- Minimal/Ambient: 60dp, Editorial/Stoic: 80dp
+- Commit: `9c86caa`
 
