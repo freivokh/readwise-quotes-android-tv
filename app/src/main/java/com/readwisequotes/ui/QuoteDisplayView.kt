@@ -30,6 +30,7 @@ class QuoteDisplayView @JvmOverloads constructor(
     private val quoteText: TextView
     private val authorText: TextView
     private val sourceText: TextView
+    private val tagsText: TextView
 
     private var currentQuotes: List<Quote> = emptyList()
     private var currentIndex = 0
@@ -92,6 +93,22 @@ class QuoteDisplayView @JvmOverloads constructor(
             )
         }
         quoteContainer.addView(sourceText)
+
+        // Tags text - positioned at bottom right corner (outside quoteContainer)
+        tagsText = TextView(context).apply {
+            gravity = Gravity.END
+            layoutParams = LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = Gravity.BOTTOM or Gravity.END
+                marginEnd = dpToPx(40)
+                bottomMargin = dpToPx(40)
+            }
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+            alpha = 0.6f
+        }
+        addView(tagsText)
 
         // Apply default style
         applyTheme(VisualStyle.AMBIENT)
@@ -156,6 +173,12 @@ class QuoteDisplayView @JvmOverloads constructor(
             alpha = 0.8f
         }
         baseSourceSize = 12f
+
+        // Tags text
+        tagsText.apply {
+            setTextColor(Color.parseColor("#606060"))
+            typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+        }
     }
 
     private fun applyAmbientTheme() {
@@ -198,6 +221,12 @@ class QuoteDisplayView @JvmOverloads constructor(
             alpha = 0.7f
         }
         baseSourceSize = 13f
+
+        // Tags text
+        tagsText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
+            typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+        }
     }
 
     private fun applyEditorialTheme() {
@@ -241,6 +270,12 @@ class QuoteDisplayView @JvmOverloads constructor(
             alpha = 0.8f
         }
         baseSourceSize = 12f
+
+        // Tags text
+        tagsText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.editorial_text_secondary))
+            typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+        }
     }
 
     private fun applyStoicTheme() {
@@ -284,6 +319,12 @@ class QuoteDisplayView @JvmOverloads constructor(
             alpha = 0.7f
         }
         baseSourceSize = 12f
+
+        // Tags text
+        tagsText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.stoic_text_secondary))
+            typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+        }
     }
 
     fun setQuoteDuration(durationSeconds: Int) {
@@ -341,6 +382,14 @@ class QuoteDisplayView @JvmOverloads constructor(
 
             authorText.visibility = if (quote.author.isNullOrEmpty()) View.GONE else View.VISIBLE
             sourceText.visibility = if (quote.title.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+            // Show tags in bottom right corner
+            if (quote.tags.isNotEmpty()) {
+                tagsText.text = quote.tags.joinToString(", ")
+                tagsText.visibility = View.VISIBLE
+            } else {
+                tagsText.visibility = View.GONE
+            }
 
             // Fade in new content
             fadeIn(fadeDuration) {
