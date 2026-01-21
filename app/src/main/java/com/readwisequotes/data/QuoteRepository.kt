@@ -99,6 +99,7 @@ class QuoteRepository @Inject constructor(
                             Quote(
                                 id = highlight.id,
                                 text = highlight.text,
+                                note = highlight.note,
                                 title = book.title,
                                 author = book.author,
                                 bookCover = book.coverImageUrl,

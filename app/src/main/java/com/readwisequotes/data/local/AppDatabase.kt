@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.readwisequotes.data.model.Quote
 
-@Database(entities = [Quote::class], version = 1, exportSchema = false)
+@Database(entities = [Quote::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun quoteDao(): QuoteDao

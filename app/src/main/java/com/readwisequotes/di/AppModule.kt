@@ -29,7 +29,7 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "readwise_quotes.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides

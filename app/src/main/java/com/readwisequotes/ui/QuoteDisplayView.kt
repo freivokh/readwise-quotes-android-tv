@@ -30,6 +30,7 @@ class QuoteDisplayView @JvmOverloads constructor(
     private val quoteText: TextView
     private val authorText: TextView
     private val sourceText: TextView
+    private val noteText: TextView
     private val tagsText: TextView
 
     private var currentQuotes: List<Quote> = emptyList()
@@ -38,6 +39,8 @@ class QuoteDisplayView @JvmOverloads constructor(
     private var isRunning = false
     private var visualStyle: VisualStyle = VisualStyle.AMBIENT
     private var textSizeScale: Float = 1.0f
+    private var showTags: Boolean = true
+    private var showNotes: Boolean = true
 
     private val autoFadeDuration = 600L
     private val manualFadeDuration = 350L
@@ -48,6 +51,7 @@ class QuoteDisplayView @JvmOverloads constructor(
     private var baseQuoteSize = 32f
     private var baseAuthorSize = 20f
     private var baseSourceSize = 16f
+    private var baseNoteSize = 14f
 
     init {
         // Create gradient background
@@ -94,15 +98,26 @@ class QuoteDisplayView @JvmOverloads constructor(
         }
         quoteContainer.addView(sourceText)
 
-        // Tags text - positioned at bottom right corner (outside quoteContainer)
+        // Note text (user's personal annotation)
+        noteText = TextView(context).apply {
+            gravity = Gravity.CENTER
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = dpToPx(16)
+            }
+        }
+        quoteContainer.addView(noteText)
+
+        // Tags text - positioned at bottom center (outside quoteContainer)
         tagsText = TextView(context).apply {
-            gravity = Gravity.END
+            gravity = Gravity.CENTER
             layoutParams = LayoutParams(
                 LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT
             ).apply {
-                gravity = Gravity.BOTTOM or Gravity.END
-                marginEnd = dpToPx(40)
+                gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
                 bottomMargin = dpToPx(40)
             }
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f)
@@ -121,6 +136,14 @@ class QuoteDisplayView @JvmOverloads constructor(
 
     fun setTextSizeScale(scale: Float) {
         textSizeScale = scale
+    }
+
+    fun setShowTags(show: Boolean) {
+        showTags = show
+    }
+
+    fun setShowNotes(show: Boolean) {
+        showNotes = show
     }
 
     private fun applyTheme(style: VisualStyle) {
@@ -174,6 +197,14 @@ class QuoteDisplayView @JvmOverloads constructor(
         }
         baseSourceSize = 12f
 
+        // Note text
+        noteText.apply {
+            setTextColor(Color.parseColor("#909090"))
+            typeface = Typeface.create("sans-serif-light", Typeface.ITALIC)
+            alpha = 0.7f
+        }
+        baseNoteSize = 12f
+
         // Tags text
         tagsText.apply {
             setTextColor(Color.parseColor("#606060"))
@@ -221,6 +252,14 @@ class QuoteDisplayView @JvmOverloads constructor(
             alpha = 0.7f
         }
         baseSourceSize = 13f
+
+        // Note text
+        noteText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.text_secondary))
+            typeface = Typeface.create("sans-serif-light", Typeface.ITALIC)
+            alpha = 0.6f
+        }
+        baseNoteSize = 12f
 
         // Tags text
         tagsText.apply {
@@ -271,6 +310,14 @@ class QuoteDisplayView @JvmOverloads constructor(
         }
         baseSourceSize = 12f
 
+        // Note text
+        noteText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.editorial_text_secondary))
+            typeface = Typeface.create("serif", Typeface.ITALIC)
+            alpha = 0.6f
+        }
+        baseNoteSize = 11f
+
         // Tags text
         tagsText.apply {
             setTextColor(ContextCompat.getColor(context, R.color.editorial_text_secondary))
@@ -319,6 +366,14 @@ class QuoteDisplayView @JvmOverloads constructor(
             alpha = 0.7f
         }
         baseSourceSize = 12f
+
+        // Note text
+        noteText.apply {
+            setTextColor(ContextCompat.getColor(context, R.color.stoic_text_secondary))
+            typeface = Typeface.create("serif", Typeface.ITALIC)
+            alpha = 0.6f
+        }
+        baseNoteSize = 11f
 
         // Tags text
         tagsText.apply {
@@ -373,6 +428,7 @@ class QuoteDisplayView @JvmOverloads constructor(
             quoteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseQuoteSize * lengthMultiplier * textSizeScale)
             authorText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseAuthorSize * textSizeScale)
             sourceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseSourceSize * textSizeScale)
+            noteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseNoteSize * textSizeScale)
 
             // Update content - clean markdown and add curly quotes
             val cleanText = cleanQuoteText(quote.text)
@@ -383,8 +439,16 @@ class QuoteDisplayView @JvmOverloads constructor(
             authorText.visibility = if (quote.author.isNullOrEmpty()) View.GONE else View.VISIBLE
             sourceText.visibility = if (quote.title.isNullOrEmpty()) View.GONE else View.VISIBLE
 
-            // Show tags in bottom right corner
-            if (quote.tags.isNotEmpty()) {
+            // Show note (if enabled and exists)
+            if (showNotes && !quote.note.isNullOrEmpty()) {
+                noteText.text = quote.note
+                noteText.visibility = View.VISIBLE
+            } else {
+                noteText.visibility = View.GONE
+            }
+
+            // Show tags at bottom center (if enabled)
+            if (showTags && quote.tags.isNotEmpty()) {
                 tagsText.text = quote.tags.joinToString(", ")
                 tagsText.visibility = View.VISIBLE
             } else {

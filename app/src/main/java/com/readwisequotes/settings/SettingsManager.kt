@@ -68,6 +68,14 @@ class SettingsManager @Inject constructor(
     fun getQuoteDuration(): Int = prefs.getInt(KEY_QUOTE_DURATION, 20)
     fun setQuoteDuration(seconds: Int) = prefs.edit().putInt(KEY_QUOTE_DURATION, seconds).apply()
 
+    // Show tags on quote display
+    fun getShowTags(): Boolean = prefs.getBoolean(KEY_SHOW_TAGS, true)
+    fun setShowTags(show: Boolean) = prefs.edit().putBoolean(KEY_SHOW_TAGS, show).apply()
+
+    // Show notes on quote display
+    fun getShowNotes(): Boolean = prefs.getBoolean(KEY_SHOW_NOTES, true)
+    fun setShowNotes(show: Boolean) = prefs.edit().putBoolean(KEY_SHOW_NOTES, show).apply()
+
     // Sync interval in hours
     fun getSyncIntervalHours(): Int = prefs.getInt(KEY_SYNC_INTERVAL, 24)
     fun setSyncIntervalHours(hours: Int) = prefs.edit().putInt(KEY_SYNC_INTERVAL, hours).apply()
@@ -163,5 +171,7 @@ class SettingsManager @Inject constructor(
         private const val KEY_TEXT_SIZE = "text_size"
         private const val KEY_QUOTE_DURATION = "quote_duration"
         private const val KEY_SYNC_INTERVAL = "sync_interval"
+        private const val KEY_SHOW_TAGS = "show_tags"
+        private const val KEY_SHOW_NOTES = "show_notes"
     }
 }

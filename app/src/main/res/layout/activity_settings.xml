@@ -293,7 +293,61 @@
             android:focusable="true"
             android:focusableInTouchMode="false"
             android:nextFocusUp="@id/styleSpinner"
-            android:nextFocusDown="@id/durationSeekBar" />
+            android:nextFocusDown="@id/showTagsSwitch" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/show_tags_label"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <Switch
+                android:id="@+id/showTagsSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:background="@drawable/focusable_item_background"
+                android:padding="8dp"
+                android:nextFocusUp="@id/textSizeSpinner"
+                android:nextFocusDown="@id/showNotesSwitch" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/show_notes_label"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <Switch
+                android:id="@+id/showNotesSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:background="@drawable/focusable_item_background"
+                android:padding="8dp"
+                android:nextFocusUp="@id/showTagsSwitch"
+                android:nextFocusDown="@id/durationSeekBar" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -320,7 +374,7 @@
                 android:background="@drawable/focusable_item_background"
                 android:focusable="true"
                 android:padding="8dp"
-                android:nextFocusUp="@id/styleSpinner"
+                android:nextFocusUp="@id/showNotesSwitch"
                 android:nextFocusDown="@id/syncIntervalSpinner" />
 
             <TextView

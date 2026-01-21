@@ -24,6 +24,8 @@
     <string name="text_size_medium">Medium</string>
     <string name="text_size_large">Large</string>
     <string name="duration_label">Quote Duration</string>
+    <string name="show_tags_label">Show Tags</string>
+    <string name="show_notes_label">Show Notes</string>
     <string name="duration_format">%d seconds</string>
     <string name="sync_interval_label">Auto-sync Every</string>
     <string name="no_quotes">No quotes found. Check your filters or sync.</string>

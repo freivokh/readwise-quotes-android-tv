@@ -21,6 +21,7 @@ data class BookResult(
 data class HighlightResult(
     val id: Long,
     val text: String,
+    val note: String?,
     @SerializedName("is_favorite") val isFavorite: Boolean,
     val tags: List<TagResult>,
     @SerializedName("updated_at") val updated: String

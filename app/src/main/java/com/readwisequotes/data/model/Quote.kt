@@ -11,6 +11,7 @@ import com.readwisequotes.data.local.Converters
 data class Quote(
     @PrimaryKey val id: Long,
     val text: String,
+    val note: String?,
     val title: String?,
     val author: String?,
     val bookCover: String?,

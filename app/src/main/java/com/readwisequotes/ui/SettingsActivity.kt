@@ -45,6 +45,8 @@ class SettingsActivity : FragmentActivity() {
     private lateinit var selectedTagsText: TextView
     private lateinit var styleSpinner: Spinner
     private lateinit var textSizeSpinner: Spinner
+    private lateinit var showTagsSwitch: Switch
+    private lateinit var showNotesSwitch: Switch
     private lateinit var durationSeekBar: SeekBar
     private lateinit var durationValue: TextView
     private lateinit var syncIntervalSpinner: Spinner
@@ -121,6 +123,8 @@ class SettingsActivity : FragmentActivity() {
         selectedTagsText = findViewById(R.id.selectedTagsText)
         styleSpinner = findViewById(R.id.styleSpinner)
         textSizeSpinner = findViewById(R.id.textSizeSpinner)
+        showTagsSwitch = findViewById(R.id.showTagsSwitch)
+        showNotesSwitch = findViewById(R.id.showNotesSwitch)
         durationSeekBar = findViewById(R.id.durationSeekBar)
         durationValue = findViewById(R.id.durationValue)
         syncIntervalSpinner = findViewById(R.id.syncIntervalSpinner)
@@ -251,6 +255,16 @@ class SettingsActivity : FragmentActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        // Show tags switch
+        showTagsSwitch.setOnCheckedChangeListener { _, isChecked ->
+            settingsManager.setShowTags(isChecked)
+        }
+
+        // Show notes switch
+        showNotesSwitch.setOnCheckedChangeListener { _, isChecked ->
+            settingsManager.setShowNotes(isChecked)
+        }
+
         // Duration seek bar
         durationSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -320,6 +334,12 @@ class SettingsActivity : FragmentActivity() {
 
         // Text size
         textSizeSpinner.setSelection(settingsManager.getTextSize().ordinal)
+
+        // Show tags
+        showTagsSwitch.isChecked = settingsManager.getShowTags()
+
+        // Show notes
+        showNotesSwitch.isChecked = settingsManager.getShowNotes()
 
         // Duration
         val duration = settingsManager.getQuoteDuration()
