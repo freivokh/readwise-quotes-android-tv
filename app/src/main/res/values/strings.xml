@@ -5,6 +5,7 @@
     <string name="api_token_label">Readwise API Token</string>
     <string name="api_token_hint">Paste your token from readwise.io/access_token</string>
     <string name="sync_now">Sync Now</string>
+    <string name="full_sync">Full Sync</string>
     <string name="last_sync">Last sync: %s</string>
     <string name="never_synced">Never synced</string>
     <string name="syncing">Syncing...</string>

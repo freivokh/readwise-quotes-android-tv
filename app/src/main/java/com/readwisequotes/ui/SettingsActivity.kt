@@ -36,6 +36,7 @@ class SettingsActivity : FragmentActivity() {
     private lateinit var backButton: Button
     private lateinit var apiTokenInput: EditText
     private lateinit var syncButton: Button
+    private lateinit var fullSyncButton: Button
     private lateinit var syncStatus: TextView
     private lateinit var filterSpinner: Spinner
     private lateinit var tagSelectionContainer: LinearLayout
@@ -111,6 +112,7 @@ class SettingsActivity : FragmentActivity() {
         backButton = findViewById(R.id.backButton)
         apiTokenInput = findViewById(R.id.apiTokenInput)
         syncButton = findViewById(R.id.syncButton)
+        fullSyncButton = findViewById(R.id.fullSyncButton)
         syncStatus = findViewById(R.id.syncStatus)
         filterSpinner = findViewById(R.id.filterSpinner)
         tagSelectionContainer = findViewById(R.id.tagSelectionContainer)
@@ -175,6 +177,13 @@ class SettingsActivity : FragmentActivity() {
             } else {
                 performSync()
             }
+        }
+
+        // Full sync button - clears last sync time to re-download all quotes
+        fullSyncButton.setOnClickListener {
+            settingsManager.clearLastSyncTime()
+            Toast.makeText(this, "Re-downloading all quotes...", Toast.LENGTH_SHORT).show()
+            performSync()
         }
 
         // Filter spinner

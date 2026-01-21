@@ -141,7 +141,23 @@
                 android:background="@drawable/focusable_button_background"
                 android:focusable="true"
                 android:nextFocusUp="@id/apiTokenInput"
-                android:nextFocusDown="@id/filterSpinner" />
+                android:nextFocusDown="@id/filterSpinner"
+                android:nextFocusRight="@id/fullSyncButton" />
+
+            <Button
+                android:id="@+id/fullSyncButton"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:text="@string/full_sync"
+                android:textSize="13sp"
+                android:textColor="@color/text_primary"
+                android:paddingHorizontal="24dp"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/focusable_button_background"
+                android:focusable="true"
+                android:nextFocusUp="@id/apiTokenInput"
+                android:nextFocusDown="@id/filterSpinner"
+                android:nextFocusLeft="@id/syncButton" />
 
             <TextView
                 android:id="@+id/syncStatus"

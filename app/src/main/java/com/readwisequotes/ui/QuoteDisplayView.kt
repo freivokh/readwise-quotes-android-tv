@@ -105,8 +105,8 @@ class QuoteDisplayView @JvmOverloads constructor(
                 marginEnd = dpToPx(40)
                 bottomMargin = dpToPx(40)
             }
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-            alpha = 0.6f
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f)
+            alpha = 0.4f
         }
         addView(tagsText)
 

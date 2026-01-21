@@ -37,6 +37,7 @@ class SettingsManager @Inject constructor(
     // Last sync timestamp
     fun getLastSyncTime(): String? = prefs.getString(KEY_LAST_SYNC, null)
     fun setLastSyncTime(time: String) = prefs.edit().putString(KEY_LAST_SYNC, time).apply()
+    fun clearLastSyncTime() = prefs.edit().remove(KEY_LAST_SYNC).apply()
 
     // Quote filter
     fun getQuoteFilter(): QuoteFilter {
