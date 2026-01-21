@@ -20,11 +20,11 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 
 | ID | Feature | Status | Priority | Notes |
 |----|---------|--------|----------|-------|
-| U1 | Update aesthetic design - cleaner, smaller font | Pending | | Use frontend-design skill |
+| ~U1~ | Update aesthetic design - cleaner, smaller font | Done | | 4 themes, elegant typography, text size setting |
 | U2 | Make settings menu cleaner and more aesthetic | Pending | | |
 | U3 | Show highlight tags in UI (bottom right corner) | Pending | | Data exists, just need to display |
 | U4 | Option to show book cover art | Pending | | Data synced, UI not implemented |
-| U5 | Quotes getting cut off / resize issues | Pending | | Has adaptive sizing but no truncation |
+| ~U5~ | Quotes getting cut off / resize issues | Done | | Reduced fonts, wider margins, markdown stripping |
 
 ---
 
@@ -67,15 +67,13 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 
 ## Remaining Features Summary
 
-**To Implement (7 items):**
+**To Implement (5 items):**
 
-1. **U1** - Aesthetic redesign (fonts, cleaner look)
-2. **U2** - Settings menu visual refresh
-3. **U3** - Display tags on quote screen
-4. **U4** - Show book cover art option
-5. **U5** - Fix quote text overflow/sizing
-6. **F1** - QR code for source link
-7. **S4** - Optional sync methods
+1. **U2** - Settings menu visual refresh
+2. **U3** - Display tags on quote screen
+3. **U4** - Show book cover art option
+4. **F1** - QR code for source link
+5. **S4** - Optional sync methods
 
 ---
 
@@ -106,6 +104,15 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 - Timer resets after manual navigation
 - Quotes shuffled on load, sequential nav through shuffled list
 - Commit: `4fed260`
+
+### 2025-01-20: Aesthetic redesign & overflow fixes (U1, U5)
+- 4 visual themes: Minimal, Ambient, Editorial, Stoic
+- Reduced font sizes for elegant, minimal look
+- Smooth quote transitions (no flicker on size change)
+- Adjustable text size setting (Small/Medium/Large)
+- Wider horizontal margins for elegant text blocks
+- Strip markdown formatting from quotes
+- Commits: `1636332`, `9dc0806`, `06c4f04`, `67c314f`, `2597e9d`, `4dd3f7b`, `a742c9f`
 
 ### 2025-12-30: Per-group match mode (F3)
 - Added `matchMode` field to TagGroup model
