@@ -162,7 +162,7 @@ class QuoteDisplayView @JvmOverloads constructor(
         setBackgroundColor(Color.BLACK)
 
         // Padding - wider horizontal margins for elegant text blocks
-        val horizontalPadding = dpToPx(120)
+        val horizontalPadding = dpToPx(60)
         val verticalPadding = dpToPx(60)
         quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
@@ -218,7 +218,7 @@ class QuoteDisplayView @JvmOverloads constructor(
         if (isRunning) gradientBackground.startAnimation()
 
         // Padding - wider horizontal margins for elegant text blocks
-        val horizontalPadding = dpToPx(120)
+        val horizontalPadding = dpToPx(60)
         val verticalPadding = dpToPx(60)
         quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
@@ -275,7 +275,7 @@ class QuoteDisplayView @JvmOverloads constructor(
         setBackgroundColor(ContextCompat.getColor(context, R.color.editorial_background))
 
         // Wider horizontal margins for elegant text blocks
-        val horizontalPadding = dpToPx(140)
+        val horizontalPadding = dpToPx(80)
         val verticalPadding = dpToPx(60)
         quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
@@ -332,7 +332,7 @@ class QuoteDisplayView @JvmOverloads constructor(
         setBackgroundColor(ContextCompat.getColor(context, R.color.stoic_background))
 
         // Wider horizontal margins for elegant text blocks
-        val horizontalPadding = dpToPx(140)
+        val horizontalPadding = dpToPx(80)
         val verticalPadding = dpToPx(60)
         quoteContainer.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
