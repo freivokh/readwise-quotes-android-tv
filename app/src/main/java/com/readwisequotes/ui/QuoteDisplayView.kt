@@ -5,6 +5,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
@@ -12,11 +13,15 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 import com.readwisequotes.R
 import com.readwisequotes.data.model.Quote
+import com.readwisequotes.settings.QrLinkType
 import com.readwisequotes.settings.VisualStyle
 
 class QuoteDisplayView @JvmOverloads constructor(
@@ -32,6 +37,7 @@ class QuoteDisplayView @JvmOverloads constructor(
     private val sourceText: TextView
     private val noteText: TextView
     private val tagsText: TextView
+    private val qrCodeImage: ImageView
 
     private var currentQuotes: List<Quote> = emptyList()
     private var currentIndex = 0
@@ -41,6 +47,8 @@ class QuoteDisplayView @JvmOverloads constructor(
     private var textSizeScale: Float = 1.0f
     private var showTags: Boolean = true
     private var showNotes: Boolean = true
+    private var showQrCode: Boolean = true
+    private var qrLinkType: QrLinkType = QrLinkType.READWISE
 
     private val autoFadeDuration = 600L
     private val manualFadeDuration = 350L
@@ -125,6 +133,21 @@ class QuoteDisplayView @JvmOverloads constructor(
         }
         addView(tagsText)
 
+        // QR code - positioned at bottom right corner
+        qrCodeImage = ImageView(context).apply {
+            layoutParams = LayoutParams(
+                dpToPx(44),
+                dpToPx(44)
+            ).apply {
+                gravity = Gravity.BOTTOM or Gravity.END
+                marginEnd = dpToPx(40)
+                bottomMargin = dpToPx(40)
+            }
+            alpha = 0.25f
+            scaleType = ImageView.ScaleType.FIT_CENTER
+        }
+        addView(qrCodeImage)
+
         // Apply default style
         applyTheme(VisualStyle.AMBIENT)
     }
@@ -144,6 +167,14 @@ class QuoteDisplayView @JvmOverloads constructor(
 
     fun setShowNotes(show: Boolean) {
         showNotes = show
+    }
+
+    fun setShowQrCode(show: Boolean) {
+        showQrCode = show
+    }
+
+    fun setQrLinkType(type: QrLinkType) {
+        qrLinkType = type
     }
 
     private fun applyTheme(style: VisualStyle) {
@@ -455,6 +486,23 @@ class QuoteDisplayView @JvmOverloads constructor(
                 tagsText.visibility = View.GONE
             }
 
+            // Show QR code (if enabled)
+            if (showQrCode) {
+                val url = when (qrLinkType) {
+                    QrLinkType.SOURCE -> quote.sourceUrl ?: "https://readwise.io/open/${quote.id}"
+                    QrLinkType.READWISE -> "https://readwise.io/open/${quote.id}"
+                }
+                val qrBitmap = generateQrCode(url)
+                if (qrBitmap != null) {
+                    qrCodeImage.setImageBitmap(qrBitmap)
+                    qrCodeImage.visibility = View.VISIBLE
+                } else {
+                    qrCodeImage.visibility = View.GONE
+                }
+            } else {
+                qrCodeImage.visibility = View.GONE
+            }
+
             // Fade in new content
             fadeIn(fadeDuration) {
                 // Schedule next quote
@@ -523,6 +571,23 @@ class QuoteDisplayView @JvmOverloads constructor(
             .removeSurrounding("\u201C", "\"")      // mixed quotes
             .removeSurrounding("\"", "\u201D")
             .trim()
+    }
+
+    private fun generateQrCode(content: String): Bitmap? {
+        return try {
+            val size = dpToPx(44)
+            val writer = QRCodeWriter()
+            val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, size, size)
+            val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+            for (x in 0 until size) {
+                for (y in 0 until size) {
+                    bitmap.setPixel(x, y, if (bitMatrix[x, y]) Color.WHITE else Color.TRANSPARENT)
+                }
+            }
+            bitmap
+        } catch (e: Exception) {
+            null
+        }
     }
 
     private fun dpToPx(dp: Int): Int {

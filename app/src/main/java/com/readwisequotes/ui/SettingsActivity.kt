@@ -15,6 +15,7 @@ import java.net.NetworkInterface
 import com.readwisequotes.R
 import com.readwisequotes.data.QuoteRepository
 import com.readwisequotes.data.SyncResult
+import com.readwisequotes.settings.QrLinkType
 import com.readwisequotes.settings.QuoteFilter
 import com.readwisequotes.settings.SettingsManager
 import com.readwisequotes.settings.TagFilterMode
@@ -47,6 +48,8 @@ class SettingsActivity : FragmentActivity() {
     private lateinit var textSizeSpinner: Spinner
     private lateinit var showTagsSwitch: Switch
     private lateinit var showNotesSwitch: Switch
+    private lateinit var showQrCodeSwitch: Switch
+    private lateinit var qrLinkTypeSpinner: Spinner
     private lateinit var durationSeekBar: SeekBar
     private lateinit var durationValue: TextView
     private lateinit var syncIntervalSpinner: Spinner
@@ -125,6 +128,8 @@ class SettingsActivity : FragmentActivity() {
         textSizeSpinner = findViewById(R.id.textSizeSpinner)
         showTagsSwitch = findViewById(R.id.showTagsSwitch)
         showNotesSwitch = findViewById(R.id.showNotesSwitch)
+        showQrCodeSwitch = findViewById(R.id.showQrCodeSwitch)
+        qrLinkTypeSpinner = findViewById(R.id.qrLinkTypeSpinner)
         durationSeekBar = findViewById(R.id.durationSeekBar)
         durationValue = findViewById(R.id.durationValue)
         syncIntervalSpinner = findViewById(R.id.syncIntervalSpinner)
@@ -265,6 +270,29 @@ class SettingsActivity : FragmentActivity() {
             settingsManager.setShowNotes(isChecked)
         }
 
+        // Show QR code switch
+        showQrCodeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            settingsManager.setShowQrCode(isChecked)
+        }
+
+        // QR link type spinner
+        val qrLinkTypeAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf(
+                getString(R.string.qr_link_readwise),
+                getString(R.string.qr_link_source)
+            )
+        )
+        qrLinkTypeSpinner.adapter = qrLinkTypeAdapter
+        qrLinkTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val type = QrLinkType.entries[position]
+                settingsManager.setQrLinkType(type)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
         // Duration seek bar
         durationSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -340,6 +368,12 @@ class SettingsActivity : FragmentActivity() {
 
         // Show notes
         showNotesSwitch.isChecked = settingsManager.getShowNotes()
+
+        // Show QR code
+        showQrCodeSwitch.isChecked = settingsManager.getShowQrCode()
+
+        // QR link type
+        qrLinkTypeSpinner.setSelection(settingsManager.getQrLinkType().ordinal)
 
         // Duration
         val duration = settingsManager.getQuoteDuration()

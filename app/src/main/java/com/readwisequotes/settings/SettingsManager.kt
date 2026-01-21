@@ -76,6 +76,17 @@ class SettingsManager @Inject constructor(
     fun getShowNotes(): Boolean = prefs.getBoolean(KEY_SHOW_NOTES, true)
     fun setShowNotes(show: Boolean) = prefs.edit().putBoolean(KEY_SHOW_NOTES, show).apply()
 
+    // Show QR code on quote display
+    fun getShowQrCode(): Boolean = prefs.getBoolean(KEY_SHOW_QR_CODE, true)
+    fun setShowQrCode(show: Boolean) = prefs.edit().putBoolean(KEY_SHOW_QR_CODE, show).apply()
+
+    // QR code link type
+    fun getQrLinkType(): QrLinkType {
+        val value = prefs.getString(KEY_QR_LINK_TYPE, QrLinkType.READWISE.name) ?: QrLinkType.READWISE.name
+        return QrLinkType.valueOf(value)
+    }
+    fun setQrLinkType(type: QrLinkType) = prefs.edit().putString(KEY_QR_LINK_TYPE, type.name).apply()
+
     // Sync interval in hours
     fun getSyncIntervalHours(): Int = prefs.getInt(KEY_SYNC_INTERVAL, 24)
     fun setSyncIntervalHours(hours: Int) = prefs.edit().putInt(KEY_SYNC_INTERVAL, hours).apply()
@@ -173,5 +184,7 @@ class SettingsManager @Inject constructor(
         private const val KEY_SYNC_INTERVAL = "sync_interval"
         private const val KEY_SHOW_TAGS = "show_tags"
         private const val KEY_SHOW_NOTES = "show_notes"
+        private const val KEY_SHOW_QR_CODE = "show_qr_code"
+        private const val KEY_QR_LINK_TYPE = "qr_link_type"
     }
 }

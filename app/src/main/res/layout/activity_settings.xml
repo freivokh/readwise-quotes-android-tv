@@ -345,9 +345,55 @@
                 android:background="@drawable/focusable_item_background"
                 android:padding="8dp"
                 android:nextFocusUp="@id/showTagsSwitch"
-                android:nextFocusDown="@id/durationSeekBar" />
+                android:nextFocusDown="@id/showQrCodeSwitch" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/show_qr_code_label"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <Switch
+                android:id="@+id/showQrCodeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:background="@drawable/focusable_item_background"
+                android:padding="8dp"
+                android:nextFocusUp="@id/showNotesSwitch"
+                android:nextFocusDown="@id/qrLinkTypeSpinner" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/qr_link_type_label"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/qrLinkTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/focusable_spinner_background"
+            android:layout_marginBottom="24dp"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:nextFocusUp="@id/showQrCodeSwitch"
+            android:nextFocusDown="@id/durationSeekBar" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -374,7 +420,7 @@
                 android:background="@drawable/focusable_item_background"
                 android:focusable="true"
                 android:padding="8dp"
-                android:nextFocusUp="@id/showNotesSwitch"
+                android:nextFocusUp="@id/qrLinkTypeSpinner"
                 android:nextFocusDown="@id/syncIntervalSpinner" />
 
             <TextView

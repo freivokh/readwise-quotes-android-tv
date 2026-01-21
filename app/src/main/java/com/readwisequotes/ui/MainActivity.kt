@@ -70,6 +70,8 @@ class MainActivity : FragmentActivity() {
         quoteDisplayView.setTextSizeScale(settingsManager.getTextSize().multiplier)
         quoteDisplayView.setShowTags(settingsManager.getShowTags())
         quoteDisplayView.setShowNotes(settingsManager.getShowNotes())
+        quoteDisplayView.setShowQrCode(settingsManager.getShowQrCode())
+        quoteDisplayView.setQrLinkType(settingsManager.getQrLinkType())
         quoteDisplayView.setQuoteDuration(settingsManager.getQuoteDuration())
 
         // Check if sync needed

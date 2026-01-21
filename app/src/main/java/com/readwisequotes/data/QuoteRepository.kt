@@ -100,6 +100,7 @@ class QuoteRepository @Inject constructor(
                                 id = highlight.id,
                                 text = highlight.text,
                                 note = highlight.note,
+                                sourceUrl = highlight.url,
                                 title = book.title,
                                 author = book.author,
                                 bookCover = book.coverImageUrl,
