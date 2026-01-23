@@ -41,7 +41,7 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 
 | ID | Feature | Status | Priority | Notes |
 |----|---------|--------|----------|-------|
-| F1 | QR code linking to original document/Readwise | Pending | | Optional, bottom right |
+| ~F1~ | QR code linking to original document/Readwise | Done | | Bottom-right, toggle + link type setting |
 | ~F3~ | Per-group match mode (ANY/ALL) | Done | | Each group has own toggle |
 
 ---
@@ -68,12 +68,11 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 
 ## Remaining Features Summary
 
-**To Implement (4 items):**
+**To Implement (3 items):**
 
 1. **U2** - Settings menu visual refresh
 2. **U4** - Show book cover art option
-3. **F1** - QR code for source link
-4. **S4** - Optional sync methods
+3. **S4** - Optional sync methods
 
 ---
 
@@ -143,4 +142,13 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 - Reduced horizontal padding for better text display
 - Minimal/Ambient: 60dp, Editorial/Stoic: 80dp
 - Commit: `9c86caa`
+
+### 2025-01-20: QR code feature (F1)
+- QR code in bottom-right corner (44dp, 25% opacity)
+- "Show QR Code" toggle in Display settings
+- "QR Code Links To" setting (Readwise / Original Source)
+- Sync sourceUrl from Readwise API
+- Falls back to Readwise URL if source unavailable
+- ZXing library for QR generation
+- Commit: `deb0d6c`
 
