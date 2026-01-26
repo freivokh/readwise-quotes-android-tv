@@ -21,7 +21,7 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 | ID | Feature | Status | Priority | Notes |
 |----|---------|--------|----------|-------|
 | ~U1~ | Update aesthetic design - cleaner, smaller font | Done | | 4 themes, elegant typography, text size setting |
-| U2 | Make settings menu cleaner and more aesthetic | Pending | | |
+| ~U2~ | Make settings menu cleaner and more aesthetic | Done | | Left rail nav, card-based content, TV-native focus |
 | ~U3~ | Show highlight tags in UI | Done | | Bottom-center, toggle in settings |
 | U4 | Option to show book cover art | Pending | | Data synced, UI not implemented |
 | ~U5~ | Quotes getting cut off / resize issues | Done | | Reduced fonts, wider margins, markdown stripping |
@@ -68,11 +68,10 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 
 ## Remaining Features Summary
 
-**To Implement (3 items):**
+**To Implement (2 items):**
 
-1. **U2** - Settings menu visual refresh
-2. **U4** - Show book cover art option
-3. **S4** - Optional sync methods
+1. **U4** - Show book cover art option
+2. **S4** - Optional sync methods
 
 ---
 
@@ -151,4 +150,14 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 - Falls back to Readwise URL if source unavailable
 - ZXing library for QR generation
 - Commit: `deb0d6c`
+
+### 2025-01-25: Settings menu redesign (U2)
+- Left rail navigation pattern (TV-native UX)
+- 4 categories: Account, Filters, Display, Sync
+- Card-based content areas with rounded corners
+- Icons next to category labels
+- Focus states: rail focused (accent bg), selected (left bar), content focused (glow border)
+- D-pad: UP/DOWN navigates rail, RIGHT enters content, LEFT returns to rail
+- New color scheme: darker surfaces, subtle borders, accent highlights
+- Files: `activity_settings_v2.xml`, `settings_content_*.xml`, `rail_item_*.xml`, `settings_*.xml`
 

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Visual Style Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/settings_card_background"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="APPEARANCE"
+                android:textColor="@color/settings_text_secondary"
+                android:textSize="11sp"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/visual_style_label"
+                android:textColor="@color/settings_text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp" />
+
+            <Spinner
+                android:id="@+id/styleSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/settings_spinner_background"
+                android:focusable="true"
+                android:focusableInTouchMode="false"
+                android:layout_marginBottom="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_size_label"
+                android:textColor="@color/settings_text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp" />
+
+            <Spinner
+                android:id="@+id/textSizeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/settings_spinner_background"
+                android:focusable="true"
+                android:focusableInTouchMode="false" />
+
+        </LinearLayout>
+
+        <!-- Content Options Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/settings_card_background"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONTENT"
+                android:textColor="@color/settings_text_secondary"
+                android:textSize="11sp"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Show Tags -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/show_tags_label"
+                    android:textColor="@color/settings_text_primary"
+                    android:textSize="14sp" />
+
+                <Switch
+                    android:id="@+id/showTagsSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:background="@drawable/settings_focusable_item"
+                    android:padding="8dp" />
+
+            </LinearLayout>
+
+            <!-- Show Notes -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/show_notes_label"
+                    android:textColor="@color/settings_text_primary"
+                    android:textSize="14sp" />
+
+                <Switch
+                    android:id="@+id/showNotesSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:background="@drawable/settings_focusable_item"
+                    android:padding="8dp" />
+
+            </LinearLayout>
+
+            <!-- Show QR Code -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/show_qr_code_label"
+                    android:textColor="@color/settings_text_primary"
+                    android:textSize="14sp" />
+
+                <Switch
+                    android:id="@+id/showQrCodeSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:background="@drawable/settings_focusable_item"
+                    android:padding="8dp" />
+
+            </LinearLayout>
+
+            <!-- QR Link Type (conditional) -->
+            <LinearLayout
+                android:id="@+id/qrLinkTypeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/qr_link_type_label"
+                    android:textColor="@color/settings_text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/qrLinkTypeSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/settings_spinner_background"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Duration Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/settings_card_background"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TIMING"
+                android:textColor="@color/settings_text_secondary"
+                android:textSize="11sp"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/duration_label"
+                android:textColor="@color/settings_text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <SeekBar
+                    android:id="@+id/durationSeekBar"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:min="10"
+                    android:max="60"
+                    android:progress="20"
+                    android:background="@drawable/settings_focusable_item"
+                    android:focusable="true"
+                    android:padding="8dp" />
+
+                <TextView
+                    android:id="@+id/durationValue"
+                    android:layout_width="56dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/settings_text_secondary"
+                    android:textSize="13sp"
+                    android:gravity="end" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- API Token Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/settings_card_background"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="API TOKEN"
+                android:textColor="@color/settings_text_secondary"
+                android:textSize="11sp"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/apiTokenInput"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="@string/api_token_hint"
+                    android:textColor="@color/settings_text_primary"
+                    android:textColorHint="@color/settings_text_secondary"
+                    android:textSize="14sp"
+                    android:background="@drawable/settings_focusable_item"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionDone"
+                    android:paddingHorizontal="16dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:nextFocusRight="@id/toggleTokenVisibility" />
+
+                <Button
+                    android:id="@+id/toggleTokenVisibility"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="👁"
+                    android:textSize="18sp"
+                    android:background="@drawable/settings_focusable_item"
+                    android:focusable="true"
+                    android:layout_marginStart="8dp"
+                    android:nextFocusLeft="@id/apiTokenInput"
+                    android:nextFocusDown="@id/setupViaPhoneButton" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tokenHelperText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get your token at readwise.io/access_token"
+                android:textColor="@color/settings_text_secondary"
+                android:textSize="12sp"
+                android:alpha="0.7"
+                android:layout_marginTop="12dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/setupViaPhoneButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="📱 Setup via Phone"
+                android:textSize="12sp"
+                android:textColor="@color/settings_text_primary"
+                android:paddingHorizontal="20dp"
+                android:background="@drawable/settings_focusable_item"
+                android:focusable="true"
+                android:layout_marginTop="16dp"
+                android:nextFocusUp="@id/toggleTokenVisibility"
+                android:nextFocusDown="@id/syncButton"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <!-- Sync Actions Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/settings_card_background"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SYNC"
+                android:textColor="@color/settings_text_secondary"
+                android:textSize="11sp"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/syncButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/sync_now"
+                    android:textSize="12sp"
+                    android:textColor="@color/settings_text_primary"
+                    android:paddingHorizontal="20dp"
+                    android:background="@drawable/settings_focusable_item"
+                    android:focusable="true"
+                    android:nextFocusRight="@id/fullSyncButton" />
+
+                <Button
+                    android:id="@+id/fullSyncButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/full_sync"
+                    android:textSize="12sp"
+                    android:textColor="@color/settings_text_primary"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/settings_focusable_item"
+                    android:focusable="true"
+                    android:nextFocusLeft="@id/syncButton" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/syncStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/settings_text_secondary"
+                android:textSize="12sp"
+                android:layout_marginTop="12dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

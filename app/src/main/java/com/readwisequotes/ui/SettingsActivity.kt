@@ -3,10 +3,12 @@ package com.readwisequotes.ui
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.text.InputType
+import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
@@ -34,68 +36,167 @@ class SettingsActivity : FragmentActivity() {
     @Inject lateinit var settingsManager: SettingsManager
     @Inject lateinit var quoteRepository: QuoteRepository
 
+    // Rail items
     private lateinit var backButton: Button
-    private lateinit var apiTokenInput: EditText
-    private lateinit var syncButton: Button
-    private lateinit var fullSyncButton: Button
-    private lateinit var syncStatus: TextView
-    private lateinit var filterSpinner: Spinner
-    private lateinit var tagSelectionContainer: LinearLayout
-    private lateinit var tagGroupsContainer: LinearLayout
-    private lateinit var createGroupButton: Button
-    private lateinit var selectedTagsText: TextView
-    private lateinit var styleSpinner: Spinner
-    private lateinit var textSizeSpinner: Spinner
-    private lateinit var showTagsSwitch: Switch
-    private lateinit var showNotesSwitch: Switch
-    private lateinit var showQrCodeSwitch: Switch
-    private lateinit var qrLinkTypeSpinner: Spinner
-    private lateinit var durationSeekBar: SeekBar
-    private lateinit var durationValue: TextView
-    private lateinit var syncIntervalSpinner: Spinner
-    private lateinit var toggleTokenVisibility: Button
-    private lateinit var tokenHelperText: TextView
-    private lateinit var setupViaPhoneButton: Button
+    private lateinit var railAccount: TextView
+    private lateinit var railFilters: TextView
+    private lateinit var railDisplay: TextView
+    private lateinit var railSync: TextView
+    private lateinit var contentArea: FrameLayout
 
+    // Current content views (dynamically inflated)
+    private var currentContentView: View? = null
+    private var currentCategory: Category = Category.ACCOUNT
+
+    // Shared state
     private var availableTags: List<String> = emptyList()
     private var isTokenVisible = false
     private var tokenEntryServer: TokenEntryServer? = null
     private var setupDialog: AlertDialog? = null
 
+    enum class Category {
+        ACCOUNT, FILTERS, DISPLAY, SYNC
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        setContentView(R.layout.activity_settings_v2)
 
-        bindViews()
-        setupListeners()
-        loadCurrentSettings()
+        bindRailViews()
+        setupRailNavigation()
+        loadAvailableTags()
 
-        // Ensure initial focus for D-pad navigation
-        backButton.post {
-            backButton.requestFocus()
+        // Show Account content by default
+        selectCategory(Category.ACCOUNT)
+
+        // Initial focus on Account rail item
+        railAccount.post {
+            railAccount.requestFocus()
         }
     }
 
-    override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
-        if (event.action == android.view.KeyEvent.ACTION_DOWN) {
-            val currentFilter = settingsManager.getQuoteFilter()
-            val tagSectionHidden = currentFilter != QuoteFilter.BY_TAG
+    private fun bindRailViews() {
+        backButton = findViewById(R.id.backButton)
+        railAccount = findViewById(R.id.railAccount)
+        railFilters = findViewById(R.id.railFilters)
+        railDisplay = findViewById(R.id.railDisplay)
+        railSync = findViewById(R.id.railSync)
+        contentArea = findViewById(R.id.contentArea)
+    }
 
-            // Check if focus is within the spinner by walking up the view hierarchy
-            val filterHasFocus = isDescendantOfView(currentFocus, filterSpinner)
-            val styleHasFocus = isDescendantOfView(currentFocus, styleSpinner)
+    private fun setupRailNavigation() {
+        backButton.setOnClickListener { finish() }
 
-            // Handle D-pad DOWN from filter spinner when tag section is hidden
-            if (event.keyCode == android.view.KeyEvent.KEYCODE_DPAD_DOWN &&
-                filterHasFocus && tagSectionHidden) {
-                styleSpinner.requestFocus()
-                return true
+        // Rail item click listeners
+        railAccount.setOnClickListener { selectCategory(Category.ACCOUNT) }
+        railFilters.setOnClickListener { selectCategory(Category.FILTERS) }
+        railDisplay.setOnClickListener { selectCategory(Category.DISPLAY) }
+        railSync.setOnClickListener { selectCategory(Category.SYNC) }
+
+        // Set up focus change listeners to update selected state
+        val railItems = listOf(railAccount, railFilters, railDisplay, railSync)
+        railItems.forEach { item ->
+            item.setOnFocusChangeListener { view, hasFocus ->
+                if (hasFocus) {
+                    val category = when (view) {
+                        railAccount -> Category.ACCOUNT
+                        railFilters -> Category.FILTERS
+                        railDisplay -> Category.DISPLAY
+                        railSync -> Category.SYNC
+                        else -> return@setOnFocusChangeListener
+                    }
+                    selectCategory(category)
+                }
+                updateRailSelection()
             }
+        }
+    }
 
-            // Handle D-pad UP from style spinner when tag section is hidden
-            if (event.keyCode == android.view.KeyEvent.KEYCODE_DPAD_UP &&
-                styleHasFocus && tagSectionHidden) {
-                filterSpinner.requestFocus()
+    private fun updateRailSelection() {
+        val railItems = listOf(
+            railAccount to Category.ACCOUNT,
+            railFilters to Category.FILTERS,
+            railDisplay to Category.DISPLAY,
+            railSync to Category.SYNC
+        )
+
+        railItems.forEach { (item, category) ->
+            item.isSelected = (category == currentCategory && !item.isFocused)
+        }
+    }
+
+    private fun selectCategory(category: Category) {
+        if (category == currentCategory && currentContentView != null) {
+            return
+        }
+
+        currentCategory = category
+        updateRailSelection()
+
+        // Inflate and show the appropriate content
+        contentArea.removeAllViews()
+
+        val layoutRes = when (category) {
+            Category.ACCOUNT -> R.layout.settings_content_account
+            Category.FILTERS -> R.layout.settings_content_filters
+            Category.DISPLAY -> R.layout.settings_content_display
+            Category.SYNC -> R.layout.settings_content_sync
+        }
+
+        currentContentView = LayoutInflater.from(this).inflate(layoutRes, contentArea, false)
+        contentArea.addView(currentContentView)
+
+        // Setup content based on category
+        when (category) {
+            Category.ACCOUNT -> setupAccountContent()
+            Category.FILTERS -> setupFiltersContent()
+            Category.DISPLAY -> setupDisplayContent()
+            Category.SYNC -> setupSyncContent()
+        }
+
+        // Set up focus navigation from rail to content
+        setupRailToContentFocus()
+    }
+
+    private fun setupRailToContentFocus() {
+        val firstFocusable = findFirstFocusableInContent()
+
+        // Rail items should move focus right into content
+        railAccount.nextFocusRightId = firstFocusable?.id ?: View.NO_ID
+        railFilters.nextFocusRightId = firstFocusable?.id ?: View.NO_ID
+        railDisplay.nextFocusRightId = firstFocusable?.id ?: View.NO_ID
+        railSync.nextFocusRightId = firstFocusable?.id ?: View.NO_ID
+    }
+
+    private fun findFirstFocusableInContent(): View? {
+        return currentContentView?.let { findFirstFocusable(it) }
+    }
+
+    private fun findFirstFocusable(view: View): View? {
+        if (view.isFocusable && view.visibility == View.VISIBLE) {
+            return view
+        }
+        if (view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                val focusable = findFirstFocusable(view.getChildAt(i))
+                if (focusable != null) return focusable
+            }
+        }
+        return null
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+            // If focus is in content area, move back to rail
+            val focusedView = currentFocus
+            if (focusedView != null && isDescendantOfView(focusedView, contentArea)) {
+                val railItem = when (currentCategory) {
+                    Category.ACCOUNT -> railAccount
+                    Category.FILTERS -> railFilters
+                    Category.DISPLAY -> railDisplay
+                    Category.SYNC -> railSync
+                }
+                railItem.requestFocus()
                 return true
             }
         }
@@ -113,43 +214,31 @@ class SettingsActivity : FragmentActivity() {
         return false
     }
 
-    private fun bindViews() {
-        backButton = findViewById(R.id.backButton)
-        apiTokenInput = findViewById(R.id.apiTokenInput)
-        syncButton = findViewById(R.id.syncButton)
-        fullSyncButton = findViewById(R.id.fullSyncButton)
-        syncStatus = findViewById(R.id.syncStatus)
-        filterSpinner = findViewById(R.id.filterSpinner)
-        tagSelectionContainer = findViewById(R.id.tagSelectionContainer)
-        tagGroupsContainer = findViewById(R.id.tagGroupsContainer)
-        createGroupButton = findViewById(R.id.createGroupButton)
-        selectedTagsText = findViewById(R.id.selectedTagsText)
-        styleSpinner = findViewById(R.id.styleSpinner)
-        textSizeSpinner = findViewById(R.id.textSizeSpinner)
-        showTagsSwitch = findViewById(R.id.showTagsSwitch)
-        showNotesSwitch = findViewById(R.id.showNotesSwitch)
-        showQrCodeSwitch = findViewById(R.id.showQrCodeSwitch)
-        qrLinkTypeSpinner = findViewById(R.id.qrLinkTypeSpinner)
-        durationSeekBar = findViewById(R.id.durationSeekBar)
-        durationValue = findViewById(R.id.durationValue)
-        syncIntervalSpinner = findViewById(R.id.syncIntervalSpinner)
-        toggleTokenVisibility = findViewById(R.id.toggleTokenVisibility)
-        tokenHelperText = findViewById(R.id.tokenHelperText)
-        setupViaPhoneButton = findViewById(R.id.setupViaPhoneButton)
-    }
+    // ==================== Account Content ====================
 
-    private fun setupListeners() {
-        // Back button
-        backButton.setOnClickListener {
-            finish()
+    private fun setupAccountContent() {
+        val view = currentContentView ?: return
+
+        val apiTokenInput = view.findViewById<EditText>(R.id.apiTokenInput)
+        val toggleTokenVisibility = view.findViewById<Button>(R.id.toggleTokenVisibility)
+        val tokenHelperText = view.findViewById<TextView>(R.id.tokenHelperText)
+        val setupViaPhoneButton = view.findViewById<Button>(R.id.setupViaPhoneButton)
+        val syncButton = view.findViewById<Button>(R.id.syncButton)
+        val fullSyncButton = view.findViewById<Button>(R.id.fullSyncButton)
+        val syncStatus = view.findViewById<TextView>(R.id.syncStatus)
+
+        // Load current token
+        val token = settingsManager.getApiToken()
+        if (token.isNotEmpty()) {
+            apiTokenInput.setText(token)
+            tokenHelperText.visibility = View.GONE
+            setupViaPhoneButton.visibility = View.GONE
+        } else {
+            tokenHelperText.visibility = View.VISIBLE
+            setupViaPhoneButton.visibility = View.VISIBLE
         }
 
-        // Setup via phone button
-        setupViaPhoneButton.setOnClickListener {
-            startTokenEntryServer()
-        }
-
-        // Toggle token visibility
+        // Toggle visibility
         toggleTokenVisibility.setOnClickListener {
             isTokenVisible = !isTokenVisible
             if (isTokenVisible) {
@@ -159,238 +248,85 @@ class SettingsActivity : FragmentActivity() {
                 apiTokenInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 toggleTokenVisibility.text = "👁"
             }
-            // Move cursor to end after changing input type
             apiTokenInput.setSelection(apiTokenInput.text.length)
         }
 
-        // API Token - verify on Enter key (not on focus change for TV navigation)
+        // Token input action
         apiTokenInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
-                val token = apiTokenInput.text.toString()
-                if (token.isNotEmpty()) {
-                    verifyAndSaveToken(token)
+                val inputToken = apiTokenInput.text.toString()
+                if (inputToken.isNotEmpty()) {
+                    verifyAndSaveToken(inputToken, syncStatus, syncButton)
                 }
                 true
-            } else {
-                false
-            }
+            } else false
         }
 
-        // Sync button
+        // Setup via phone
+        setupViaPhoneButton.setOnClickListener {
+            startTokenEntryServer(apiTokenInput, tokenHelperText, setupViaPhoneButton, syncStatus, syncButton)
+        }
+
+        // Sync buttons
         syncButton.setOnClickListener {
             val inputToken = apiTokenInput.text.toString()
             val savedToken = settingsManager.getApiToken()
             if (inputToken.isNotEmpty() && inputToken != savedToken) {
-                // Token was entered but not saved yet - verify and save first
-                verifyAndSaveToken(inputToken)
+                verifyAndSaveToken(inputToken, syncStatus, syncButton)
             } else {
-                performSync()
+                performSync(syncStatus, syncButton)
             }
         }
 
-        // Full sync button - clears last sync time to re-download all quotes
         fullSyncButton.setOnClickListener {
             settingsManager.clearLastSyncTime()
             Toast.makeText(this, "Re-downloading all quotes...", Toast.LENGTH_SHORT).show()
-            performSync()
+            performSync(syncStatus, syncButton)
         }
 
-        // Filter spinner
-        val filterAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            listOf(
-                getString(R.string.filter_all),
-                getString(R.string.filter_favorites),
-                getString(R.string.filter_tags),
-                getString(R.string.filter_recent)
-            )
-        )
-        filterSpinner.adapter = filterAdapter
-        filterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val filter = QuoteFilter.entries[position]
-                settingsManager.setQuoteFilter(filter)
-                updateTagSelectionVisibility(filter)
+        // Update sync status
+        updateSyncStatus(syncStatus)
+    }
+
+    private fun verifyAndSaveToken(token: String, syncStatus: TextView, syncButton: Button) {
+        lifecycleScope.launch {
+            syncButton.isEnabled = false
+            syncStatus.text = "Verifying token..."
+
+            val isValid = quoteRepository.verifyToken(token)
+            if (isValid) {
+                settingsManager.setApiToken(token)
+                syncStatus.text = "Token verified!"
+                performSync(syncStatus, syncButton)
+            } else {
+                syncStatus.text = "Invalid token"
+                Toast.makeText(this@SettingsActivity, "Invalid API token", Toast.LENGTH_SHORT).show()
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        // Create group button
-        createGroupButton.setOnClickListener {
-            showCreateGroupDialog()
-        }
-
-        // Style spinner - order must match VisualStyle enum: MINIMAL, AMBIENT, EDITORIAL, STOIC
-        val styleAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            listOf(
-                getString(R.string.style_minimal),
-                getString(R.string.style_ambient),
-                getString(R.string.style_editorial),
-                getString(R.string.style_stoic)
-            )
-        )
-        styleSpinner.adapter = styleAdapter
-        styleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val style = VisualStyle.entries[position]
-                settingsManager.setVisualStyle(style)
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        // Text size spinner - order must match TextSize enum: SMALL, MEDIUM, LARGE
-        val textSizeAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            listOf(
-                getString(R.string.text_size_small),
-                getString(R.string.text_size_medium),
-                getString(R.string.text_size_large)
-            )
-        )
-        textSizeSpinner.adapter = textSizeAdapter
-        textSizeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val size = TextSize.entries[position]
-                settingsManager.setTextSize(size)
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        // Show tags switch
-        showTagsSwitch.setOnCheckedChangeListener { _, isChecked ->
-            settingsManager.setShowTags(isChecked)
-        }
-
-        // Show notes switch
-        showNotesSwitch.setOnCheckedChangeListener { _, isChecked ->
-            settingsManager.setShowNotes(isChecked)
-        }
-
-        // Show QR code switch
-        showQrCodeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            settingsManager.setShowQrCode(isChecked)
-        }
-
-        // QR link type spinner
-        val qrLinkTypeAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            listOf(
-                getString(R.string.qr_link_readwise),
-                getString(R.string.qr_link_source)
-            )
-        )
-        qrLinkTypeSpinner.adapter = qrLinkTypeAdapter
-        qrLinkTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val type = QrLinkType.entries[position]
-                settingsManager.setQrLinkType(type)
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        // Duration seek bar
-        durationSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                durationValue.text = getString(R.string.duration_format, progress)
-                if (fromUser) {
-                    settingsManager.setQuoteDuration(progress)
-                }
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        // Sync interval spinner
-        val intervalAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            listOf("1 hour", "6 hours", "24 hours", "Manual only")
-        )
-        syncIntervalSpinner.adapter = intervalAdapter
-        syncIntervalSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val hours = when (position) {
-                    0 -> 1
-                    1 -> 6
-                    2 -> 24
-                    else -> Int.MAX_VALUE
-                }
-                settingsManager.setSyncIntervalHours(hours)
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            syncButton.isEnabled = true
         }
     }
 
-    private fun loadCurrentSettings() {
-        // Token (show masked)
-        val token = settingsManager.getApiToken()
-        if (token.isNotEmpty()) {
-            apiTokenInput.setText(token)
-            tokenHelperText.visibility = View.GONE
-            setupViaPhoneButton.visibility = View.GONE
-            // Focus chain: token row → sync button (skip hidden setup button)
-            apiTokenInput.nextFocusDownId = R.id.syncButton
-            toggleTokenVisibility.nextFocusDownId = R.id.syncButton
-        } else {
-            tokenHelperText.visibility = View.VISIBLE
-            setupViaPhoneButton.visibility = View.VISIBLE
-            // Focus chain: token row → setup button → sync button
-            apiTokenInput.nextFocusDownId = R.id.setupViaPhoneButton
-            toggleTokenVisibility.nextFocusDownId = R.id.setupViaPhoneButton
+    private fun performSync(syncStatus: TextView, syncButton: Button) {
+        lifecycleScope.launch {
+            syncButton.isEnabled = false
+            syncStatus.text = getString(R.string.syncing)
+
+            when (val result = quoteRepository.sync()) {
+                is SyncResult.Success -> {
+                    Toast.makeText(this@SettingsActivity, "Synced ${result.count} quotes", Toast.LENGTH_SHORT).show()
+                    loadAvailableTags()
+                }
+                is SyncResult.Error -> {
+                    Toast.makeText(this@SettingsActivity, "Sync failed: ${result.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            updateSyncStatus(syncStatus)
+            syncButton.isEnabled = true
         }
-
-        // Sync status
-        updateSyncStatus()
-
-        // Filter
-        val currentFilter = settingsManager.getQuoteFilter()
-        filterSpinner.setSelection(currentFilter.ordinal)
-        updateTagSelectionVisibility(currentFilter)
-
-        // Tag settings
-        renderTagGroups()
-        updateSelectedTagsDisplay()
-        loadAvailableTags()
-
-        // Style
-        styleSpinner.setSelection(settingsManager.getVisualStyle().ordinal)
-
-        // Text size
-        textSizeSpinner.setSelection(settingsManager.getTextSize().ordinal)
-
-        // Show tags
-        showTagsSwitch.isChecked = settingsManager.getShowTags()
-
-        // Show notes
-        showNotesSwitch.isChecked = settingsManager.getShowNotes()
-
-        // Show QR code
-        showQrCodeSwitch.isChecked = settingsManager.getShowQrCode()
-
-        // QR link type
-        qrLinkTypeSpinner.setSelection(settingsManager.getQrLinkType().ordinal)
-
-        // Duration
-        val duration = settingsManager.getQuoteDuration()
-        durationSeekBar.progress = duration
-        durationValue.text = getString(R.string.duration_format, duration)
-
-        // Sync interval
-        val intervalPosition = when (settingsManager.getSyncIntervalHours()) {
-            1 -> 0
-            6 -> 1
-            24 -> 2
-            else -> 3
-        }
-        syncIntervalSpinner.setSelection(intervalPosition)
     }
 
-    private fun updateSyncStatus() {
+    private fun updateSyncStatus(syncStatus: TextView) {
         lifecycleScope.launch {
             val lastSync = settingsManager.getLastSyncTime()
             val count = quoteRepository.getQuoteCount()
@@ -412,94 +348,69 @@ class SettingsActivity : FragmentActivity() {
         }
     }
 
-    private fun verifyAndSaveToken(token: String) {
-        lifecycleScope.launch {
-            syncButton.isEnabled = false
-            syncStatus.text = "Verifying token..."
+    // ==================== Filters Content ====================
 
-            val isValid = quoteRepository.verifyToken(token)
-            if (isValid) {
-                settingsManager.setApiToken(token)
-                syncStatus.text = "Token verified!"
-                performSync()
-            } else {
-                syncStatus.text = "Invalid token"
-                Toast.makeText(this@SettingsActivity, "Invalid API token", Toast.LENGTH_SHORT).show()
+    private fun setupFiltersContent() {
+        val view = currentContentView ?: return
+
+        val filterSpinner = view.findViewById<Spinner>(R.id.filterSpinner)
+        val tagSelectionContainer = view.findViewById<LinearLayout>(R.id.tagSelectionContainer)
+        val tagGroupsContainer = view.findViewById<LinearLayout>(R.id.tagGroupsContainer)
+        val createGroupButton = view.findViewById<Button>(R.id.createGroupButton)
+        val selectedTagsText = view.findViewById<TextView>(R.id.selectedTagsText)
+
+        // Filter spinner
+        val filterAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf(
+                getString(R.string.filter_all),
+                getString(R.string.filter_favorites),
+                getString(R.string.filter_tags),
+                getString(R.string.filter_recent)
+            )
+        )
+        filterSpinner.adapter = filterAdapter
+        filterSpinner.setSelection(settingsManager.getQuoteFilter().ordinal)
+
+        filterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
+                val filter = QuoteFilter.entries[position]
+                settingsManager.setQuoteFilter(filter)
+                tagSelectionContainer.visibility = if (filter == QuoteFilter.BY_TAG) View.VISIBLE else View.GONE
             }
-            syncButton.isEnabled = true
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
+        // Initial visibility
+        val currentFilter = settingsManager.getQuoteFilter()
+        tagSelectionContainer.visibility = if (currentFilter == QuoteFilter.BY_TAG) View.VISIBLE else View.GONE
+
+        // Create group button
+        createGroupButton.setOnClickListener {
+            showCreateGroupDialog(tagGroupsContainer, selectedTagsText)
+        }
+
+        // Render existing groups
+        renderTagGroups(tagGroupsContainer, selectedTagsText, filterSpinner, createGroupButton)
+        updateSelectedTagsDisplay(selectedTagsText)
     }
 
-    private fun performSync() {
-        lifecycleScope.launch {
-            syncButton.isEnabled = false
-            syncStatus.text = getString(R.string.syncing)
-
-            when (val result = quoteRepository.sync()) {
-                is SyncResult.Success -> {
-                    Toast.makeText(
-                        this@SettingsActivity,
-                        "Synced ${result.count} quotes",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    loadAvailableTags()
-                }
-                is SyncResult.Error -> {
-                    Toast.makeText(
-                        this@SettingsActivity,
-                        "Sync failed: ${result.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-
-            updateSyncStatus()
-            syncButton.isEnabled = true
-        }
-    }
-
-    private fun loadAvailableTags() {
-        lifecycleScope.launch {
-            availableTags = quoteRepository.getAllTags()
-        }
-    }
-
-    private fun updateTagSelectionVisibility(filter: QuoteFilter) {
-        val isTagFilter = filter == QuoteFilter.BY_TAG
-
-        // 1. Update visibility
-        tagSelectionContainer.visibility = if (isTagFilter) View.VISIBLE else View.GONE
-
-        // 2. Update focus chain AFTER layout completes (critical for D-pad navigation)
-        filterSpinner.post {
-            if (isTagFilter) {
-                // Tag section visible: filter → first group or createGroupButton → style
-                // (renderTagGroups() will set filterSpinner.nextFocusDownId to first group or createGroupButton)
-                styleSpinner.nextFocusUpId = R.id.createGroupButton
-            } else {
-                // Tag section hidden: filter → style directly
-                filterSpinner.nextFocusDownId = R.id.styleSpinner
-                styleSpinner.nextFocusUpId = R.id.filterSpinner
-            }
-        }
-
-        // Load tags if needed
-        if (isTagFilter && availableTags.isEmpty()) {
-            loadAvailableTags()
-        }
-    }
-
-    private fun renderTagGroups() {
-        tagGroupsContainer.removeAllViews()
+    private fun renderTagGroups(
+        container: LinearLayout,
+        selectedTagsText: TextView,
+        filterSpinner: Spinner,
+        createGroupButton: Button
+    ) {
+        container.removeAllViews()
         val groups = settingsManager.getTagGroups()
 
-        // Track first and last focusable elements for focus chain
         var firstGroupCheckbox: CheckBox? = null
         var lastGroupDeleteButton: Button? = null
         var previousDeleteButton: Button? = null
 
         groups.forEachIndexed { index, group ->
-            val itemView = layoutInflater.inflate(R.layout.item_tag_group, tagGroupsContainer, false)
+            val itemView = layoutInflater.inflate(R.layout.item_tag_group, container, false)
 
             val groupSwitch = itemView.findViewById<CheckBox>(R.id.groupSwitch)
             val groupName = itemView.findViewById<TextView>(R.id.groupName)
@@ -508,7 +419,6 @@ class SettingsActivity : FragmentActivity() {
             val editButton = itemView.findViewById<Button>(R.id.editButton)
             val deleteButton = itemView.findViewById<Button>(R.id.deleteButton)
 
-            // Generate unique IDs for each view to fix focus navigation
             groupSwitch.id = View.generateViewId()
             matchModeToggle.id = View.generateViewId()
             editButton.id = View.generateViewId()
@@ -519,7 +429,7 @@ class SettingsActivity : FragmentActivity() {
             groupSwitch.isChecked = group.isEnabled
             matchModeToggle.isChecked = group.matchMode == TagFilterMode.ALL
 
-            // Set horizontal focus navigation within the row
+            // Horizontal focus
             groupSwitch.nextFocusRightId = matchModeToggle.id
             matchModeToggle.nextFocusLeftId = groupSwitch.id
             matchModeToggle.nextFocusRightId = editButton.id
@@ -527,17 +437,14 @@ class SettingsActivity : FragmentActivity() {
             editButton.nextFocusRightId = deleteButton.id
             deleteButton.nextFocusLeftId = editButton.id
 
-            // Set vertical focus navigation between rows
             if (previousDeleteButton != null) {
-                // Connect previous row's delete button DOWN to this row's checkbox
                 previousDeleteButton!!.nextFocusDownId = groupSwitch.id
-                // Connect this row's checkbox UP to previous row's checkbox
-                groupSwitch.nextFocusUpId = firstGroupCheckbox?.id ?: R.id.filterSpinner
+                groupSwitch.nextFocusUpId = firstGroupCheckbox?.id ?: filterSpinner.id
             }
 
             groupSwitch.setOnCheckedChangeListener { _, _ ->
                 settingsManager.toggleTagGroup(group.id)
-                updateSelectedTagsDisplay()
+                updateSelectedTagsDisplay(selectedTagsText)
             }
 
             matchModeToggle.setOnCheckedChangeListener { _, isChecked ->
@@ -546,45 +453,217 @@ class SettingsActivity : FragmentActivity() {
             }
 
             editButton.setOnClickListener {
-                showEditGroupDialog(group)
+                showEditGroupDialog(group, container, selectedTagsText, filterSpinner, createGroupButton)
             }
 
             deleteButton.setOnClickListener {
-                showDeleteGroupConfirmation(group)
+                showDeleteGroupConfirmation(group, container, selectedTagsText, filterSpinner, createGroupButton)
             }
 
-            tagGroupsContainer.addView(itemView)
+            container.addView(itemView)
 
-            // Track first/last elements
-            if (index == 0) {
-                firstGroupCheckbox = groupSwitch
-            }
+            if (index == 0) firstGroupCheckbox = groupSwitch
             lastGroupDeleteButton = deleteButton
             previousDeleteButton = deleteButton
         }
 
-        // Connect focus chain: filterSpinner → first group, last group → createGroupButton
+        // Focus chain connections
         firstGroupCheckbox?.let { first ->
-            filterSpinner.post {
-                filterSpinner.nextFocusDownId = first.id
-                first.nextFocusUpId = R.id.filterSpinner
-            }
+            filterSpinner.nextFocusDownId = first.id
+            first.nextFocusUpId = filterSpinner.id
         }
         lastGroupDeleteButton?.let { last ->
             last.nextFocusDownId = createGroupButton.id
             createGroupButton.nextFocusUpId = last.id
         }
-
-        // If no groups, connect filterSpinner directly to createGroupButton
         if (groups.isEmpty()) {
-            filterSpinner.post {
-                filterSpinner.nextFocusDownId = R.id.createGroupButton
-                createGroupButton.nextFocusUpId = R.id.filterSpinner
-            }
+            filterSpinner.nextFocusDownId = createGroupButton.id
+            createGroupButton.nextFocusUpId = filterSpinner.id
         }
     }
 
-    private fun showCreateGroupDialog() {
+    private fun updateSelectedTagsDisplay(selectedTagsText: TextView) {
+        val enabledGroups = settingsManager.getEnabledTagGroups()
+        val allTags = settingsManager.getAllEnabledTags()
+
+        selectedTagsText.text = when {
+            enabledGroups.isEmpty() -> "No groups enabled"
+            allTags.size <= 5 -> "${enabledGroups.size} group(s): ${allTags.joinToString(", ")}"
+            else -> "${enabledGroups.size} group(s): ${allTags.take(5).joinToString(", ")} +${allTags.size - 5} more"
+        }
+    }
+
+    // ==================== Display Content ====================
+
+    private fun setupDisplayContent() {
+        val view = currentContentView ?: return
+
+        val styleSpinner = view.findViewById<Spinner>(R.id.styleSpinner)
+        val textSizeSpinner = view.findViewById<Spinner>(R.id.textSizeSpinner)
+        val showTagsSwitch = view.findViewById<Switch>(R.id.showTagsSwitch)
+        val showNotesSwitch = view.findViewById<Switch>(R.id.showNotesSwitch)
+        val showQrCodeSwitch = view.findViewById<Switch>(R.id.showQrCodeSwitch)
+        val qrLinkTypeContainer = view.findViewById<LinearLayout>(R.id.qrLinkTypeContainer)
+        val qrLinkTypeSpinner = view.findViewById<Spinner>(R.id.qrLinkTypeSpinner)
+        val durationSeekBar = view.findViewById<SeekBar>(R.id.durationSeekBar)
+        val durationValue = view.findViewById<TextView>(R.id.durationValue)
+
+        // Style spinner
+        val styleAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf(
+                getString(R.string.style_minimal),
+                getString(R.string.style_ambient),
+                getString(R.string.style_editorial),
+                getString(R.string.style_stoic)
+            )
+        )
+        styleSpinner.adapter = styleAdapter
+        styleSpinner.setSelection(settingsManager.getVisualStyle().ordinal)
+        styleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
+                settingsManager.setVisualStyle(VisualStyle.entries[position])
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        // Text size spinner
+        val textSizeAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf(
+                getString(R.string.text_size_small),
+                getString(R.string.text_size_medium),
+                getString(R.string.text_size_large)
+            )
+        )
+        textSizeSpinner.adapter = textSizeAdapter
+        textSizeSpinner.setSelection(settingsManager.getTextSize().ordinal)
+        textSizeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
+                settingsManager.setTextSize(TextSize.entries[position])
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        // Switches
+        showTagsSwitch.isChecked = settingsManager.getShowTags()
+        showTagsSwitch.setOnCheckedChangeListener { _, isChecked ->
+            settingsManager.setShowTags(isChecked)
+        }
+
+        showNotesSwitch.isChecked = settingsManager.getShowNotes()
+        showNotesSwitch.setOnCheckedChangeListener { _, isChecked ->
+            settingsManager.setShowNotes(isChecked)
+        }
+
+        showQrCodeSwitch.isChecked = settingsManager.getShowQrCode()
+        showQrCodeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            settingsManager.setShowQrCode(isChecked)
+            qrLinkTypeContainer.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+
+        // QR link type
+        qrLinkTypeContainer.visibility = if (settingsManager.getShowQrCode()) View.VISIBLE else View.GONE
+        val qrLinkTypeAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf(getString(R.string.qr_link_readwise), getString(R.string.qr_link_source))
+        )
+        qrLinkTypeSpinner.adapter = qrLinkTypeAdapter
+        qrLinkTypeSpinner.setSelection(settingsManager.getQrLinkType().ordinal)
+        qrLinkTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
+                settingsManager.setQrLinkType(QrLinkType.entries[position])
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        // Duration
+        val duration = settingsManager.getQuoteDuration()
+        durationSeekBar.progress = duration
+        durationValue.text = getString(R.string.duration_format, duration)
+        durationSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                durationValue.text = getString(R.string.duration_format, progress)
+                if (fromUser) settingsManager.setQuoteDuration(progress)
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+    }
+
+    // ==================== Sync Content ====================
+
+    private fun setupSyncContent() {
+        val view = currentContentView ?: return
+
+        val syncIntervalSpinner = view.findViewById<Spinner>(R.id.syncIntervalSpinner)
+        val lastSyncedText = view.findViewById<TextView>(R.id.lastSyncedText)
+        val quoteCountText = view.findViewById<TextView>(R.id.quoteCountText)
+
+        // Sync interval spinner
+        val intervalAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf("1 hour", "6 hours", "24 hours", "Manual only")
+        )
+        syncIntervalSpinner.adapter = intervalAdapter
+
+        val intervalPosition = when (settingsManager.getSyncIntervalHours()) {
+            1 -> 0
+            6 -> 1
+            24 -> 2
+            else -> 3
+        }
+        syncIntervalSpinner.setSelection(intervalPosition)
+
+        syncIntervalSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
+                val hours = when (position) {
+                    0 -> 1
+                    1 -> 6
+                    2 -> 24
+                    else -> Int.MAX_VALUE
+                }
+                settingsManager.setSyncIntervalHours(hours)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        // Status info
+        lifecycleScope.launch {
+            val lastSync = settingsManager.getLastSyncTime()
+            val count = quoteRepository.getQuoteCount()
+
+            val timeText = if (lastSync != null) {
+                try {
+                    val instant = Instant.parse(lastSync)
+                    val formatter = DateTimeFormatter.ofPattern("MMM d, yyyy 'at' h:mm a")
+                        .withZone(ZoneId.systemDefault())
+                    "Last synced: ${formatter.format(instant)}"
+                } catch (e: Exception) {
+                    "Last synced: Never"
+                }
+            } else {
+                "Last synced: Never"
+            }
+
+            lastSyncedText.text = timeText
+            quoteCountText.text = "$count quotes"
+        }
+    }
+
+    // ==================== Tag Group Dialogs ====================
+
+    private fun loadAvailableTags() {
+        lifecycleScope.launch {
+            availableTags = quoteRepository.getAllTags()
+        }
+    }
+
+    private fun showCreateGroupDialog(container: LinearLayout, selectedTagsText: TextView) {
         if (availableTags.isEmpty()) {
             Toast.makeText(this, "No tags available. Sync your quotes first.", Toast.LENGTH_SHORT).show()
             return
@@ -594,8 +673,43 @@ class SettingsActivity : FragmentActivity() {
         val defaultName = "Group ${existingGroups.size + 1}"
 
         showGroupNameDialog("Create Tag Group", defaultName) { name ->
-            showSelectTagsForGroupDialog(name, emptySet())
+            showSelectTagsForGroupDialog(name, emptySet(), null, container, selectedTagsText)
         }
+    }
+
+    private fun showEditGroupDialog(
+        group: com.readwisequotes.data.model.TagGroup,
+        container: LinearLayout,
+        selectedTagsText: TextView,
+        filterSpinner: Spinner,
+        createGroupButton: Button
+    ) {
+        showGroupNameDialog("Edit Group", group.name) { name ->
+            if (name.isNotEmpty()) {
+                showSelectTagsForGroupDialog(name, group.tags, group.id, container, selectedTagsText)
+            } else {
+                Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showDeleteGroupConfirmation(
+        group: com.readwisequotes.data.model.TagGroup,
+        container: LinearLayout,
+        selectedTagsText: TextView,
+        filterSpinner: Spinner,
+        createGroupButton: Button
+    ) {
+        AlertDialog.Builder(this)
+            .setTitle("Delete Group")
+            .setMessage("Delete \"${group.name}\"?")
+            .setPositiveButton("Delete") { _, _ ->
+                settingsManager.deleteTagGroup(group.id)
+                renderTagGroups(container, selectedTagsText, filterSpinner, createGroupButton)
+                updateSelectedTagsDisplay(selectedTagsText)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun showGroupNameDialog(title: String, initialName: String, onNext: (String) -> Unit) {
@@ -620,7 +734,6 @@ class SettingsActivity : FragmentActivity() {
             onNext(name)
         }
 
-        // Handle Enter key on EditText
         nameInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT) {
                 nextButton.performClick()
@@ -632,7 +745,13 @@ class SettingsActivity : FragmentActivity() {
         nameInput.requestFocus()
     }
 
-    private fun showSelectTagsForGroupDialog(groupName: String, existingTags: Set<String>, groupId: String? = null) {
+    private fun showSelectTagsForGroupDialog(
+        groupName: String,
+        existingTags: Set<String>,
+        groupId: String?,
+        container: LinearLayout,
+        selectedTagsText: TextView
+    ) {
         val selectedTags = existingTags.toMutableSet()
 
         val dialog = Dialog(this, android.R.style.Theme_Material_Dialog_NoActionBar)
@@ -649,7 +768,6 @@ class SettingsActivity : FragmentActivity() {
 
         titleView.text = "Select tags for \"$groupName\""
 
-        // Create checkboxes for each tag
         val checkboxes = mutableListOf<CheckBox>()
         availableTags.forEachIndexed { index, tag ->
             val checkBox = layoutInflater.inflate(R.layout.item_tag_checkbox, tagsContainer, false) as CheckBox
@@ -659,11 +777,9 @@ class SettingsActivity : FragmentActivity() {
                 if (isChecked) selectedTags.add(tag) else selectedTags.remove(tag)
             }
 
-            // LEFT from any tag → Cancel, RIGHT from any tag → Save
             checkBox.nextFocusLeftId = cancelButton.id
             checkBox.nextFocusRightId = saveButton.id
 
-            // Vertical navigation at list boundaries
             if (index == 0) {
                 saveButton.nextFocusDownId = checkBox.id
                 cancelButton.nextFocusDownId = checkBox.id
@@ -702,23 +818,23 @@ class SettingsActivity : FragmentActivity() {
 
             dialog.dismiss()
             Toast.makeText(this@SettingsActivity, "Group \"$groupName\" saved!", Toast.LENGTH_SHORT).show()
-            renderTagGroups()
-            updateSelectedTagsDisplay()
+
+            // Re-render the filters content
+            setupFiltersContent()
         }
 
-        // Intercept LEFT/RIGHT from checkboxes to navigate to buttons
         dialog.setOnKeyListener { _, keyCode, event ->
-            if (event.action == android.view.KeyEvent.ACTION_DOWN) {
+            if (event.action == KeyEvent.ACTION_DOWN) {
                 val focused = dialog.currentFocus
                 val isCheckboxFocused = checkboxes.contains(focused)
 
                 if (isCheckboxFocused) {
                     when (keyCode) {
-                        android.view.KeyEvent.KEYCODE_DPAD_LEFT -> {
+                        KeyEvent.KEYCODE_DPAD_LEFT -> {
                             cancelButton.requestFocus()
                             return@setOnKeyListener true
                         }
-                        android.view.KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                        KeyEvent.KEYCODE_DPAD_RIGHT -> {
                             saveButton.requestFocus()
                             return@setOnKeyListener true
                         }
@@ -729,50 +845,20 @@ class SettingsActivity : FragmentActivity() {
         }
 
         dialog.show()
-
-        // Focus first checkbox if available
         if (checkboxes.isNotEmpty()) {
             checkboxes[0].requestFocus()
         }
     }
 
-    private fun showEditGroupDialog(group: com.readwisequotes.data.model.TagGroup) {
-        showGroupNameDialog("Edit Group", group.name) { name ->
-            if (name.isNotEmpty()) {
-                showSelectTagsForGroupDialog(name, group.tags, group.id)
-            } else {
-                Toast.makeText(this, "Please enter a name", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun showDeleteGroupConfirmation(group: com.readwisequotes.data.model.TagGroup) {
-        AlertDialog.Builder(this)
-            .setTitle("Delete Group")
-            .setMessage("Delete \"${group.name}\"?")
-            .setPositiveButton("Delete") { _, _ ->
-                settingsManager.deleteTagGroup(group.id)
-                renderTagGroups()
-                updateSelectedTagsDisplay()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun updateSelectedTagsDisplay() {
-        val enabledGroups = settingsManager.getEnabledTagGroups()
-        val allTags = settingsManager.getAllEnabledTags()
-
-        selectedTagsText.text = when {
-            enabledGroups.isEmpty() -> "No groups enabled"
-            allTags.size <= 5 -> "${enabledGroups.size} group(s): ${allTags.joinToString(", ")}"
-            else -> "${enabledGroups.size} group(s): ${allTags.take(5).joinToString(", ")} +${allTags.size - 5} more"
-        }
-    }
-
     // ==================== Token Entry Server ====================
 
-    private fun startTokenEntryServer() {
+    private fun startTokenEntryServer(
+        apiTokenInput: EditText,
+        tokenHelperText: TextView,
+        setupViaPhoneButton: Button,
+        syncStatus: TextView,
+        syncButton: Button
+    ) {
         val ipAddress = getDeviceIpAddress()
         if (ipAddress == null) {
             Toast.makeText(this, "Could not get IP address. Make sure you're connected to WiFi.", Toast.LENGTH_LONG).show()
@@ -782,7 +868,7 @@ class SettingsActivity : FragmentActivity() {
         val port = 8080
         tokenEntryServer = TokenEntryServer(port) { token ->
             runOnUiThread {
-                handleTokenReceived(token)
+                handleTokenReceived(token, apiTokenInput, tokenHelperText, setupViaPhoneButton, syncStatus, syncButton)
             }
         }
 
@@ -811,24 +897,25 @@ class SettingsActivity : FragmentActivity() {
         setupDialog?.show()
     }
 
-    private fun handleTokenReceived(token: String) {
-        // Stop the server
+    private fun handleTokenReceived(
+        token: String,
+        apiTokenInput: EditText,
+        tokenHelperText: TextView,
+        setupViaPhoneButton: Button,
+        syncStatus: TextView,
+        syncButton: Button
+    ) {
         stopTokenEntryServer()
-
-        // Dismiss the dialog
         setupDialog?.dismiss()
 
-        // Save and verify the token
         settingsManager.setApiToken(token)
         apiTokenInput.setText(token)
 
-        // Hide the helper text and setup button
         tokenHelperText.visibility = View.GONE
         setupViaPhoneButton.visibility = View.GONE
 
-        // Show success and trigger sync
         Toast.makeText(this, "Token received! Syncing...", Toast.LENGTH_SHORT).show()
-        performSync()
+        performSync(syncStatus, syncButton)
     }
 
     private fun stopTokenEntryServer() {

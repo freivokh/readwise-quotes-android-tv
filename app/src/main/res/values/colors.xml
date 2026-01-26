@@ -22,4 +22,14 @@
     <color name="stoic_text_primary">#e8e4dc</color>
     <color name="stoic_text_secondary">#a09080</color>
     <color name="stoic_accent">#c9a962</color>
+
+    <!-- Settings screen surfaces -->
+    <color name="settings_background">#0D0D0D</color>
+    <color name="settings_rail_surface">#1A1A1A</color>
+    <color name="settings_card_surface">#1E1E1E</color>
+    <color name="settings_card_border">#2A2A2A</color>
+    <color name="settings_text_primary">#F5F5F5</color>
+    <color name="settings_text_secondary">#888888</color>
+    <color name="settings_rail_selected">#33e94560</color>
+    <color name="settings_focus_glow">#66e94560</color>
 </resources>
