@@ -4,7 +4,7 @@
     <color name="background_dark">#000000</color>
     <color name="text_primary">#FFFFFF</color>
     <color name="text_secondary">#B0B0B0</color>
-    <color name="accent">#e94560</color>
+    <color name="accent">#c9a962</color>
 
     <!-- Ambient theme gradient -->
     <color name="gradient_start">#1a1a2e</color>
@@ -30,6 +30,6 @@
     <color name="settings_card_border">#2A2A2A</color>
     <color name="settings_text_primary">#F5F5F5</color>
     <color name="settings_text_secondary">#888888</color>
-    <color name="settings_rail_selected">#33e94560</color>
-    <color name="settings_focus_glow">#66e94560</color>
+    <color name="settings_rail_selected">#33c9a962</color>
+    <color name="settings_focus_glow">#66c9a962</color>
 </resources>
