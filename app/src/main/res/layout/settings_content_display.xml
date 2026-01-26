@@ -41,6 +41,8 @@
                 android:layout_height="48dp"
                 android:background="@drawable/settings_spinner_background"
                 android:popupBackground="@drawable/spinner_dropdown_background"
+                android:dropDownVerticalOffset="56dp"
+                android:dropDownWidth="match_parent"
                 android:focusable="true"
                 android:focusableInTouchMode="false"
                 android:layout_marginBottom="20dp" />
@@ -59,6 +61,8 @@
                 android:layout_height="48dp"
                 android:background="@drawable/settings_spinner_background"
                 android:popupBackground="@drawable/spinner_dropdown_background"
+                android:dropDownVerticalOffset="56dp"
+                android:dropDownWidth="match_parent"
                 android:focusable="true"
                 android:focusableInTouchMode="false" />
 
@@ -182,6 +186,8 @@
                     android:layout_height="48dp"
                     android:background="@drawable/settings_spinner_background"
                     android:popupBackground="@drawable/spinner_dropdown_background"
+                    android:dropDownVerticalOffset="56dp"
+                    android:dropDownWidth="match_parent"
                     android:focusable="true"
                     android:focusableInTouchMode="false" />
 
