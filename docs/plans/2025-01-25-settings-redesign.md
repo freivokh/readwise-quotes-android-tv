@@ -49,7 +49,7 @@ Blend of app theme matching + modern polish:
 | Card border | `#2A2A2A` | Very subtle, 1dp |
 | Text primary | `#F5F5F5` | Warm white |
 | Text secondary | `#888888` | Labels, hints |
-| Accent | Existing | Selected states |
+| Accent | `#c9a962` | Gold, selected states |
 
 ### Focus States
 
@@ -66,8 +66,10 @@ Blend of app theme matching + modern polish:
 
 ### Corners & Spacing
 
-- Rail items: 8dp radius
+- Rail items: 12dp radius
 - Content cards: 12dp radius
+- Spinners/inputs: 12dp radius
+- Dropdown popups: 16dp radius
 - Rail item padding: 16dp vertical, 20dp horizontal
 - Content card padding: 20dp
 - Card gap: 16dp

@@ -154,10 +154,13 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 ### 2025-01-25: Settings menu redesign (U2)
 - Left rail navigation pattern (TV-native UX)
 - 4 categories: Account, Filters, Display, Sync
-- Card-based content areas with rounded corners
+- Card-based content areas with rounded corners (12dp)
 - Icons next to category labels
+- Gold accent color (`#c9a962`)
 - Focus states: rail focused (accent bg), selected (left bar), content focused (glow border)
 - D-pad: UP/DOWN navigates rail, RIGHT enters content, LEFT returns to rail
-- New color scheme: darker surfaces, subtle borders, accent highlights
+- New color scheme: darker surfaces, subtle borders, gold accent highlights
+- Rounded dropdown popups (16dp) with proper alignment
 - Files: `activity_settings_v2.xml`, `settings_content_*.xml`, `rail_item_*.xml`, `settings_*.xml`
+- Commits: `04037aa` (initial), `5f721ed` (gold accent), `f741b8a` (dropdown alignment)
 
