@@ -87,6 +87,10 @@ class SettingsManager @Inject constructor(
     }
     fun setQrLinkType(type: QrLinkType) = prefs.edit().putString(KEY_QR_LINK_TYPE, type.name).apply()
 
+    // Left align text (instead of center)
+    fun getLeftAlignText(): Boolean = prefs.getBoolean(KEY_LEFT_ALIGN_TEXT, false)
+    fun setLeftAlignText(leftAlign: Boolean) = prefs.edit().putBoolean(KEY_LEFT_ALIGN_TEXT, leftAlign).apply()
+
     // Sync interval in hours
     fun getSyncIntervalHours(): Int = prefs.getInt(KEY_SYNC_INTERVAL, 24)
     fun setSyncIntervalHours(hours: Int) = prefs.edit().putInt(KEY_SYNC_INTERVAL, hours).apply()
@@ -186,5 +190,6 @@ class SettingsManager @Inject constructor(
         private const val KEY_SHOW_NOTES = "show_notes"
         private const val KEY_SHOW_QR_CODE = "show_qr_code"
         private const val KEY_QR_LINK_TYPE = "qr_link_type"
+        private const val KEY_LEFT_ALIGN_TEXT = "left_align_text"
     }
 }

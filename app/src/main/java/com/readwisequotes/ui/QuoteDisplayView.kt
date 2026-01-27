@@ -71,6 +71,7 @@ class QuoteDisplayView @JvmOverloads constructor(
     private var showNotes: Boolean = true
     private var showQrCode: Boolean = true
     private var qrLinkType: QrLinkType = QrLinkType.READWISE
+    private var leftAlignText: Boolean = false
 
     private val autoFadeDuration = 600L
     private val manualFadeDuration = 350L
@@ -293,6 +294,10 @@ class QuoteDisplayView @JvmOverloads constructor(
 
     fun setQrLinkType(type: QrLinkType) {
         qrLinkType = type
+    }
+
+    fun setLeftAlignText(leftAlign: Boolean) {
+        leftAlignText = leftAlign
     }
 
     private fun applyTheme(style: VisualStyle) {
@@ -667,8 +672,18 @@ class QuoteDisplayView @JvmOverloads constructor(
         // Update content - clean markdown and add curly quotes
         val cleanText = cleanQuoteText(quote.text)
         quoteText.text = "\u201C${cleanText}\u201D"
-        authorText.text = quote.author?.let { "\u2014 $it" } ?: ""
+        authorText.text = quote.author ?: ""
         sourceText.text = quote.title ?: ""
+
+        // Apply text alignment based on setting
+        val textGravity = if (leftAlignText) Gravity.START else Gravity.CENTER
+        quoteText.gravity = textGravity
+        authorText.gravity = textGravity
+        sourceText.gravity = textGravity
+        noteText.gravity = textGravity
+
+        // Also update container gravity so WRAP_CONTENT views align properly
+        quoteContainer.gravity = if (leftAlignText) (Gravity.CENTER_VERTICAL or Gravity.START) else Gravity.CENTER
 
         authorText.visibility = if (quote.author.isNullOrEmpty()) View.GONE else View.VISIBLE
         sourceText.visibility = if (quote.title.isNullOrEmpty()) View.GONE else View.VISIBLE

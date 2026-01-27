@@ -73,6 +73,7 @@ class MainActivity : FragmentActivity() {
         quoteDisplayView.setShowQrCode(settingsManager.getShowQrCode())
         quoteDisplayView.setQrLinkType(settingsManager.getQrLinkType())
         quoteDisplayView.setQuoteDuration(settingsManager.getQuoteDuration())
+        quoteDisplayView.setLeftAlignText(settingsManager.getLeftAlignText())
 
         // Check if sync needed
         lifecycleScope.launch {

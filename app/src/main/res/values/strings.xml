@@ -24,6 +24,7 @@
     <string name="text_size_small">Small</string>
     <string name="text_size_medium">Medium</string>
     <string name="text_size_large">Large</string>
+    <string name="left_align_text_label">Left Align Text</string>
     <string name="duration_label">Quote Duration</string>
     <string name="show_tags_label">Show Tags</string>
     <string name="show_notes_label">Show Notes</string>

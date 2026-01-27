@@ -503,6 +503,7 @@ class SettingsActivity : FragmentActivity() {
         val showTagsSwitch = view.findViewById<Switch>(R.id.showTagsSwitch)
         val showNotesSwitch = view.findViewById<Switch>(R.id.showNotesSwitch)
         val showQrCodeSwitch = view.findViewById<Switch>(R.id.showQrCodeSwitch)
+        val leftAlignTextSwitch = view.findViewById<Switch>(R.id.leftAlignTextSwitch)
         val qrLinkTypeContainer = view.findViewById<LinearLayout>(R.id.qrLinkTypeContainer)
         val qrLinkTypeSpinner = view.findViewById<Spinner>(R.id.qrLinkTypeSpinner)
         val durationSeekBar = view.findViewById<SeekBar>(R.id.durationSeekBar)
@@ -563,6 +564,11 @@ class SettingsActivity : FragmentActivity() {
         showQrCodeSwitch.setOnCheckedChangeListener { _, isChecked ->
             settingsManager.setShowQrCode(isChecked)
             qrLinkTypeContainer.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+
+        leftAlignTextSwitch.isChecked = settingsManager.getLeftAlignText()
+        leftAlignTextSwitch.setOnCheckedChangeListener { _, isChecked ->
+            settingsManager.setLeftAlignText(isChecked)
         }
 
         // QR link type
