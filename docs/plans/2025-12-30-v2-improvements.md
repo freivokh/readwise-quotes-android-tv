@@ -23,7 +23,7 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 | ~U1~ | Update aesthetic design - cleaner, smaller font | Done | | 4 themes, elegant typography, text size setting |
 | ~U2~ | Make settings menu cleaner and more aesthetic | Done | | Left rail nav, card-based content, TV-native focus |
 | ~U3~ | Show highlight tags in UI | Done | | Bottom-center, toggle in settings |
-| U4 | Option to show book cover art | Pending | | Data synced, UI not implemented |
+| ~U4~ | Option to show book cover art | Done | | Library theme with dynamic colors |
 | ~U5~ | Quotes getting cut off / resize issues | Done | | Reduced fonts, wider margins, markdown stripping |
 | ~U6~ | Show highlight notes | Done | | Below source, toggle in settings |
 
@@ -68,10 +68,9 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 
 ## Remaining Features Summary
 
-**To Implement (2 items):**
+**To Implement (1 item):**
 
-1. **U4** - Show book cover art option
-2. **S4** - Optional sync methods
+1. **S4** - Optional sync methods
 
 ---
 
@@ -163,4 +162,15 @@ Organized list of planned improvements based on codebase review (2025-12-30).
 - Rounded dropdown popups (16dp) with proper alignment
 - Files: `activity_settings_v2.xml`, `settings_content_*.xml`, `rail_item_*.xml`, `settings_*.xml`
 - Commits: `04037aa` (initial), `5f721ed` (gold accent), `f741b8a` (dropdown alignment)
+
+### 2025-01-26: Library theme with book covers (U4)
+- New "Library" visual style in Visual Style dropdown
+- Split-screen layout: quote on left (~60%), book cover on right (~40%)
+- Dynamic background color extracted from book cover using Palette API
+- Text colors auto-adjust for contrast (titleTextColor, bodyTextColor)
+- Book cover displayed large with cropped edge effect
+- Fallback to dark neutral when no cover available
+- Color cache per book to avoid re-processing
+- Dependencies: Coil (image loading), AndroidX Palette (color extraction)
+- Commit: `8d9cc4d`
 
