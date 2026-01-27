@@ -1012,26 +1012,25 @@ class QuoteDisplayView @JvmOverloads constructor(
 
         // Calculate luminance to determine if background is light or dark
         val luminance = calculateLuminance(bgColor)
-        val isLightBackground = luminance > 0.45
+        val isLightBackground = luminance > 0.4  // Lower threshold to catch more light backgrounds
 
         // Use high-contrast text colors based on background luminance
-        // Accent bar is always light/white (semi-transparent) to match Readwise style
         val titleColor: Int
         val bodyColor: Int
         val mutedColor: Int
         val accentBarColor: Int
 
         if (isLightBackground) {
-            // Dark text on light background
+            // Dark text on light background - use very dark colors for readability
             titleColor = Color.parseColor("#1A1A1A")
-            bodyColor = Color.parseColor("#404040")
-            mutedColor = Color.parseColor("#666666")
-            accentBarColor = Color.parseColor("#40FFFFFF") // White accent bar
+            bodyColor = Color.parseColor("#2A2A2A")
+            mutedColor = Color.parseColor("#3A3A3A")
+            accentBarColor = Color.parseColor("#30000000") // Dark accent bar on light bg
         } else {
-            // Light text on dark background
-            titleColor = Color.parseColor("#F5F5F5")
-            bodyColor = Color.parseColor("#CCCCCC")
-            mutedColor = Color.parseColor("#999999")
+            // Light text on dark background - use very light colors
+            titleColor = Color.parseColor("#FFFFFF")
+            bodyColor = Color.parseColor("#E8E8E8")
+            mutedColor = Color.parseColor("#D0D0D0")
             accentBarColor = Color.parseColor("#50FFFFFF") // White accent bar
         }
 
