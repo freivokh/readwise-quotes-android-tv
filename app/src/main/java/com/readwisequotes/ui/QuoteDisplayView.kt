@@ -52,7 +52,9 @@ class QuoteDisplayView @JvmOverloads constructor(
     // Library theme specific views
     private val libraryContainer: LinearLayout
     private val libraryLeftPanel: FrameLayout
+    private val libraryAccentBar: View
     private val libraryQuoteContainer: LinearLayout
+    private val libraryGradientOverlay: View
     private val libraryBookTitle: TextView
     private val libraryBookAuthor: TextView
     private val coverImageView: ImageView
@@ -177,24 +179,58 @@ class QuoteDisplayView @JvmOverloads constructor(
         }
         addView(libraryContainer)
 
-        // Library left panel (colored background, ~60% width)
+        // Library left panel (colored background, ~62% width)
         libraryLeftPanel = FrameLayout(context).apply {
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.6f)
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.62f)
         }
         libraryContainer.addView(libraryLeftPanel)
 
-        // Library quote container (inside left panel)
-        libraryQuoteContainer = LinearLayout(context).apply {
-            orientation = LinearLayout.VERTICAL
+        // Library quote container with accent bar integrated
+        // Using a horizontal layout: [accent bar] [quote content]
+        val quoteWrapper = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             layoutParams = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT
-            )
-            val padding = dpToPx(60)
-            setPadding(padding, padding, padding, padding)
+                FrameLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = Gravity.CENTER_VERTICAL
+                marginStart = dpToPx(48)
+                marginEnd = dpToPx(32)
+            }
         }
-        libraryLeftPanel.addView(libraryQuoteContainer)
+        libraryLeftPanel.addView(quoteWrapper)
+
+        // Dark accent bar - will stretch to match quote content height
+        libraryAccentBar = View(context).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                dpToPx(3),
+                LinearLayout.LayoutParams.MATCH_PARENT
+            ).apply {
+                marginEnd = dpToPx(16)
+            }
+            setBackgroundColor(Color.parseColor("#40000000"))
+        }
+        quoteWrapper.addView(libraryAccentBar)
+
+        // Library quote container (vertical stack of quote, title, author)
+        libraryQuoteContainer = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.START
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+            )
+        }
+        quoteWrapper.addView(libraryQuoteContainer)
+
+        // Subtle gradient overlay (now just a spacer, gradient applied to panel background)
+        libraryGradientOverlay = View(context).apply {
+            layoutParams = LinearLayout.LayoutParams(dpToPx(8), LinearLayout.LayoutParams.MATCH_PARENT)
+            visibility = View.GONE // Hard edge, no gradient overlay
+        }
+        libraryContainer.addView(libraryGradientOverlay)
 
         // Library book title (below quote)
         libraryBookTitle = TextView(context).apply {
@@ -218,19 +254,17 @@ class QuoteDisplayView @JvmOverloads constructor(
             }
         }
 
-        // Cover image (right side, ~40% width)
+        // Cover image (right side, with subtle 2D angle rotation)
         coverImageView = ImageView(context).apply {
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.4f).apply {
-                marginStart = dpToPx(-40) // Pull slightly left for cropped effect
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.38f).apply {
+                marginEnd = dpToPx(-30)
             }
             scaleType = ImageView.ScaleType.CENTER_CROP
-            // Clip to rounded corners on left side only
-            clipToOutline = true
-            outlineProvider = object : android.view.ViewOutlineProvider() {
-                override fun getOutline(view: View, outline: android.graphics.Outline) {
-                    outline.setRoundRect(-dpToPx(8), 0, view.width, view.height, dpToPx(8).toFloat())
-                }
-            }
+            // Subtle clockwise rotation (5 degrees like reference)
+            rotation = 5f
+            // Scale up slightly to fill gaps
+            scaleX = 1.08f
+            scaleY = 1.12f
         }
         libraryContainer.addView(coverImageView)
 
@@ -679,22 +713,24 @@ class QuoteDisplayView @JvmOverloads constructor(
         // Clear and rebuild library quote container
         libraryQuoteContainer.removeAllViews()
 
+        // Scale text more aggressively for longer quotes to fit the screen
         val lengthMultiplier = when {
-            quote.text.length > 500 -> 0.625f
-            quote.text.length > 300 -> 0.75f
-            quote.text.length > 150 -> 0.875f
+            quote.text.length > 800 -> 0.5f
+            quote.text.length > 600 -> 0.6f
+            quote.text.length > 400 -> 0.7f
+            quote.text.length > 250 -> 0.8f
+            quote.text.length > 150 -> 0.9f
             else -> 1f
         }
 
-        // Quote text (author is book author, not quote author in Readwise)
+        // Quote text - italic serif, no curly quotes (matches Readwise style)
         val cleanText = cleanQuoteText(quote.text)
         val quoteWithAuthor = TextView(context).apply {
-            text = "\u201C${cleanText}\u201D"
+            text = cleanText
             setTextSize(TypedValue.COMPLEX_UNIT_SP, baseQuoteSize * lengthMultiplier * textSizeScale)
-            setTextColor(Color.parseColor("#F5F5F5"))
-            typeface = Typeface.create("serif", Typeface.NORMAL)
-            setLineSpacing(dpToPx(4).toFloat(), 1.05f)
-            setShadowLayer(2f, 0f, 1f, Color.parseColor("#40000000"))
+            setTextColor(Color.parseColor("#1A1A1A"))
+            typeface = Typeface.create("serif", Typeface.ITALIC)
+            setLineSpacing(dpToPx(6).toFloat(), 1.1f)
             gravity = Gravity.START
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -703,36 +739,34 @@ class QuoteDisplayView @JvmOverloads constructor(
         }
         libraryQuoteContainer.addView(quoteWithAuthor)
 
-        // Book title
+        // Book title - sans-serif, dark text
         val bookTitleView = TextView(context).apply {
             text = quote.title ?: ""
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f * textSizeScale)
-            setTextColor(Color.parseColor("#F5F5F5"))
-            typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-            setShadowLayer(2f, 0f, 1f, Color.parseColor("#40000000"))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f * textSizeScale)
+            setTextColor(Color.parseColor("#1A1A1A"))
+            typeface = Typeface.create("sans-serif", Typeface.NORMAL)
             visibility = if (quote.title.isNullOrEmpty()) View.GONE else View.VISIBLE
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                topMargin = dpToPx(24)
+                topMargin = dpToPx(32)
             }
         }
         libraryQuoteContainer.addView(bookTitleView)
 
-        // Book author
+        // Book author - smaller, slightly muted
         val bookAuthorView = TextView(context).apply {
             text = quote.author ?: ""
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f * textSizeScale)
-            setTextColor(Color.parseColor("#CCCCCC"))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f * textSizeScale)
+            setTextColor(Color.parseColor("#404040"))
             typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-            setShadowLayer(2f, 0f, 1f, Color.parseColor("#40000000"))
             visibility = if (quote.author.isNullOrEmpty()) View.GONE else View.VISIBLE
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                topMargin = dpToPx(4)
+                topMargin = dpToPx(2)
             }
         }
         libraryQuoteContainer.addView(bookAuthorView)
@@ -849,9 +883,22 @@ class QuoteDisplayView @JvmOverloads constructor(
                             Palette.from(bitmap).generate()
                         }
 
-                        val swatch = palette.dominantSwatch
-                            ?: palette.vibrantSwatch
-                            ?: palette.mutedSwatch
+                        // Prefer vibrant swatches for colorful backgrounds like the reference
+                        // Priority: light vibrant > vibrant > muted > light muted > dominant
+                        val candidates = listOfNotNull(
+                            palette.lightVibrantSwatch,
+                            palette.vibrantSwatch,
+                            palette.mutedSwatch,
+                            palette.lightMutedSwatch,
+                            palette.dominantSwatch
+                        )
+
+                        // Pick the first swatch that isn't too dark (brightness > 0.25)
+                        val swatch = candidates.firstOrNull { sw ->
+                            val hsv = FloatArray(3)
+                            android.graphics.Color.colorToHSV(sw.rgb, hsv)
+                            hsv[2] > 0.25f // brightness threshold
+                        } ?: candidates.firstOrNull() ?: palette.dominantSwatch
 
                         colorCache[cacheKey] = swatch
 
@@ -874,8 +921,23 @@ class QuoteDisplayView @JvmOverloads constructor(
         bookTitleView: TextView,
         bookAuthorView: TextView
     ) {
-        // Apply background color
-        libraryLeftPanel.setBackgroundColor(swatch.rgb)
+        val bgColor = swatch.rgb
+
+        // Create subtle gradient: slightly darker on left, base color on right
+        val darkerLeft = Color.argb(
+            255,
+            maxOf(0, (Color.red(bgColor) * 0.92f).toInt()),
+            maxOf(0, (Color.green(bgColor) * 0.92f).toInt()),
+            maxOf(0, (Color.blue(bgColor) * 0.92f).toInt())
+        )
+        val panelGradient = GradientDrawable(
+            GradientDrawable.Orientation.LEFT_RIGHT,
+            intArrayOf(darkerLeft, bgColor)
+        )
+        libraryLeftPanel.background = panelGradient
+
+        // Accent bar: semi-transparent dark color
+        libraryAccentBar.setBackgroundColor(Color.parseColor("#35000000"))
 
         // Use palette's text colors for contrast
         val titleColor = swatch.titleTextColor
@@ -892,8 +954,18 @@ class QuoteDisplayView @JvmOverloads constructor(
         bookTitleView: TextView,
         bookAuthorView: TextView
     ) {
-        // Dark neutral background
-        libraryLeftPanel.setBackgroundColor(Color.parseColor("#1A1A1A"))
+        val darkerLeft = Color.parseColor("#151515")
+        val bgColor = Color.parseColor("#1E1E1E")
+
+        // Subtle gradient: darker on left
+        val panelGradient = GradientDrawable(
+            GradientDrawable.Orientation.LEFT_RIGHT,
+            intArrayOf(darkerLeft, bgColor)
+        )
+        libraryLeftPanel.background = panelGradient
+
+        // Accent bar
+        libraryAccentBar.setBackgroundColor(Color.parseColor("#35FFFFFF"))
 
         // Light text
         quoteTextView.setTextColor(Color.parseColor("#F5F5F5"))
