@@ -565,44 +565,46 @@ class QuoteDisplayView @JvmOverloads constructor(
         qrCodeImage.bringToFront()
         tagsText.bringToFront()
 
-        // Move QR code to bottom-left
-        (qrCodeImage.layoutParams as LayoutParams).apply {
+        // Move QR code to bottom-left with proper margins
+        qrCodeImage.layoutParams = LayoutParams(dpToPx(44), dpToPx(44)).apply {
             gravity = Gravity.BOTTOM or Gravity.START
             marginStart = dpToPx(60)
             marginEnd = 0
             bottomMargin = dpToPx(40)
+            topMargin = 0
         }
-        qrCodeImage.requestLayout()
 
         // Move tags to bottom-left above QR code
-        (tagsText.layoutParams as LayoutParams).apply {
+        tagsText.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
             gravity = Gravity.BOTTOM or Gravity.START
             marginStart = dpToPx(60)
+            marginEnd = 0
             bottomMargin = dpToPx(100)
+            topMargin = 0
         }
-        tagsText.requestLayout()
     }
 
     private fun hideLibraryTheme() {
         libraryContainer.visibility = View.GONE
         quoteContainer.visibility = View.VISIBLE
 
-        // Reset QR code position
-        (qrCodeImage.layoutParams as LayoutParams).apply {
+        // Reset QR code position to bottom-right corner
+        qrCodeImage.layoutParams = LayoutParams(dpToPx(44), dpToPx(44)).apply {
             gravity = Gravity.BOTTOM or Gravity.END
             marginStart = 0
             marginEnd = dpToPx(40)
             bottomMargin = dpToPx(40)
+            topMargin = 0
         }
-        qrCodeImage.requestLayout()
 
-        // Reset tags position
-        (tagsText.layoutParams as LayoutParams).apply {
+        // Reset tags position to bottom-center
+        tagsText.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
             gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
             marginStart = 0
+            marginEnd = 0
             bottomMargin = dpToPx(40)
+            topMargin = 0
         }
-        tagsText.requestLayout()
     }
 
     fun setQuoteDuration(durationSeconds: Int) {
