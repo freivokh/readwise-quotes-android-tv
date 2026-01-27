@@ -74,7 +74,7 @@ class QuoteDisplayView @JvmOverloads constructor(
     private var leftAlignText: Boolean = false
 
     private val autoFadeDuration = 600L
-    private val manualFadeDuration = 350L
+    private val manualFadeDuration = 500L
 
     private val displayRunnable = Runnable { showNextQuoteAuto() }
 
