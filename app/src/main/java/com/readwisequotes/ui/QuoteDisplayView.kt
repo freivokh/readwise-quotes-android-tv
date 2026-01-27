@@ -565,21 +565,21 @@ class QuoteDisplayView @JvmOverloads constructor(
         qrCodeImage.bringToFront()
         tagsText.bringToFront()
 
-        // Move QR code to bottom-left with proper margins
-        qrCodeImage.layoutParams = LayoutParams(dpToPx(44), dpToPx(44)).apply {
+        // Move QR code to bottom-left corner (tucked away)
+        qrCodeImage.layoutParams = LayoutParams(dpToPx(36), dpToPx(36)).apply {
             gravity = Gravity.BOTTOM or Gravity.START
-            marginStart = dpToPx(60)
+            marginStart = dpToPx(24)
             marginEnd = 0
-            bottomMargin = dpToPx(40)
+            bottomMargin = dpToPx(24)
             topMargin = 0
         }
 
-        // Move tags to bottom-left above QR code
+        // Move tags to the right of QR code (same row, horizontal)
         tagsText.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
             gravity = Gravity.BOTTOM or Gravity.START
-            marginStart = dpToPx(60)
+            marginStart = dpToPx(72) // 24 (QR margin) + 36 (QR size) + 12 (gap)
             marginEnd = 0
-            bottomMargin = dpToPx(100)
+            bottomMargin = dpToPx(30) // Vertically centered with QR
             topMargin = 0
         }
     }
