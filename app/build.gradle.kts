@@ -73,6 +73,12 @@ dependencies {
     // QR Code generation
     implementation("com.google.zxing:core:3.5.2")
 
+    // Image loading
+    implementation("io.coil-kt:coil:2.5.0")
+
+    // Palette API for color extraction
+    implementation("androidx.palette:palette-ktx:1.0.0")
+
     // Testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")

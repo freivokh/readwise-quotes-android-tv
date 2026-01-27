@@ -516,7 +516,8 @@ class SettingsActivity : FragmentActivity() {
                 getString(R.string.style_minimal),
                 getString(R.string.style_ambient),
                 getString(R.string.style_editorial),
-                getString(R.string.style_stoic)
+                getString(R.string.style_stoic),
+                getString(R.string.style_library)
             )
         )
         styleSpinner.adapter = styleAdapter

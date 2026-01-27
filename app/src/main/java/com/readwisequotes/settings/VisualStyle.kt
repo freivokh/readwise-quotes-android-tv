@@ -5,5 +5,6 @@ enum class VisualStyle(val displayName: String) {
     MINIMAL("Minimal"),
     AMBIENT("Ambient"),
     EDITORIAL("Editorial"),
-    STOIC("Stoic")
+    STOIC("Stoic"),
+    LIBRARY("Library")
 }

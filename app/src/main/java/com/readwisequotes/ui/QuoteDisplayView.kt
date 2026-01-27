@@ -8,6 +8,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
@@ -17,12 +18,21 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.palette.graphics.Palette
+import coil.imageLoader
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 import com.readwisequotes.R
 import com.readwisequotes.data.model.Quote
 import com.readwisequotes.settings.QrLinkType
 import com.readwisequotes.settings.VisualStyle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class QuoteDisplayView @JvmOverloads constructor(
     context: Context,
@@ -38,6 +48,17 @@ class QuoteDisplayView @JvmOverloads constructor(
     private val noteText: TextView
     private val tagsText: TextView
     private val qrCodeImage: ImageView
+
+    // Library theme specific views
+    private val libraryContainer: LinearLayout
+    private val libraryLeftPanel: FrameLayout
+    private val libraryQuoteContainer: LinearLayout
+    private val libraryBookTitle: TextView
+    private val libraryBookAuthor: TextView
+    private val coverImageView: ImageView
+
+    // Cache for extracted colors per book
+    private val colorCache = mutableMapOf<String, Palette.Swatch?>()
 
     private var currentQuotes: List<Quote> = emptyList()
     private var currentIndex = 0
@@ -148,6 +169,71 @@ class QuoteDisplayView @JvmOverloads constructor(
         }
         addView(qrCodeImage)
 
+        // Library theme: horizontal container with left panel and cover
+        libraryContainer = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+            visibility = View.GONE
+        }
+        addView(libraryContainer)
+
+        // Library left panel (colored background, ~60% width)
+        libraryLeftPanel = FrameLayout(context).apply {
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.6f)
+        }
+        libraryContainer.addView(libraryLeftPanel)
+
+        // Library quote container (inside left panel)
+        libraryQuoteContainer = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_VERTICAL
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            val padding = dpToPx(60)
+            setPadding(padding, padding, padding, padding)
+        }
+        libraryLeftPanel.addView(libraryQuoteContainer)
+
+        // Library book title (below quote)
+        libraryBookTitle = TextView(context).apply {
+            gravity = Gravity.START
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = dpToPx(24)
+            }
+        }
+
+        // Library book author (below title)
+        libraryBookAuthor = TextView(context).apply {
+            gravity = Gravity.START
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = dpToPx(4)
+            }
+        }
+
+        // Cover image (right side, ~40% width)
+        coverImageView = ImageView(context).apply {
+            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.4f).apply {
+                marginStart = dpToPx(-40) // Pull slightly left for cropped effect
+            }
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            // Clip to rounded corners on left side only
+            clipToOutline = true
+            outlineProvider = object : android.view.ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: android.graphics.Outline) {
+                    outline.setRoundRect(-dpToPx(8), 0, view.width, view.height, dpToPx(8).toFloat())
+                }
+            }
+        }
+        libraryContainer.addView(coverImageView)
+
         // Apply default style
         applyTheme(VisualStyle.AMBIENT)
     }
@@ -183,10 +269,14 @@ class QuoteDisplayView @JvmOverloads constructor(
             VisualStyle.AMBIENT -> applyAmbientTheme()
             VisualStyle.EDITORIAL -> applyEditorialTheme()
             VisualStyle.STOIC -> applyStoicTheme()
+            VisualStyle.LIBRARY -> applyLibraryTheme()
         }
     }
 
     private fun applyMinimalTheme() {
+        // Hide library layout if switching from Library theme
+        hideLibraryTheme()
+
         // Background
         gradientBackground.visibility = View.GONE
         gradientBackground.stopAnimation()
@@ -244,6 +334,9 @@ class QuoteDisplayView @JvmOverloads constructor(
     }
 
     private fun applyAmbientTheme() {
+        // Hide library layout if switching from Library theme
+        hideLibraryTheme()
+
         // Background - animated gradient
         gradientBackground.visibility = View.VISIBLE
         if (isRunning) gradientBackground.startAnimation()
@@ -300,6 +393,9 @@ class QuoteDisplayView @JvmOverloads constructor(
     }
 
     private fun applyEditorialTheme() {
+        // Hide library layout if switching from Library theme
+        hideLibraryTheme()
+
         // Background - warm dark paper tone
         gradientBackground.visibility = View.GONE
         gradientBackground.stopAnimation()
@@ -357,6 +453,9 @@ class QuoteDisplayView @JvmOverloads constructor(
     }
 
     private fun applyStoicTheme() {
+        // Hide library layout if switching from Library theme
+        hideLibraryTheme()
+
         // Background - deep charcoal
         gradientBackground.visibility = View.GONE
         gradientBackground.stopAnimation()
@@ -413,6 +512,63 @@ class QuoteDisplayView @JvmOverloads constructor(
         }
     }
 
+    private fun applyLibraryTheme() {
+        // Hide standard backgrounds, show library layout
+        gradientBackground.visibility = View.GONE
+        gradientBackground.stopAnimation()
+        quoteContainer.visibility = View.GONE
+        libraryContainer.visibility = View.VISIBLE
+        setBackgroundColor(Color.parseColor("#1A1A1A"))
+
+        // Default colors (will be updated per-quote based on cover)
+        libraryLeftPanel.setBackgroundColor(Color.parseColor("#1A1A1A"))
+
+        // Base text sizes for Library theme
+        baseQuoteSize = 24f
+        baseAuthorSize = 16f
+        baseSourceSize = 14f
+        baseNoteSize = 12f
+
+        // Move QR code to bottom-right of left panel area
+        (qrCodeImage.layoutParams as LayoutParams).apply {
+            gravity = Gravity.BOTTOM or Gravity.START
+            marginStart = dpToPx(60)
+            marginEnd = 0
+            bottomMargin = dpToPx(40)
+        }
+        qrCodeImage.requestLayout()
+
+        // Move tags to bottom of left panel
+        (tagsText.layoutParams as LayoutParams).apply {
+            gravity = Gravity.BOTTOM or Gravity.START
+            marginStart = dpToPx(60)
+            bottomMargin = dpToPx(100)
+        }
+        tagsText.requestLayout()
+    }
+
+    private fun hideLibraryTheme() {
+        libraryContainer.visibility = View.GONE
+        quoteContainer.visibility = View.VISIBLE
+
+        // Reset QR code position
+        (qrCodeImage.layoutParams as LayoutParams).apply {
+            gravity = Gravity.BOTTOM or Gravity.END
+            marginStart = 0
+            marginEnd = dpToPx(40)
+            bottomMargin = dpToPx(40)
+        }
+        qrCodeImage.requestLayout()
+
+        // Reset tags position
+        (tagsText.layoutParams as LayoutParams).apply {
+            gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+            marginStart = 0
+            bottomMargin = dpToPx(40)
+        }
+        tagsText.requestLayout()
+    }
+
     fun setQuoteDuration(durationSeconds: Int) {
         quoteDurationMs = durationSeconds * 1000L
     }
@@ -448,67 +604,302 @@ class QuoteDisplayView @JvmOverloads constructor(
 
         // Fade out current content first
         fadeOut(fadeDuration) {
-            // Adjust text size based on quote length (while invisible)
-            val lengthMultiplier = when {
-                quote.text.length > 500 -> 0.625f
-                quote.text.length > 300 -> 0.75f
-                quote.text.length > 150 -> 0.875f
-                else -> 1f
-            }
-            // Apply both length-based and user preference scaling
-            quoteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseQuoteSize * lengthMultiplier * textSizeScale)
-            authorText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseAuthorSize * textSizeScale)
-            sourceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseSourceSize * textSizeScale)
-            noteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseNoteSize * textSizeScale)
-
-            // Update content - clean markdown and add curly quotes
-            val cleanText = cleanQuoteText(quote.text)
-            quoteText.text = "\u201C${cleanText}\u201D"
-            authorText.text = quote.author?.let { "\u2014 $it" } ?: ""
-            sourceText.text = quote.title ?: ""
-
-            authorText.visibility = if (quote.author.isNullOrEmpty()) View.GONE else View.VISIBLE
-            sourceText.visibility = if (quote.title.isNullOrEmpty()) View.GONE else View.VISIBLE
-
-            // Show note (if enabled and exists)
-            if (showNotes && !quote.note.isNullOrEmpty()) {
-                noteText.text = quote.note
-                noteText.visibility = View.VISIBLE
+            if (visualStyle == VisualStyle.LIBRARY) {
+                displayLibraryQuote(quote, fadeDuration)
             } else {
-                noteText.visibility = View.GONE
+                displayStandardQuote(quote, fadeDuration)
             }
+        }
+    }
 
-            // Show tags at bottom center (if enabled)
-            if (showTags && quote.tags.isNotEmpty()) {
-                tagsText.text = quote.tags.joinToString(", ")
-                tagsText.visibility = View.VISIBLE
-            } else {
-                tagsText.visibility = View.GONE
+    private fun displayStandardQuote(quote: Quote, fadeDuration: Long) {
+        // Adjust text size based on quote length (while invisible)
+        val lengthMultiplier = when {
+            quote.text.length > 500 -> 0.625f
+            quote.text.length > 300 -> 0.75f
+            quote.text.length > 150 -> 0.875f
+            else -> 1f
+        }
+        // Apply both length-based and user preference scaling
+        quoteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseQuoteSize * lengthMultiplier * textSizeScale)
+        authorText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseAuthorSize * textSizeScale)
+        sourceText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseSourceSize * textSizeScale)
+        noteText.setTextSize(TypedValue.COMPLEX_UNIT_SP, baseNoteSize * textSizeScale)
+
+        // Update content - clean markdown and add curly quotes
+        val cleanText = cleanQuoteText(quote.text)
+        quoteText.text = "\u201C${cleanText}\u201D"
+        authorText.text = quote.author?.let { "\u2014 $it" } ?: ""
+        sourceText.text = quote.title ?: ""
+
+        authorText.visibility = if (quote.author.isNullOrEmpty()) View.GONE else View.VISIBLE
+        sourceText.visibility = if (quote.title.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+        // Show note (if enabled and exists)
+        if (showNotes && !quote.note.isNullOrEmpty()) {
+            noteText.text = quote.note
+            noteText.visibility = View.VISIBLE
+        } else {
+            noteText.visibility = View.GONE
+        }
+
+        // Show tags at bottom center (if enabled)
+        if (showTags && quote.tags.isNotEmpty()) {
+            tagsText.text = quote.tags.joinToString(", ")
+            tagsText.visibility = View.VISIBLE
+        } else {
+            tagsText.visibility = View.GONE
+        }
+
+        // Show QR code (if enabled)
+        if (showQrCode) {
+            val url = when (qrLinkType) {
+                QrLinkType.SOURCE -> quote.sourceUrl ?: "https://readwise.io/open/${quote.id}"
+                QrLinkType.READWISE -> "https://readwise.io/open/${quote.id}"
             }
-
-            // Show QR code (if enabled)
-            if (showQrCode) {
-                val url = when (qrLinkType) {
-                    QrLinkType.SOURCE -> quote.sourceUrl ?: "https://readwise.io/open/${quote.id}"
-                    QrLinkType.READWISE -> "https://readwise.io/open/${quote.id}"
-                }
-                val qrBitmap = generateQrCode(url)
-                if (qrBitmap != null) {
-                    qrCodeImage.setImageBitmap(qrBitmap)
-                    qrCodeImage.visibility = View.VISIBLE
-                } else {
-                    qrCodeImage.visibility = View.GONE
-                }
+            val qrBitmap = generateQrCode(url)
+            if (qrBitmap != null) {
+                qrCodeImage.setImageBitmap(qrBitmap)
+                qrCodeImage.visibility = View.VISIBLE
             } else {
                 qrCodeImage.visibility = View.GONE
             }
+        } else {
+            qrCodeImage.visibility = View.GONE
+        }
 
-            // Fade in new content
-            fadeIn(fadeDuration) {
-                // Schedule next quote
-                handler?.postDelayed(displayRunnable, quoteDurationMs)
+        // Fade in new content
+        fadeIn(fadeDuration) {
+            // Schedule next quote
+            handler?.postDelayed(displayRunnable, quoteDurationMs)
+        }
+    }
+
+    private fun displayLibraryQuote(quote: Quote, fadeDuration: Long) {
+        // Clear and rebuild library quote container
+        libraryQuoteContainer.removeAllViews()
+
+        val lengthMultiplier = when {
+            quote.text.length > 500 -> 0.625f
+            quote.text.length > 300 -> 0.75f
+            quote.text.length > 150 -> 0.875f
+            else -> 1f
+        }
+
+        // Quote text (author is book author, not quote author in Readwise)
+        val cleanText = cleanQuoteText(quote.text)
+        val quoteWithAuthor = TextView(context).apply {
+            text = "\u201C${cleanText}\u201D"
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, baseQuoteSize * lengthMultiplier * textSizeScale)
+            setTextColor(Color.parseColor("#F5F5F5"))
+            typeface = Typeface.create("serif", Typeface.NORMAL)
+            setLineSpacing(dpToPx(4).toFloat(), 1.05f)
+            setShadowLayer(2f, 0f, 1f, Color.parseColor("#40000000"))
+            gravity = Gravity.START
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+        libraryQuoteContainer.addView(quoteWithAuthor)
+
+        // Book title
+        val bookTitleView = TextView(context).apply {
+            text = quote.title ?: ""
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f * textSizeScale)
+            setTextColor(Color.parseColor("#F5F5F5"))
+            typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+            setShadowLayer(2f, 0f, 1f, Color.parseColor("#40000000"))
+            visibility = if (quote.title.isNullOrEmpty()) View.GONE else View.VISIBLE
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = dpToPx(24)
             }
         }
+        libraryQuoteContainer.addView(bookTitleView)
+
+        // Book author
+        val bookAuthorView = TextView(context).apply {
+            text = quote.author ?: ""
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f * textSizeScale)
+            setTextColor(Color.parseColor("#CCCCCC"))
+            typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+            setShadowLayer(2f, 0f, 1f, Color.parseColor("#40000000"))
+            visibility = if (quote.author.isNullOrEmpty()) View.GONE else View.VISIBLE
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = dpToPx(4)
+            }
+        }
+        libraryQuoteContainer.addView(bookAuthorView)
+
+        // Show note (if enabled and exists)
+        if (showNotes && !quote.note.isNullOrEmpty()) {
+            val noteView = TextView(context).apply {
+                text = quote.note
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, baseNoteSize * textSizeScale)
+                setTextColor(Color.parseColor("#AAAAAA"))
+                typeface = Typeface.create("sans-serif-light", Typeface.ITALIC)
+                setShadowLayer(2f, 0f, 1f, Color.parseColor("#40000000"))
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    topMargin = dpToPx(16)
+                }
+            }
+            libraryQuoteContainer.addView(noteView)
+        }
+
+        // Show tags
+        if (showTags && quote.tags.isNotEmpty()) {
+            tagsText.text = quote.tags.joinToString(", ")
+            tagsText.setTextColor(Color.parseColor("#888888"))
+            tagsText.visibility = View.VISIBLE
+        } else {
+            tagsText.visibility = View.GONE
+        }
+
+        // Show QR code
+        if (showQrCode) {
+            val url = when (qrLinkType) {
+                QrLinkType.SOURCE -> quote.sourceUrl ?: "https://readwise.io/open/${quote.id}"
+                QrLinkType.READWISE -> "https://readwise.io/open/${quote.id}"
+            }
+            val qrBitmap = generateQrCode(url)
+            if (qrBitmap != null) {
+                qrCodeImage.setImageBitmap(qrBitmap)
+                qrCodeImage.visibility = View.VISIBLE
+            } else {
+                qrCodeImage.visibility = View.GONE
+            }
+        } else {
+            qrCodeImage.visibility = View.GONE
+        }
+
+        // Load cover and extract colors
+        loadCoverAndApplyColors(quote, quoteWithAuthor, bookTitleView, bookAuthorView)
+
+        // Fade in new content
+        fadeIn(fadeDuration) {
+            // Schedule next quote
+            handler?.postDelayed(displayRunnable, quoteDurationMs)
+        }
+    }
+
+    private fun loadCoverAndApplyColors(
+        quote: Quote,
+        quoteTextView: TextView,
+        bookTitleView: TextView,
+        bookAuthorView: TextView
+    ) {
+        val coverUrl = quote.bookCover
+
+        if (coverUrl.isNullOrEmpty()) {
+            // No cover - use fallback colors and hide cover
+            applyLibraryFallbackColors(quoteTextView, bookTitleView, bookAuthorView)
+            coverImageView.visibility = View.GONE
+            // Expand left panel to full width
+            (libraryLeftPanel.layoutParams as LinearLayout.LayoutParams).weight = 1f
+            (coverImageView.layoutParams as LinearLayout.LayoutParams).weight = 0f
+            libraryLeftPanel.requestLayout()
+            return
+        }
+
+        // Reset weights for cover display
+        (libraryLeftPanel.layoutParams as LinearLayout.LayoutParams).weight = 0.6f
+        (coverImageView.layoutParams as LinearLayout.LayoutParams).weight = 0.4f
+        libraryLeftPanel.requestLayout()
+        coverImageView.visibility = View.VISIBLE
+
+        // Check cache first
+        val cacheKey = coverUrl
+        if (colorCache.containsKey(cacheKey)) {
+            val cachedSwatch = colorCache[cacheKey]
+            if (cachedSwatch != null) {
+                applyExtractedColors(cachedSwatch, quoteTextView, bookTitleView, bookAuthorView)
+            } else {
+                applyLibraryFallbackColors(quoteTextView, bookTitleView, bookAuthorView)
+            }
+        }
+
+        // Load cover image with Coil (disable hardware bitmaps for Palette API)
+        val request = ImageRequest.Builder(context)
+            .data(coverUrl)
+            .allowHardware(false)
+            .target { drawable ->
+                coverImageView.setImageDrawable(drawable)
+
+                // Extract colors from bitmap
+                CoroutineScope(Dispatchers.Main).launch {
+                    val bitmap = withContext(Dispatchers.IO) {
+                        try {
+                            drawable.toBitmap()
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+
+                    if (bitmap != null) {
+                        val palette = withContext(Dispatchers.Default) {
+                            Palette.from(bitmap).generate()
+                        }
+
+                        val swatch = palette.dominantSwatch
+                            ?: palette.vibrantSwatch
+                            ?: palette.mutedSwatch
+
+                        colorCache[cacheKey] = swatch
+
+                        if (swatch != null) {
+                            applyExtractedColors(swatch, quoteTextView, bookTitleView, bookAuthorView)
+                        } else {
+                            applyLibraryFallbackColors(quoteTextView, bookTitleView, bookAuthorView)
+                        }
+                    }
+                }
+            }
+            .build()
+
+        context.imageLoader.enqueue(request)
+    }
+
+    private fun applyExtractedColors(
+        swatch: Palette.Swatch,
+        quoteTextView: TextView,
+        bookTitleView: TextView,
+        bookAuthorView: TextView
+    ) {
+        // Apply background color
+        libraryLeftPanel.setBackgroundColor(swatch.rgb)
+
+        // Use palette's text colors for contrast
+        val titleColor = swatch.titleTextColor
+        val bodyColor = swatch.bodyTextColor
+
+        quoteTextView.setTextColor(titleColor)
+        bookTitleView.setTextColor(titleColor)
+        bookAuthorView.setTextColor(bodyColor)
+        tagsText.setTextColor(bodyColor)
+    }
+
+    private fun applyLibraryFallbackColors(
+        quoteTextView: TextView,
+        bookTitleView: TextView,
+        bookAuthorView: TextView
+    ) {
+        // Dark neutral background
+        libraryLeftPanel.setBackgroundColor(Color.parseColor("#1A1A1A"))
+
+        // Light text
+        quoteTextView.setTextColor(Color.parseColor("#F5F5F5"))
+        bookTitleView.setTextColor(Color.parseColor("#F5F5F5"))
+        bookAuthorView.setTextColor(Color.parseColor("#CCCCCC"))
+        tagsText.setTextColor(Color.parseColor("#888888"))
     }
 
     private fun showNextQuoteAuto() {
@@ -534,7 +925,8 @@ class QuoteDisplayView @JvmOverloads constructor(
     }
 
     private fun fadeOut(fadeDuration: Long, onComplete: () -> Unit) {
-        ObjectAnimator.ofFloat(quoteContainer, "alpha", 1f, 0f).apply {
+        val targetView = if (visualStyle == VisualStyle.LIBRARY) libraryContainer else quoteContainer
+        ObjectAnimator.ofFloat(targetView, "alpha", 1f, 0f).apply {
             duration = fadeDuration
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
@@ -546,7 +938,8 @@ class QuoteDisplayView @JvmOverloads constructor(
     }
 
     private fun fadeIn(fadeDuration: Long, onComplete: () -> Unit) {
-        ObjectAnimator.ofFloat(quoteContainer, "alpha", 0f, 1f).apply {
+        val targetView = if (visualStyle == VisualStyle.LIBRARY) libraryContainer else quoteContainer
+        ObjectAnimator.ofFloat(targetView, "alpha", 0f, 1f).apply {
             duration = fadeDuration
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
