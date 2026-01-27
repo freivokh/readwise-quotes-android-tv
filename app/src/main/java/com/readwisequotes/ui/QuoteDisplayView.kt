@@ -788,11 +788,12 @@ class QuoteDisplayView @JvmOverloads constructor(
         libraryQuoteContainer.addView(bookAuthorView)
 
         // Show note (if enabled and exists)
+        var noteView: TextView? = null
         if (showNotes && !quote.note.isNullOrEmpty()) {
-            val noteView = TextView(context).apply {
+            noteView = TextView(context).apply {
                 text = quote.note
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, baseNoteSize * textSizeScale)
-                setTextColor(Color.parseColor("#AAAAAA"))
+                setTextColor(Color.parseColor("#AAAAAA")) // Default, will be updated by color extraction
                 typeface = Typeface.create("sans-serif-light", Typeface.ITALIC)
                 setShadowLayer(2f, 0f, 1f, Color.parseColor("#40000000"))
                 layoutParams = LinearLayout.LayoutParams(
@@ -832,7 +833,7 @@ class QuoteDisplayView @JvmOverloads constructor(
         }
 
         // Load cover and extract colors
-        loadCoverAndApplyColors(quote, quoteWithAuthor, bookTitleView, bookAuthorView)
+        loadCoverAndApplyColors(quote, quoteWithAuthor, bookTitleView, bookAuthorView, noteView)
 
         // Fade in new content
         fadeIn(fadeDuration) {
@@ -845,7 +846,8 @@ class QuoteDisplayView @JvmOverloads constructor(
         quote: Quote,
         quoteTextView: TextView,
         bookTitleView: TextView,
-        bookAuthorView: TextView
+        bookAuthorView: TextView,
+        noteView: TextView? = null
     ) {
         val coverUrl = quote.bookCover
 
@@ -854,7 +856,7 @@ class QuoteDisplayView @JvmOverloads constructor(
 
         if (coverUrl.isNullOrEmpty()) {
             // No cover - use fallback colors and hide cover
-            applyLibraryFallbackColors(quoteTextView, bookTitleView, bookAuthorView)
+            applyLibraryFallbackColors(quoteTextView, bookTitleView, bookAuthorView, noteView)
             coverImageView.visibility = View.GONE
             // Expand text to use full width
             quoteWrapper?.let {
@@ -876,9 +878,9 @@ class QuoteDisplayView @JvmOverloads constructor(
         if (colorCache.containsKey(cacheKey)) {
             val cachedSwatch = colorCache[cacheKey]
             if (cachedSwatch != null) {
-                applyExtractedColors(cachedSwatch, quoteTextView, bookTitleView, bookAuthorView)
+                applyExtractedColors(cachedSwatch, quoteTextView, bookTitleView, bookAuthorView, noteView)
             } else {
-                applyLibraryFallbackColors(quoteTextView, bookTitleView, bookAuthorView)
+                applyLibraryFallbackColors(quoteTextView, bookTitleView, bookAuthorView, noteView)
             }
         }
 
@@ -974,9 +976,9 @@ class QuoteDisplayView @JvmOverloads constructor(
                         colorCache[cacheKey] = swatch
 
                         if (swatch != null) {
-                            applyExtractedColors(swatch, quoteTextView, bookTitleView, bookAuthorView)
+                            applyExtractedColors(swatch, quoteTextView, bookTitleView, bookAuthorView, noteView)
                         } else {
-                            applyLibraryFallbackColors(quoteTextView, bookTitleView, bookAuthorView)
+                            applyLibraryFallbackColors(quoteTextView, bookTitleView, bookAuthorView, noteView)
                         }
                     }
                 }
@@ -990,7 +992,8 @@ class QuoteDisplayView @JvmOverloads constructor(
         swatch: Palette.Swatch,
         quoteTextView: TextView,
         bookTitleView: TextView,
-        bookAuthorView: TextView
+        bookAuthorView: TextView,
+        noteView: TextView? = null
     ) {
         val bgColor = swatch.rgb
 
@@ -1015,17 +1018,20 @@ class QuoteDisplayView @JvmOverloads constructor(
         // Accent bar is always light/white (semi-transparent) to match Readwise style
         val titleColor: Int
         val bodyColor: Int
+        val mutedColor: Int
         val accentBarColor: Int
 
         if (isLightBackground) {
             // Dark text on light background
             titleColor = Color.parseColor("#1A1A1A")
             bodyColor = Color.parseColor("#404040")
+            mutedColor = Color.parseColor("#666666")
             accentBarColor = Color.parseColor("#40FFFFFF") // White accent bar
         } else {
             // Light text on dark background
             titleColor = Color.parseColor("#F5F5F5")
             bodyColor = Color.parseColor("#CCCCCC")
+            mutedColor = Color.parseColor("#999999")
             accentBarColor = Color.parseColor("#50FFFFFF") // White accent bar
         }
 
@@ -1033,7 +1039,8 @@ class QuoteDisplayView @JvmOverloads constructor(
         quoteTextView.setTextColor(titleColor)
         bookTitleView.setTextColor(titleColor)
         bookAuthorView.setTextColor(bodyColor)
-        tagsText.setTextColor(bodyColor)
+        noteView?.setTextColor(mutedColor)
+        tagsText.setTextColor(mutedColor)
     }
 
     /** Calculate relative luminance using sRGB formula */
@@ -1052,7 +1059,8 @@ class QuoteDisplayView @JvmOverloads constructor(
     private fun applyLibraryFallbackColors(
         quoteTextView: TextView,
         bookTitleView: TextView,
-        bookAuthorView: TextView
+        bookAuthorView: TextView,
+        noteView: TextView? = null
     ) {
         val darkerLeft = Color.parseColor("#101010")
         val bgColor = Color.parseColor("#1E1E1E")
@@ -1071,6 +1079,7 @@ class QuoteDisplayView @JvmOverloads constructor(
         quoteTextView.setTextColor(Color.parseColor("#F5F5F5"))
         bookTitleView.setTextColor(Color.parseColor("#F5F5F5"))
         bookAuthorView.setTextColor(Color.parseColor("#CCCCCC"))
+        noteView?.setTextColor(Color.parseColor("#999999"))
         tagsText.setTextColor(Color.parseColor("#888888"))
     }
 
