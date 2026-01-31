@@ -852,6 +852,8 @@ class QuoteDisplayView @JvmOverloads constructor(
 
         // Fade in new content
         fadeIn(fadeDuration) {
+            // Preload next quote's cover so it's cached for smooth transition
+            preloadNextCover()
             // Schedule next quote
             handler?.postDelayed(displayRunnable, quoteDurationMs)
         }
@@ -1117,6 +1119,20 @@ class QuoteDisplayView @JvmOverloads constructor(
         handler?.removeCallbacks(displayRunnable)
         currentIndex = if (currentIndex > 0) currentIndex - 1 else currentQuotes.size - 1
         displayCurrentQuote(manualFadeDuration)
+    }
+
+    /** Preload the next quote's cover image into Coil's cache */
+    private fun preloadNextCover() {
+        if (currentQuotes.isEmpty() || visualStyle != VisualStyle.PRETTY) return
+        val nextIndex = (currentIndex + 1) % currentQuotes.size
+        val nextCoverUrl = currentQuotes[nextIndex].bookCover
+        if (!nextCoverUrl.isNullOrEmpty()) {
+            val request = ImageRequest.Builder(context)
+                .data(nextCoverUrl)
+                .allowHardware(false)
+                .build()
+            context.imageLoader.enqueue(request)
+        }
     }
 
     private fun fadeOut(fadeDuration: Long, onComplete: () -> Unit) {
