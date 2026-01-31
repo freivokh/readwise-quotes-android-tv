@@ -2,9 +2,9 @@
 package com.readwisequotes.settings
 
 enum class VisualStyle(val displayName: String) {
+    PRETTY("Pretty"),
     MINIMAL("Minimal"),
     AMBIENT("Ambient"),
     EDITORIAL("Editorial"),
-    STOIC("Stoic"),
-    LIBRARY("Library")
+    STOIC("Stoic")
 }

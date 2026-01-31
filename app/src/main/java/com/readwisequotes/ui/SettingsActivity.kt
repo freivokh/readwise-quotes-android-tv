@@ -514,11 +514,11 @@ class SettingsActivity : FragmentActivity() {
             this,
             android.R.layout.simple_spinner_dropdown_item,
             listOf(
+                getString(R.string.style_pretty),
                 getString(R.string.style_minimal),
                 getString(R.string.style_ambient),
                 getString(R.string.style_editorial),
-                getString(R.string.style_stoic),
-                getString(R.string.style_library)
+                getString(R.string.style_stoic)
             )
         )
         styleSpinner.adapter = styleAdapter
@@ -872,7 +872,7 @@ class SettingsActivity : FragmentActivity() {
             return
         }
 
-        val port = 8080
+        val port = 9876
         tokenEntryServer = TokenEntryServer(port) { token ->
             runOnUiThread {
                 handleTokenReceived(token, apiTokenInput, tokenHelperText, setupViaPhoneButton, syncStatus, syncButton)

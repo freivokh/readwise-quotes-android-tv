@@ -306,7 +306,7 @@ class QuoteDisplayView @JvmOverloads constructor(
             VisualStyle.AMBIENT -> applyAmbientTheme()
             VisualStyle.EDITORIAL -> applyEditorialTheme()
             VisualStyle.STOIC -> applyStoicTheme()
-            VisualStyle.LIBRARY -> applyLibraryTheme()
+            VisualStyle.PRETTY -> applyLibraryTheme()
         }
     }
 
@@ -647,7 +647,7 @@ class QuoteDisplayView @JvmOverloads constructor(
 
         // Fade out current content first
         fadeOut(fadeDuration) {
-            if (visualStyle == VisualStyle.LIBRARY) {
+            if (visualStyle == VisualStyle.PRETTY) {
                 displayLibraryQuote(quote, fadeDuration)
             } else {
                 displayStandardQuote(quote, fadeDuration)
@@ -1120,7 +1120,7 @@ class QuoteDisplayView @JvmOverloads constructor(
     }
 
     private fun fadeOut(fadeDuration: Long, onComplete: () -> Unit) {
-        val targetView = if (visualStyle == VisualStyle.LIBRARY) libraryContainer else quoteContainer
+        val targetView = if (visualStyle == VisualStyle.PRETTY) libraryContainer else quoteContainer
         ObjectAnimator.ofFloat(targetView, "alpha", 1f, 0f).apply {
             duration = fadeDuration
             addListener(object : AnimatorListenerAdapter() {
@@ -1133,7 +1133,7 @@ class QuoteDisplayView @JvmOverloads constructor(
     }
 
     private fun fadeIn(fadeDuration: Long, onComplete: () -> Unit) {
-        val targetView = if (visualStyle == VisualStyle.LIBRARY) libraryContainer else quoteContainer
+        val targetView = if (visualStyle == VisualStyle.PRETTY) libraryContainer else quoteContainer
         ObjectAnimator.ofFloat(targetView, "alpha", 0f, 1f).apply {
             duration = fadeDuration
             addListener(object : AnimatorListenerAdapter() {
