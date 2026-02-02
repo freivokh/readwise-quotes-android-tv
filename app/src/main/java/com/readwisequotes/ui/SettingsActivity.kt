@@ -3,8 +3,11 @@ package com.readwisequotes.ui
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
+import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +15,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import java.net.Inet4Address
-import java.net.NetworkInterface
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 import com.readwisequotes.R
 import com.readwisequotes.data.QuoteRepository
 import com.readwisequotes.data.SyncResult
@@ -25,6 +28,8 @@ import com.readwisequotes.settings.TextSize
 import com.readwisequotes.settings.VisualStyle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.net.Inet4Address
+import java.net.NetworkInterface
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -890,9 +895,35 @@ class SettingsActivity : FragmentActivity() {
     private fun showSetupDialog(ipAddress: String, port: Int) {
         val url = "http://$ipAddress:$port"
 
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = android.view.Gravity.CENTER_HORIZONTAL
+            val pad = dpToPx(24)
+            setPadding(pad, pad, pad, pad)
+        }
+
+        val qrSize = dpToPx(200)
+        val qrBitmap = generateQrCodeBitmap(url, qrSize)
+        if (qrBitmap != null) {
+            val qrImage = ImageView(this).apply {
+                setImageBitmap(qrBitmap)
+                layoutParams = LinearLayout.LayoutParams(qrSize, qrSize).apply {
+                    bottomMargin = dpToPx(16)
+                }
+            }
+            layout.addView(qrImage)
+        }
+
+        val instructions = TextView(this).apply {
+            text = "Scan the QR code, or open a browser and go to:\n\n$url\n\nThen paste your Readwise API token."
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            gravity = android.view.Gravity.CENTER
+        }
+        layout.addView(instructions)
+
         setupDialog = AlertDialog.Builder(this)
-            .setTitle("📱 Setup via Phone")
-            .setMessage("On your phone, open a browser and go to:\n\n$url\n\nThen paste your Readwise API token.")
+            .setTitle("Setup via Phone")
+            .setView(layout)
             .setNegativeButton("Cancel") { _, _ ->
                 stopTokenEntryServer()
             }
@@ -902,6 +933,32 @@ class SettingsActivity : FragmentActivity() {
             .create()
 
         setupDialog?.show()
+    }
+
+    private fun generateQrCodeBitmap(content: String, size: Int): Bitmap? {
+        return try {
+            val writer = QRCodeWriter()
+            val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, size, size)
+            val pixels = IntArray(size * size)
+            for (y in 0 until size) {
+                for (x in 0 until size) {
+                    pixels[y * size + x] = if (bitMatrix[x, y]) Color.BLACK else Color.WHITE
+                }
+            }
+            val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+            bitmap.setPixels(pixels, 0, size, 0, 0, size, size)
+            bitmap
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp.toFloat(),
+            resources.displayMetrics
+        ).toInt()
     }
 
     private fun handleTokenReceived(
